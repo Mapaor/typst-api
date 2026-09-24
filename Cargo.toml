@@ -1,0 +1,18 @@
+[package]
+name = "typst-api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = { version = "0.8.9", features = ["multipart"] }
+chrono = "0.4.45"
+comemo = "0.5.1"
+dotenvy = "0.15.7"
+fontdb = "0.24.0"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+tokio = { version = "1.53.1", features = ["full"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+typst = "0.15.1"
+typst-pdf = "0.15.1"

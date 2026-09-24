@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  typst-api:
+    image: typst-api:latest
+    build: .
+    container_name: typst-api
+    ports:
+      - "${PORT:-8080}:${PORT:-8080}"
+    environment:
+      - PORT=${PORT:-8080}
+      - TYPST_FONT_PATHS=/fonts
+      - MAX_PAYLOAD_SIZE=${MAX_PAYLOAD_SIZE:-52428800} # 50MB
+      - COMPILATION_TIMEOUT=${COMPILATION_TIMEOUT:-10}
+      - AUTH_TOKEN=${AUTH_TOKEN:-}
+    volumes:
+      - ./fonts:/fonts:ro
+    restart: unless-stopped
