@@ -2,8 +2,6 @@ name: Publish Docker image
 
 on:
   push:
-    branches:
-      - main
     tags:
       - "v*"
 
@@ -30,7 +28,7 @@ jobs:
         with:
           images: ${{ vars.DOCKERHUB_USERNAME }}/typst-api
           tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=latest
             type=semver,pattern={{version}}
 
       - name: Build and push image
