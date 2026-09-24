@@ -1,4 +1,5 @@
 /target
+.env
 /fonts
 /reference-crates
 TYPST.md
