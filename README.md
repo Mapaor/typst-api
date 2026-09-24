@@ -2,21 +2,25 @@
 
 A high-performance, Dockerized REST API built in Rust to compile [Typst](https://typst.app/) documents into PDFs. It supports compiling documents with local assets, caching fonts for performance, and configurable resource limits.
 
-## Usage
+## Spinning up the container
 
 ### Running with Docker
 You can pull the pre-built image directly from Docker Hub:
 ```bash
-docker run -p 8080:8080 -e AUTH_TOKEN=mysecret -e MAX_CONCURRENT_COMPILATIONS=10 mapaor4/typst-api:latest
+docker run -p 8080:8080 -e mapaor4/typst-api:latest
 ```
-
 ### Running with Docker Compose
+1. Create a `.env` and add the variables you need for your case.
+2. Run `docker compose up -d`
+3. The API will be available at `http://localhost:8080/compile` or whatever port you have specified.
+
+### Running with Docker Compose (Local Development)
 
 1. Copy `.env.example` to `.env` and adjust the variables if needed.
-2. Run `docker compose up --build -d`.
+2. Run `docker compose up --build -d`. This will trigger the `Dockerfile`.
 3. The API will be available at `http://localhost:8080/compile`.
-4. You can then use any reverse proxy, tunnel or VPN you might typically use to expose your containers to your other devices or the whole internet.
 
+## Using the API
 ### Source code simple request
 Send an `application/json` request with your typst source code like shown in [`examples/typst-source-code/README.md`](./examples/typst-source-code/README.md).
 
@@ -58,6 +62,26 @@ If you have Postman desktop installed (and optionally the VSCode Extension as we
 3. Add a key named `main`, change its type from `Text` to `File`.
 4. Select (upload) your `.typ` file in the value column.
 5. Click Send. Postman is great because it will show the visual PDF if the request is successful or it will show the JSON error if it fails.
+
+## Exposing the API
+You can then use any reverse proxy, tunnel or VPN you might typically use to expose your containers to your other devices or the whole internet.
+
+My recommendations:
+- If you are the only one who is gonna use the API from a specific set of devices, use Tailscale and make the requests to the tailnet IP of your server.
+- If you want the API to be accessible through the internet, use Caddy as a reverse proxy on your server and then Cloudflare Tunnel (Cloudflared) for creating a tunnel between your host and the world.
+Quick tip, use `http` instead of `https` or nothing (``) in the URL of the subdomain where you'll host your server in your Caddyfile.
+```
+http://my.subdomain.com {
+    reverse_proxy typst-api:8080 {
+        header_up X-Forwarded-Proto https
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+    }
+}
+```
+- Use Pangolin (instead of Cloudflare Tunnel) running on a VPS if you plan to work with very big documents or concurrent requests and want to avoid the Cloudflare 100MB/s limitation.
+
+Note: If you do expose the API running on your server to the general public (the internet) make sure to either enable token authentication (so that only you and people who you trust can  use the API) or enforce limits like maximum payload size and maximum concurrent compilation to prevent API usage.
 
 ## ROADMAP
 
@@ -104,3 +128,6 @@ We could also do this all with HTTP maybe and reuse the session. Or we could som
 - [ ] Allow output additional information (fomat eg. PDF or PDF-A, DPI, PDF metadata, etc.) Check the current output options of the typst compiler and the typst web app.
 - [ ] Create a way to generate versioned docker images corresponding to a few typst compiler versions. Find a way to name them properly, for example: `typst-api:0.1.0-v0.15.1` or `typst-api:latest-v0.14.2`.
 - [ ] Also create an endpoint to check the typst version and an endpoint to check a particular package version which typst requirements has. Maybe `typst-kit` already has some sort of package resolution/compatibility internal information(?).
+
+## License
+MIT
