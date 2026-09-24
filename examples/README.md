@@ -26,6 +26,14 @@ curl -X POST http://localhost:3000/compile -F "main=@examples/multi-file-documen
 curl -X POST http://localhost:3000/compile -F "main=@examples/using-packages/using-packages.typ" --output "examples/using-packages/using-packages.pdf"
 ```
 
+```bash
+curl -X POST http://localhost:3000/compile -F "main=@examples/using-a-template/using-a-template.typ" --output "examples/using-a-template/using-a-template.pdf"
+```
+
+```bash
+curl -X POST http://localhost:3000/compile -F "main=@examples/local-template/local-template.typ" -F "cv.typ=@examples/local-template/cv.typ" -F "utils.typ=@examples/local-template/utils.typ" -F "layouts/timeline.typ=@examples/local-template/layouts/timeline.typ" -F "layouts/prose.typ=@examples/local-template/layouts/prose.typ" -F "layouts/numbered-list.typ=@examples/local-template/layouts/numbered-list.typ" -F "layouts/header.typ=@examples/local-template/layouts/header.typ" -F "layouts/bullet-list.typ=@examples/local-template/layouts/bullet-list.typ" -F "example-cv.yml=@examples/local-template/example-cv.yml" --output "examples/local-template/local-template.pdf"
+```
+
 ## With powershell
 *The perk of powershell here is that `Invoke-WebRequest` naturally handles errors, so if the compilation fails you will directly see the JSON with the error response.*
 
@@ -56,4 +64,24 @@ Invoke-WebRequest -Uri http://localhost:3000/compile -Method Post -Form @{
 Invoke-WebRequest -Uri http://localhost:3000/compile -Method Post -Form @{
     main = Get-Item "examples/using-packages/using-packages.typ"
 } -OutFile "examples/using-packages/using-packages.pdf"
+```
+
+```pwsh
+Invoke-WebRequest -Uri http://localhost:3000/compile -Method Post -Form @{
+    main = Get-Item "examples/using-a-template/using-a-template.typ"
+} -OutFile "examples/using-a-template/using-a-template.pdf"
+```
+
+```pwsh
+Invoke-WebRequest -Uri http://localhost:3000/compile -Method Post -Form @{
+    "main" = Get-Item "examples/local-template/local-template.typ"
+    "cv.typ" = Get-Item "examples/local-template/cv.typ"
+    "utils.typ" = Get-Item "examples/local-template/utils.typ"
+    "layouts/timeline.typ" = Get-Item "examples/local-template/layouts/timeline.typ"
+    "layouts/prose.typ" = Get-Item "examples/local-template/layouts/prose.typ"
+    "layouts/numbered-list.typ" = Get-Item "examples/local-template/layouts/numbered-list.typ"
+    "layouts/header.typ" = Get-Item "examples/local-template/layouts/header.typ"
+    "layouts/bullet-list.typ" = Get-Item "examples/local-template/layouts/bullet-list.typ"
+    "example-cv.yml" = Get-Item "examples/local-template/example-cv.yml"
+} -OutFile "examples/local-template/local-template.pdf"
 ```
