@@ -8,6 +8,7 @@ pub struct Config {
     pub max_payload_size: usize,
     pub compilation_timeout_secs: u64,
     pub auth_token: Option<String>,
+    pub cors_allowed_origins: Option<String>,
 }
 
 impl Config {
@@ -44,12 +45,15 @@ impl Config {
 
         let auth_token = env::var("AUTH_TOKEN").ok().filter(|s| !s.trim().is_empty());
 
+        let cors_allowed_origins = env::var("CORS_ALLOWED_ORIGINS").ok().filter(|s| !s.trim().is_empty());
+
         Self {
             port,
             font_paths,
             max_payload_size,
             compilation_timeout_secs,
             auth_token,
+            cors_allowed_origins,
         }
     }
 }

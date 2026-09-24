@@ -13,6 +13,7 @@ services:
       - MAX_PAYLOAD_SIZE=${MAX_PAYLOAD_SIZE:-52428800} # 50MB
       - COMPILATION_TIMEOUT=${COMPILATION_TIMEOUT:-10}
       - AUTH_TOKEN=${AUTH_TOKEN:-}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-}
     volumes:
       - ./fonts:/fonts:ro
     restart: unless-stopped

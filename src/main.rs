@@ -5,10 +5,11 @@ mod world;
 use axum::{
     Json, Router,
     extract::{DefaultBodyLimit, Multipart, State},
-    http::{HeaderMap, StatusCode},
+    http::{HeaderMap, StatusCode, HeaderValue, Method, header},
     response::IntoResponse,
     routing::{get, post},
 };
+use tower_http::cors::CorsLayer;
 use config::Config;
 use fonts::FontState;
 use serde_json::json;
@@ -53,12 +54,43 @@ async fn main() {
         packages,
     };
 
+    let cors_layer = if let Some(cors_origins) = &config.cors_allowed_origins {
+        if cors_origins == "*" {
+            CorsLayer::permissive()
+        } else {
+            let allowed_patterns: Vec<String> = cors_origins
+                .split(',')
+                .map(|s| s.trim().to_string())
+                .collect();
+            
+            let allow_origin = tower_http::cors::AllowOrigin::predicate(
+                move |origin: &HeaderValue, _| {
+                    if let Ok(origin_str) = origin.to_str() {
+                        allowed_patterns.iter().any(|pattern| {
+                            origin_str == pattern || origin_str.starts_with(&format!("{}:", pattern))
+                        })
+                    } else {
+                        false
+                    }
+                },
+            );
+
+            CorsLayer::new()
+                .allow_origin(allow_origin)
+                .allow_methods([Method::GET, Method::POST])
+                .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION])
+        }
+    } else {
+        CorsLayer::new() // Default restrictive layer
+    };
+
     let app = Router::new()
         .route("/health", get(|| async { "OK" }))
         .route("/compile", post(compile_handler))
         .route("/compile/source", post(compile_source_handler))
         .route("/fonts", get(list_fonts_handler))
         .route("/fonts/refresh", post(refresh_fonts_handler))
+        .layer(cors_layer)
         .layer(DefaultBodyLimit::max(config.max_payload_size))
         .with_state(state);
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; display: flex; flex-direction: column; gap: 10px; max-width: 500px; padding: 20px; }
+    textarea { height: 150px; font-family: monospace; } .gray-text{opacity: 0.7; font-style: italic; font-size: 10pt;}
+  </style>
+</head>
+<body>
+
+  <label>Backend Port: <input id="port" type="number" value="8080"></label>
+  <label>Typst Code:</label>
+  <textarea id="source">= Hello Typst!
+This is a very simple document.</textarea>
+
+  <button id="openPdf">Open PDF</button>
+  <span class="gray-text">Note: For the request to work you have to or set CORS to permissive (*) or 'null' in the .env file and restart the container.</span>
+  <script>
+    document.getElementById('openPdf').addEventListener('click', async () => {
+      const port = document.getElementById('port').value;
+      const sourceCode = document.getElementById('source').value;
+
+      try {
+        const response = await fetch(`http://localhost:${port}/compile/source`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            source: sourceCode,
+            filename: "main.typ"
+          })
+        });
+
+        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+
+        const pdfBlob = await response.blob();
+        const blobUrl = URL.createObjectURL(pdfBlob);
+        window.open(blobUrl, '_blank');
+      } catch (err) {
+        alert("Failed to compile: " + err.message);
+      }
+    });
+  </script>
+
+</body>
+</html>

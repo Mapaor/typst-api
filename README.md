@@ -10,7 +10,16 @@ A high-performance, Dockerized REST API built in Rust to compile [Typst](https:/
 2. Run `docker compose up -d`.
 3. The API will be available at `http://localhost:8080/compile`.
 
-### Example Request
+### Source code simple request
+Send an `application/json` request with your typst source code like shown in [`examples/typst-source-code/README.md`](./examples/typst-source-code/README.md).
+
+```bash
+curl -X POST http://localhost:8080/compile/source -H "Content-Type: application/json" -d '{"source": "= Hello Typst!\nThis is a very simple document.", "filename": "main.typ"}' --output "examples/typst-source-code/example.pdf"
+```
+
+You can also set CORS to `*` in the env file and open [`examples/typst-source-code/index.html`](examples/typst-source-code/index.html) for a more interactive example.
+
+### Multipart example Request
 
 Send a `multipart/form-data` request with your Typst files. The main file should either be explicitly named in the form field as `main` or named `main.typ` in its filename.
 
@@ -36,28 +45,21 @@ try {
 ```
 
 #### With Postman
-If you have Postman desktop installed (and optionally the VSCode Extension as well), you can easily test the API:
+If you have Postman desktop installed (and optionally the VSCode Extension as well), you can easily test the API by doing the following:
 1. Create a new `POST` request to `http://localhost:8080/compile`.
-2. Go to the **Body** tab and select `form-data`.
-3. Add a key named `main` (change its type from `Text` to `File` by hovering over the key field).
-4. Select your `.typ` file in the value column.
-5. Click **Send**! Postman will show the visual PDF if successful, or gracefully show the JSON error if it fails.
+2. Go to the Body tab and select `form-data` (instead of `raw`).
+3. Add a key named `main`, change its type from `Text` to `File`.
+4. Select (upload) your `.typ` file in the value column.
+5. Click Send. Postman is great because it will show the visual PDF if the request is successful or it will show the JSON error if it fails.
 
 ## ROADMAP
 
 - [X] **Dynamic Custom Fonts via Multipart:** Implement support for users to upload custom `.ttf` or `.otf` font files as part of the `multipart/form-data` payload on a per-request basis (allowing ephemeral custom fonts per compile).
 - [X] **User-Defined Custom Fonts:** Further improve the global custom font loading logic (currently loaded via the mounted `/fonts` directory on startup) to allow dynamically refreshing the font cache or hot-reloading user fonts without needing a container restart.
 - [X] Add better diagnostics (return line and column) in the format_errors response.
-- [X] Allow to make a HTTP request with typst code (instead of a typst file). For example
-```
-POST /compile/source
-Content-Type: application/json
-
-{
-  "source": "= Hello\n\nThis is Typst.",
-  "filename": "main.typ"
-}
-```
+- [X] Allow to make a HTTP request with typst code (instead of a typst file). Using an `application/json` new endpoint (which we'll call `/compile/source`).
+- [X] Handle CORS with `tower-http` and add configuration options in the env file.
+- [ ] Minimize build disk usage by only importing tokio features we actually use/need and by changing the Dockerfile cache strategy to a build-kit cache one.
 - [ ] Add concurrency limits (not only timeout of individual requests but also a maximum of active compilations)
 - [ ] Add other limits (maximum file count or maximum source size or maximum package fetching?) although maybe our current global payload limit already handles their combination correctly so that the API cannot be abused.
 - [ ] Should we maybe cache the top 100 most used typst packages? or something similar.
