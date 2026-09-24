@@ -1,6 +1,8 @@
 /target
 .env
-/fonts
+fonts/*.ttf
+fonts/*.otf
+fonts/*.ttc
 /reference-crates
 TYPST.md
 implementation_plan.md
