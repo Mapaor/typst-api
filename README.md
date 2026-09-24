@@ -45,5 +45,31 @@ If you have Postman desktop installed (and optionally the VSCode Extension as we
 
 ## To-Do List
 
-- [ ] **Dynamic Custom Fonts via Multipart:** Implement support for users to upload custom `.ttf` or `.otf` font files as part of the `multipart/form-data` payload on a per-request basis (allowing ephemeral custom fonts per compile).
-- [ ] **User-Defined Custom Fonts:** Further improve the global custom font loading logic (currently loaded via the mounted `/fonts` directory on startup) to allow dynamically refreshing the font cache or hot-reloading user fonts without needing a container restart.
+- [X] **Dynamic Custom Fonts via Multipart:** Implement support for users to upload custom `.ttf` or `.otf` font files as part of the `multipart/form-data` payload on a per-request basis (allowing ephemeral custom fonts per compile).
+- [X] **User-Defined Custom Fonts:** Further improve the global custom font loading logic (currently loaded via the mounted `/fonts` directory on startup) to allow dynamically refreshing the font cache or hot-reloading user fonts without needing a container restart.
+- [ ] Add better diagnostics (return line and column) in the format_errors response.
+- [ ] Allow to make a HTTP request with typst code (instead of a typst file). For example
+```
+POST /compile/source
+Content-Type: application/json
+
+{
+  "source": "= Hello\n\nThis is Typst.",
+  "filename": "main.typ"
+}
+```
+- [ ] Add concurrency limits (not only timeout of individual requests but also a maximum of active compilations)
+- [ ] Add other limits (maximum file count or maximum source size or maximum package fetching?) although maybe our current global payload limit already handles their combination correctly so that the API cannot be abused.
+- [ ] Should we maybe cache the top 100 most used typst packages? or something similar.
+- [ ] Test the API authentication (token) manually (I still haven't).
+
+#### After we have a first stable/complete version of the API
+- [ ]  Create an OpenAPI documentation
+- [ ]  Create a test suite
+
+#### In the far future
+- [ ] Implement something similar like a 'watch' option (like the CLI) for compiling a file that is constantly changing without having to compile it all again (only the parts that have changed). In other words, implement caching of compiled results.
+- [ ] Allow different outputs (PDF, SVG, PNG, HTML?). SVG can be generated with `typst-svg` and PNG probably from the SVG. Investigate how the Typst web app handles the (still experimental) HTML export.
+- [ ] Allow output additional information (fomat eg. PDF or PDF-A, DPI, PDF metadata, etc.) Check the current output options of the typst compiler and the typst web app.
+- [ ] Create a way to generate versioned docker images corresponding to a few typst compiler versions. Find a way to name them properly, for example: `typst-api:0.1.0-v0.15.1` or `typst-api:latest-v0.14.2`.
+- [ ] Also create an endpoint to check the typst version and an endpoint to check a particular package version which typst requirements has. Maybe `typst-kit` already has some sort of package resolution/compatibility internal information?

@@ -23,7 +23,7 @@ use world::ApiWorld;
 #[derive(Clone)]
 struct AppState {
     config: Arc<Config>,
-    font_state: Arc<FontState>,
+    font_state: Arc<tokio::sync::RwLock<Arc<FontState>>>,
     packages: Arc<SystemPackages>,
 }
 
@@ -35,7 +35,7 @@ async fn main() {
     tracing::info!("Starting server on port {}", config.port);
     tracing::info!("Font paths: {:?}", config.font_paths);
 
-    let font_state = Arc::new(FontState::new(&config.font_paths));
+    let font_state = Arc::new(tokio::sync::RwLock::new(Arc::new(FontState::new(&config.font_paths))));
 
     let downloader = SystemDownloader::new("typst-api");
     let packages = Arc::new(SystemPackages::new(downloader));
@@ -49,6 +49,8 @@ async fn main() {
     let app = Router::new()
         .route("/health", get(|| async { "OK" }))
         .route("/compile", post(compile_handler))
+        .route("/fonts", get(list_fonts_handler))
+        .route("/fonts/refresh", post(refresh_fonts_handler))
         .layer(DefaultBodyLimit::max(config.max_payload_size))
         .with_state(state);
 
@@ -75,6 +77,7 @@ async fn compile_handler(
 
     let mut files_data = HashMap::new();
     let mut main_file = None;
+    let mut ephemeral_fonts = Vec::new();
 
     while let Ok(Some(field)) = multipart.next_field().await {
         let name = field.name().unwrap_or("").to_string();
@@ -82,7 +85,15 @@ async fn compile_handler(
 
         if let Ok(data) = field.bytes().await {
             let data = data.to_vec();
-            if name == "main" {
+            
+            let is_font = file_name.ends_with(".ttf") || file_name.ends_with(".otf") || file_name.ends_with(".ttc");
+
+            if is_font {
+                let bytes = typst::foundations::Bytes::new(data);
+                for font in typst::text::Font::iter(bytes) {
+                    ephemeral_fonts.push(font);
+                }
+            } else if name == "main" {
                 let fname = if file_name.is_empty() {
                     "main.typ".to_string()
                 } else {
@@ -113,8 +124,10 @@ async fn compile_handler(
         }
     };
 
+    let global_font_state = state.font_state.read().await.clone();
     let world = match ApiWorld::new(
-        state.font_state.clone(),
+        global_font_state,
+        ephemeral_fonts,
         state.packages.clone(),
         files_data,
         main_file,
@@ -184,4 +197,39 @@ fn format_errors(_world: &ApiWorld, errors: &[SourceDiagnostic]) -> Vec<serde_js
             info
         })
         .collect()
+}
+
+async fn list_fonts_handler(State(state): State<AppState>) -> Json<serde_json::Value> {
+    let font_state = state.font_state.read().await;
+    let mut fonts = Vec::new();
+    for font in &font_state.fonts {
+        let info = font.info();
+        fonts.push(json!({
+            "family": info.family,
+            "style": format!("{:?}", info.variant.style),
+            "weight": info.variant.weight.to_number(),
+            "stretch": format!("{:?}", info.variant.stretch),
+        }));
+    }
+    Json(json!({ "fonts": fonts }))
+}
+
+async fn refresh_fonts_handler(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+) -> Result<Json<serde_json::Value>, (StatusCode, Json<serde_json::Value>)> {
+    if let Some(token) = &state.config.auth_token {
+        let auth_header = headers.get("Authorization").and_then(|h| h.to_str().ok());
+        let expected = format!("Bearer {}", token);
+        if auth_header != Some(&expected) {
+            return Err((
+                StatusCode::UNAUTHORIZED,
+                Json(json!({"error": "Unauthorized"})),
+            ));
+        }
+    }
+
+    let mut font_state = state.font_state.write().await;
+    *font_state = Arc::new(FontState::new(&state.config.font_paths));
+    Ok(Json(json!({ "status": "ok", "message": "Fonts reloaded successfully" })))
 }

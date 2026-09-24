@@ -15,7 +15,8 @@ use crate::fonts::FontState;
 
 pub struct ApiWorld {
     pub library: LazyHash<Library>,
-    pub font_state: Arc<FontState>,
+    pub book: LazyHash<FontBook>,
+    pub fonts: Vec<Font>,
     pub packages: Arc<SystemPackages>,
     pub main: FileId,
     pub files: HashMap<FileId, Bytes>,
@@ -26,6 +27,7 @@ pub struct ApiWorld {
 impl ApiWorld {
     pub fn new(
         font_state: Arc<FontState>,
+        ephemeral_fonts: Vec<Font>,
         packages: Arc<SystemPackages>,
         files_data: HashMap<String, Vec<u8>>,
         main_file: String,
@@ -66,9 +68,19 @@ impl ApiWorld {
         let today = Datetime::from_ymd(now.year(), now.month() as u8, now.day() as u8)
             .unwrap_or(Datetime::from_ymd(1970, 1, 1).unwrap());
 
+        let (book, fonts) = if ephemeral_fonts.is_empty() {
+            (font_state.book.clone(), font_state.fonts.clone())
+        } else {
+            let mut combined_fonts = font_state.fonts.clone();
+            combined_fonts.extend(ephemeral_fonts);
+            let book = FontBook::from_fonts(&combined_fonts);
+            (LazyHash::new(book), combined_fonts)
+        };
+
         Ok(Self {
             library,
-            font_state,
+            book,
+            fonts,
             packages,
             main: main_id,
             files,
@@ -84,7 +96,7 @@ impl World for ApiWorld {
     }
 
     fn book(&self) -> &LazyHash<FontBook> {
-        &self.font_state.book
+        &self.book
     }
 
     fn main(&self) -> FileId {
@@ -120,7 +132,7 @@ impl World for ApiWorld {
     }
 
     fn font(&self, index: usize) -> Option<Font> {
-        self.font_state.fonts.get(index).cloned()
+        self.fonts.get(index).cloned()
     }
 
     fn today(&self, _offset: Option<Duration>) -> Option<Datetime> {
