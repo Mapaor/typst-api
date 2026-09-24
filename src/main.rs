@@ -1,14 +1,17 @@
 mod config;
 mod fonts;
 mod world;
+mod middleware;
 
 use axum::{
     Json, Router,
     extract::{DefaultBodyLimit, Multipart, State},
-    http::{HeaderMap, StatusCode, HeaderValue, Method, header},
+    http::{StatusCode, HeaderValue, Method, header},
     response::IntoResponse,
     routing::{get, post},
 };
+use axum::middleware::from_fn_with_state;
+use crate::middleware::auth_middleware;
 use tower::limit::ConcurrencyLimitLayer;
 use tower_http::cors::CorsLayer;
 use config::Config;
@@ -24,7 +27,7 @@ use typst_kit::packages::SystemPackages;
 use world::ApiWorld;
 
 #[derive(Clone)]
-struct AppState {
+pub(crate) struct AppState {
     config: Arc<Config>,
     font_state: Arc<tokio::sync::RwLock<Arc<FontState>>>,
     packages: Arc<SystemPackages>,
@@ -55,7 +58,15 @@ async fn main() {
         packages,
     };
 
-    let cors_layer = if let Some(cors_origins) = &config.cors_allowed_origins {
+    let app = create_app(state);
+
+    let addr = format!("0.0.0.0:{}", config.port);
+    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
+    axum::serve(listener, app).await.unwrap();
+}
+
+pub(crate) fn create_app(state: AppState) -> Router {
+    let cors_layer = if let Some(cors_origins) = &state.config.cors_allowed_origins {
         if cors_origins == "*" {
             CorsLayer::permissive()
         } else {
@@ -88,38 +99,26 @@ async fn main() {
     let compile_router = Router::new()
         .route("/", post(compile_handler))
         .route("/source", post(compile_source_handler))
-        .layer(ConcurrencyLimitLayer::new(config.max_concurrent_compilations));
+        .layer(ConcurrencyLimitLayer::new(state.config.max_concurrent_compilations));
 
-    let app = Router::new()
-        .route("/health", get(|| async { "OK" }))
+    let protected_routes = Router::new()
         .nest("/compile", compile_router)
-        .route("/fonts", get(list_fonts_handler))
         .route("/fonts/refresh", post(refresh_fonts_handler))
-        .layer(cors_layer)
-        .layer(DefaultBodyLimit::max(config.max_payload_size))
-        .with_state(state);
+        .route_layer(from_fn_with_state(state.clone(), auth_middleware));
 
-    let addr = format!("0.0.0.0:{}", config.port);
-    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    Router::new()
+        .route("/health", get(|| async { "OK" }))
+        .route("/fonts", get(list_fonts_handler))
+        .merge(protected_routes)
+        .layer(cors_layer)
+        .layer(DefaultBodyLimit::max(state.config.max_payload_size))
+        .with_state(state)
 }
 
 async fn compile_handler(
     State(state): State<AppState>,
-    headers: HeaderMap,
     mut multipart: Multipart,
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
-    if let Some(token) = &state.config.auth_token {
-        let auth_header = headers.get("Authorization").and_then(|h| h.to_str().ok());
-        let expected = format!("Bearer {}", token);
-        if auth_header != Some(&expected) {
-            return Err((
-                StatusCode::UNAUTHORIZED,
-                Json(json!({"error": "Unauthorized"})),
-            ));
-        }
-    }
-
     let mut files_data = HashMap::new();
     let mut main_file = None;
     let mut ephemeral_fonts = Vec::new();
@@ -228,20 +227,8 @@ async fn perform_compilation(
 
 async fn compile_source_handler(
     State(state): State<AppState>,
-    headers: HeaderMap,
     Json(payload): Json<CompileSourceRequest>,
 ) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
-    if let Some(token) = &state.config.auth_token {
-        let auth_header = headers.get("Authorization").and_then(|h| h.to_str().ok());
-        let expected = format!("Bearer {}", token);
-        if auth_header != Some(&expected) {
-            return Err((
-                StatusCode::UNAUTHORIZED,
-                Json(json!({"error": "Unauthorized"})),
-            ));
-        }
-    }
-
     let main_file = payload.filename.unwrap_or_else(|| "main.typ".to_string());
     let mut files_data = HashMap::new();
     files_data.insert(main_file.clone(), payload.source.into_bytes());
@@ -311,18 +298,7 @@ async fn list_fonts_handler(State(state): State<AppState>) -> Json<serde_json::V
 
 async fn refresh_fonts_handler(
     State(state): State<AppState>,
-    headers: HeaderMap,
 ) -> Result<Json<serde_json::Value>, (StatusCode, Json<serde_json::Value>)> {
-    if let Some(token) = &state.config.auth_token {
-        let auth_header = headers.get("Authorization").and_then(|h| h.to_str().ok());
-        let expected = format!("Bearer {}", token);
-        if auth_header != Some(&expected) {
-            return Err((
-                StatusCode::UNAUTHORIZED,
-                Json(json!({"error": "Unauthorized"})),
-            ));
-        }
-    }
 
     let mut font_state = state.font_state.write().await;
     *font_state = Arc::new(FontState::new(&state.config.font_paths));
