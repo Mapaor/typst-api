@@ -1,7 +1,7 @@
-use typst::text::{Font, FontBook};
 use fontdb::Database;
-use typst::utils::LazyHash;
 use typst::foundations::Bytes;
+use typst::text::{Font, FontBook};
+use typst::utils::LazyHash;
 
 pub struct FontState {
     pub book: LazyHash<FontBook>,

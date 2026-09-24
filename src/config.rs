@@ -1,5 +1,5 @@
-use std::path::PathBuf;
 use std::env;
+use std::path::PathBuf;
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -28,12 +28,18 @@ impl Config {
 
         // Default to 50MB (50 * 1024 * 1024 bytes)
         let max_payload_size = env::var("MAX_PAYLOAD_SIZE")
-            .map(|s| s.parse().expect("MAX_PAYLOAD_SIZE must be a number (bytes)"))
+            .map(|s| {
+                s.parse()
+                    .expect("MAX_PAYLOAD_SIZE must be a number (bytes)")
+            })
             .unwrap_or(50 * 1024 * 1024);
 
         // Default timeout to 10 seconds
         let compilation_timeout_secs = env::var("COMPILATION_TIMEOUT")
-            .map(|s| s.parse().expect("COMPILATION_TIMEOUT must be a number (seconds)"))
+            .map(|s| {
+                s.parse()
+                    .expect("COMPILATION_TIMEOUT must be a number (seconds)")
+            })
             .unwrap_or(10);
 
         let auth_token = env::var("AUTH_TOKEN").ok().filter(|s| !s.trim().is_empty());

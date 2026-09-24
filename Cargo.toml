@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+typst-kit = { version = "0.15.1", features = ["system-packages", "system-downloader", "system-files"] }
 axum = { version = "0.8.9", features = ["multipart"] }
 chrono = "0.4.45"
 comemo = "0.5.1"
