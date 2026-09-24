@@ -1,7 +1,7 @@
 # How to use the examples
 If you have cloned this repo, in your terminal, from the root directory of the repository you would run the following commands or HTTP requests.
 
-(Changing the port '3000' to whatever you have set in your `.env` file).
+(Changing the port `3000` to whatever port you have set in your `.env` file).
 
 ## With curl
 *Note: If compilation fails, curl will save the JSON error response into the `.pdf` file. To see the exact error in your console instead, remove the `--output` flag.*
@@ -32,6 +32,10 @@ curl -X POST http://localhost:3000/compile -F "main=@examples/using-a-template/u
 
 ```bash
 curl -X POST http://localhost:3000/compile -F "main=@examples/local-template/local-template.typ" -F "cv.typ=@examples/local-template/cv.typ" -F "utils.typ=@examples/local-template/utils.typ" -F "layouts/timeline.typ=@examples/local-template/layouts/timeline.typ" -F "layouts/prose.typ=@examples/local-template/layouts/prose.typ" -F "layouts/numbered-list.typ=@examples/local-template/layouts/numbered-list.typ" -F "layouts/header.typ=@examples/local-template/layouts/header.typ" -F "layouts/bullet-list.typ=@examples/local-template/layouts/bullet-list.typ" -F "example-cv.yml=@examples/local-template/example-cv.yml" --output "examples/local-template/local-template.pdf"
+```
+
+```bash
+curl -X POST http://localhost:3000/compile -F "main=@examples/using-fonts/using-fonts.typ" -F "terminal-grotesque.ttf=@examples/using-fonts/terminal-grotesque.ttf" --output "examples/using-fonts/using-fonts.pdf"
 ```
 
 ## With powershell
@@ -84,4 +88,11 @@ Invoke-WebRequest -Uri http://localhost:3000/compile -Method Post -Form @{
     "layouts/bullet-list.typ" = Get-Item "examples/local-template/layouts/bullet-list.typ"
     "example-cv.yml" = Get-Item "examples/local-template/example-cv.yml"
 } -OutFile "examples/local-template/local-template.pdf"
+```
+
+```pwsh
+Invoke-WebRequest -Uri http://localhost:3000/compile -Method Post -Form @{
+    "main" = Get-Item "examples/using-fonts/using-fonts.typ"
+    "terminal-grotesque.ttf" = Get-Item "examples/using-fonts/terminal-grotesque.ttf"
+} -OutFile "examples/using-fonts/using-fonts.pdf"
 ```
