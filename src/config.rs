@@ -9,6 +9,7 @@ pub struct Config {
     pub compilation_timeout_secs: u64,
     pub auth_token: Option<String>,
     pub cors_allowed_origins: Option<String>,
+    pub max_concurrent_compilations: usize,
 }
 
 impl Config {
@@ -47,6 +48,13 @@ impl Config {
 
         let cors_allowed_origins = env::var("CORS_ALLOWED_ORIGINS").ok().filter(|s| !s.trim().is_empty());
 
+        let max_concurrent_compilations = env::var("MAX_CONCURRENT_COMPILATIONS")
+            .map(|s| {
+                s.parse()
+                    .expect("MAX_CONCURRENT_COMPILATIONS must be a number")
+            })
+            .unwrap_or(10); // default to 10 active compilations
+
         Self {
             port,
             font_paths,
@@ -54,6 +62,7 @@ impl Config {
             compilation_timeout_secs,
             auth_token,
             cors_allowed_origins,
+            max_concurrent_compilations,
         }
     }
 }

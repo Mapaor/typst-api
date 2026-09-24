@@ -9,6 +9,7 @@ use axum::{
     response::IntoResponse,
     routing::{get, post},
 };
+use tower::limit::ConcurrencyLimitLayer;
 use tower_http::cors::CorsLayer;
 use config::Config;
 use fonts::FontState;
@@ -84,10 +85,14 @@ async fn main() {
         CorsLayer::new() // Default restrictive layer
     };
 
+    let compile_router = Router::new()
+        .route("/", post(compile_handler))
+        .route("/source", post(compile_source_handler))
+        .layer(ConcurrencyLimitLayer::new(config.max_concurrent_compilations));
+
     let app = Router::new()
         .route("/health", get(|| async { "OK" }))
-        .route("/compile", post(compile_handler))
-        .route("/compile/source", post(compile_source_handler))
+        .nest("/compile", compile_router)
         .route("/fonts", get(list_fonts_handler))
         .route("/fonts/refresh", post(refresh_fonts_handler))
         .layer(cors_layer)

@@ -59,8 +59,7 @@ If you have Postman desktop installed (and optionally the VSCode Extension as we
 - [X] Add better diagnostics (return line and column) in the format_errors response.
 - [X] Allow to make a HTTP request with typst code (instead of a typst file). Using an `application/json` new endpoint (which we'll call `/compile/source`).
 - [X] Handle CORS with `tower-http` and add configuration options in the env file.
-- [ ] Minimize build disk usage by only importing tokio features we actually use/need and by changing the Dockerfile cache strategy to a build-kit cache one.
-- [ ] Add concurrency limits (not only timeout of individual requests but also a maximum of active compilations)
+- [X] Add concurrency limits (not only timeout of individual requests but also a maximum of active compilations)
 - [ ] Add other limits (maximum file count or maximum source size or maximum package fetching?) although maybe our current global payload limit already handles their combination correctly so that the API cannot be abused.
 - [ ] Should we maybe cache the top 100 most used typst packages? or something similar.
 - [ ] Test the API authentication (token) manually (I still haven't).
