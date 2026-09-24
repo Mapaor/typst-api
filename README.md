@@ -47,6 +47,7 @@ If you have Postman desktop installed (and optionally the VSCode Extension as we
 
 - [X] **Dynamic Custom Fonts via Multipart:** Implement support for users to upload custom `.ttf` or `.otf` font files as part of the `multipart/form-data` payload on a per-request basis (allowing ephemeral custom fonts per compile).
 - [X] **User-Defined Custom Fonts:** Further improve the global custom font loading logic (currently loaded via the mounted `/fonts` directory on startup) to allow dynamically refreshing the font cache or hot-reloading user fonts without needing a container restart.
+
 - [ ] Add better diagnostics (return line and column) in the format_errors response.
 - [ ] Allow to make a HTTP request with typst code (instead of a typst file). For example
 ```
@@ -68,8 +69,29 @@ Content-Type: application/json
 - [ ]  Create a test suite
 
 #### In the far future
-- [ ] Implement something similar like a 'watch' option (like the CLI) for compiling a file that is constantly changing without having to compile it all again (only the parts that have changed). In other words, implement caching of compiled results.
+- [ ] Implement something similar like a 'watch' option (like the CLI) for compiling a file that is constantly changing without having to compile it all again (only the parts that have changed). In other words, implement caching of compiled results. Typst already allows incremental compilation. We could maybe expose another layer of the API that works with websockets instead of http. Something like:
+```
+POST /sessions
+  Creates a compilation session
+
+WebSocket /sessions/{id}/watch
+  Sends source changes and receives results
+
+DELETE /sessions/{id}
+  Releases server-side state
+```
+The server should use one actor/task per session so updates are serialized:
+session actor
+  -> receive update
+  -> update virtual files
+  -> compile
+  -> render PDF/SVG
+  -> send result
+Without letting multiple concurrent requests mutate the same compilation state. The good thing is axum already supports websockets. We could also use socketioxide (like socket.io for rust). I don't know.
+
+We could also do this with HTTP maybe and reuse the session. Or we could somehow even provide a wasm of the typst compiler already initialized via http. I really don't know. Or maybe none of this is needed and debounce compilation on the client-side is already enough.
+
 - [ ] Allow different outputs (PDF, SVG, PNG, HTML?). SVG can be generated with `typst-svg` and PNG probably from the SVG. Investigate how the Typst web app handles the (still experimental) HTML export.
 - [ ] Allow output additional information (fomat eg. PDF or PDF-A, DPI, PDF metadata, etc.) Check the current output options of the typst compiler and the typst web app.
 - [ ] Create a way to generate versioned docker images corresponding to a few typst compiler versions. Find a way to name them properly, for example: `typst-api:0.1.0-v0.15.1` or `typst-api:latest-v0.14.2`.
-- [ ] Also create an endpoint to check the typst version and an endpoint to check a particular package version which typst requirements has. Maybe `typst-kit` already has some sort of package resolution/compatibility internal information?
+- [ ] Also create an endpoint to check the typst version and an endpoint to check a particular package version which typst requirements has. Maybe `typst-kit` already has some sort of package resolution/compatibility internal information(?).
