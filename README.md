@@ -4,11 +4,18 @@ A high-performance, Dockerized REST API built in Rust to compile [Typst](https:/
 
 ## Usage
 
+### Running with Docker
+You can pull the pre-built image directly from Docker Hub:
+```bash
+docker run -p 8080:8080 -e AUTH_TOKEN=mysecret -e MAX_CONCURRENT_COMPILATIONS=10 mapaor4/typst-api:latest
+```
+
 ### Running with Docker Compose
 
 1. Copy `.env.example` to `.env` and adjust the variables if needed.
-2. Run `docker compose up -d`.
+2. Run `docker compose up --build -d`.
 3. The API will be available at `http://localhost:8080/compile`.
+4. You can then use any reverse proxy, tunnel or VPN you might typically use to expose your containers to your other devices or the whole internet.
 
 ### Source code simple request
 Send an `application/json` request with your typst source code like shown in [`examples/typst-source-code/README.md`](./examples/typst-source-code/README.md).
@@ -62,11 +69,11 @@ If you have Postman desktop installed (and optionally the VSCode Extension as we
 - [X] Add concurrency limits (not only timeout of individual requests but also a maximum of active compilations)
 - [ ] Add other limits (maximum file count or maximum source size or maximum package fetching?) although maybe our current global payload limit already handles their combination correctly so that the API cannot be abused.
 - [ ] Should we maybe cache the top 100 most used typst packages? or something similar.
-- [ ] Test the API authentication (token) manually (I still haven't).
+- [X] Test the API authentication (token) manually.
 
 #### After we have a first stable/complete version of the API
+- [X]  Create an initial test suite
 - [ ]  Create an OpenAPI documentation
-- [ ]  Create a test suite
 
 #### In the far future
 - [ ] Implement something similar like a 'watch' option (like the CLI) for compiling a file that is constantly changing without having to compile it all again (only the parts that have changed). In other words, implement caching of compiled results. Typst already allows incremental compilation. We could maybe expose another layer of the API that works with websockets instead of http. Something like:
