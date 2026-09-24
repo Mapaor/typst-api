@@ -43,13 +43,12 @@ If you have Postman desktop installed (and optionally the VSCode Extension as we
 4. Select your `.typ` file in the value column.
 5. Click **Send**! Postman will show the visual PDF if successful, or gracefully show the JSON error if it fails.
 
-## To-Do List
+## ROADMAP
 
 - [X] **Dynamic Custom Fonts via Multipart:** Implement support for users to upload custom `.ttf` or `.otf` font files as part of the `multipart/form-data` payload on a per-request basis (allowing ephemeral custom fonts per compile).
 - [X] **User-Defined Custom Fonts:** Further improve the global custom font loading logic (currently loaded via the mounted `/fonts` directory on startup) to allow dynamically refreshing the font cache or hot-reloading user fonts without needing a container restart.
-
-- [ ] Add better diagnostics (return line and column) in the format_errors response.
-- [ ] Allow to make a HTTP request with typst code (instead of a typst file). For example
+- [X] Add better diagnostics (return line and column) in the format_errors response.
+- [X] Allow to make a HTTP request with typst code (instead of a typst file). For example
 ```
 POST /compile/source
 Content-Type: application/json
@@ -89,7 +88,9 @@ session actor
   -> send result
 Without letting multiple concurrent requests mutate the same compilation state. The good thing is axum already supports websockets. We could also use socketioxide (like socket.io for rust). I don't know.
 
-We could also do this with HTTP maybe and reuse the session. Or we could somehow even provide a wasm of the typst compiler already initialized via http. I really don't know. Or maybe none of this is needed and debounce compilation on the client-side is already enough.
+Or maybe a 2-layer is not needed, a single WebSocket endpoint (ws://localhost:8080/watch) where the client connects, sends an initial "setup" payload with files, and then sends diffs or update messages. And when the client disconnects, the watch actor gets killed.
+
+We could also do this all with HTTP maybe and reuse the session. Or we could somehow even provide a wasm of the typst compiler already initialized via http. I really don't know. Or maybe none of this is needed and debounce compilation on the client-side is already enough.
 
 - [ ] Allow different outputs (PDF, SVG, PNG, HTML?). SVG can be generated with `typst-svg` and PNG probably from the SVG. Investigate how the Typst web app handles the (still experimental) HTML export.
 - [ ] Allow output additional information (fomat eg. PDF or PDF-A, DPI, PDF metadata, etc.) Check the current output options of the typst compiler and the typst web app.

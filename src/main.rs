@@ -16,6 +16,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::time::timeout;
 use typst::diag::SourceDiagnostic;
+use typst::{World, WorldExt};
 use typst_kit::downloader::SystemDownloader;
 use typst_kit::packages::SystemPackages;
 use world::ApiWorld;
@@ -25,6 +26,12 @@ struct AppState {
     config: Arc<Config>,
     font_state: Arc<tokio::sync::RwLock<Arc<FontState>>>,
     packages: Arc<SystemPackages>,
+}
+
+#[derive(serde::Deserialize)]
+struct CompileSourceRequest {
+    source: String,
+    filename: Option<String>,
 }
 
 #[tokio::main]
@@ -49,6 +56,7 @@ async fn main() {
     let app = Router::new()
         .route("/health", get(|| async { "OK" }))
         .route("/compile", post(compile_handler))
+        .route("/compile/source", post(compile_source_handler))
         .route("/fonts", get(list_fonts_handler))
         .route("/fonts/refresh", post(refresh_fonts_handler))
         .layer(DefaultBodyLimit::max(config.max_payload_size))
@@ -136,7 +144,14 @@ async fn compile_handler(
         Err(e) => return Err((StatusCode::BAD_REQUEST, Json(json!({"error": e})))),
     };
 
-    let timeout_duration = std::time::Duration::from_secs(state.config.compilation_timeout_secs);
+    perform_compilation(world, state.config.compilation_timeout_secs).await
+}
+
+async fn perform_compilation(
+    world: Arc<ApiWorld>,
+    timeout_secs: u64,
+) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
+    let timeout_duration = std::time::Duration::from_secs(timeout_secs);
 
     let world_clone = world.clone();
     let compile_result = timeout(
@@ -174,7 +189,42 @@ async fn compile_handler(
     }
 }
 
-fn format_errors(_world: &ApiWorld, errors: &[SourceDiagnostic]) -> Vec<serde_json::Value> {
+async fn compile_source_handler(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Json(payload): Json<CompileSourceRequest>,
+) -> Result<impl IntoResponse, (StatusCode, Json<serde_json::Value>)> {
+    if let Some(token) = &state.config.auth_token {
+        let auth_header = headers.get("Authorization").and_then(|h| h.to_str().ok());
+        let expected = format!("Bearer {}", token);
+        if auth_header != Some(&expected) {
+            return Err((
+                StatusCode::UNAUTHORIZED,
+                Json(json!({"error": "Unauthorized"})),
+            ));
+        }
+    }
+
+    let main_file = payload.filename.unwrap_or_else(|| "main.typ".to_string());
+    let mut files_data = HashMap::new();
+    files_data.insert(main_file.clone(), payload.source.into_bytes());
+
+    let global_font_state = state.font_state.read().await.clone();
+    let world = match ApiWorld::new(
+        global_font_state,
+        vec![],
+        state.packages.clone(),
+        files_data,
+        main_file,
+    ) {
+        Ok(w) => Arc::new(w),
+        Err(e) => return Err((StatusCode::BAD_REQUEST, Json(json!({"error": e})))),
+    };
+
+    perform_compilation(world, state.config.compilation_timeout_secs).await
+}
+
+fn format_errors(world: &ApiWorld, errors: &[SourceDiagnostic]) -> Vec<serde_json::Value> {
     errors
         .iter()
         .map(|e| {
@@ -187,6 +237,14 @@ fn format_errors(_world: &ApiWorld, errors: &[SourceDiagnostic]) -> Vec<serde_js
 
             if let Some(id) = e.span.id() {
                 map.insert("file".to_string(), json!(format!("{:?}", id)));
+                if let Ok(source) = world.source(id) {
+                    if let Some(range) = world.range(e.span) {
+                        if let Some((line, col)) = source.lines().byte_to_line_column(range.start) {
+                            map.insert("line".to_string(), json!(line + 1));
+                            map.insert("column".to_string(), json!(col + 1));
+                        }
+                    }
+                }
             }
 
             if !e.hints.is_empty() {
