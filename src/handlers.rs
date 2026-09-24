@@ -210,3 +210,78 @@ pub(crate) async fn refresh_fonts_handler(
     *font_state = Arc::new(FontState::new(&state.config.font_paths));
     Ok(Json(json!({ "status": "ok", "message": "Fonts reloaded successfully" })))
 }
+
+#[cfg(test)]
+mod tests {
+    use axum::{
+        http::{Request, StatusCode},
+        body::Body,
+    };
+    use tower::ServiceExt;
+    use crate::create_app;
+    use crate::state::test_helpers::create_test_state;
+    use axum::body::to_bytes;
+
+    #[tokio::test]
+    async fn test_compile_source_success() {
+        let state = create_test_state(None);
+        let app = create_app(state);
+        
+        let req = Request::builder()
+            .method("POST")
+            .uri("/compile/source")
+            .header("Content-Type", "application/json")
+            .body(Body::from(r#"{"source": "= Title\nHello world!"}"#))
+            .unwrap();
+            
+        let res = app.oneshot(req).await.unwrap();
+        assert_eq!(res.status(), StatusCode::OK);
+        assert_eq!(res.headers().get("Content-Type").unwrap(), "application/pdf");
+        
+        let body_bytes = to_bytes(res.into_body(), usize::MAX).await.unwrap();
+        assert!(body_bytes.starts_with(b"%PDF-"));
+    }
+
+    #[tokio::test]
+    async fn test_compile_source_error() {
+        let state = create_test_state(None);
+        let app = create_app(state);
+        
+        // Intentional syntax error in typst code (unclosed bracket)
+        let req = Request::builder()
+            .method("POST")
+            .uri("/compile/source")
+            .header("Content-Type", "application/json")
+            .body(Body::from(r#"{"source": "= Title\n#let x = (1, 2"}"#))
+            .unwrap();
+            
+        let res = app.oneshot(req).await.unwrap();
+        assert_eq!(res.status(), StatusCode::BAD_REQUEST);
+        
+        let body_bytes = to_bytes(res.into_body(), usize::MAX).await.unwrap();
+        let body_json: serde_json::Value = serde_json::from_slice(&body_bytes).unwrap();
+        
+        assert!(body_json.get("errors").is_some());
+        let errors = body_json["errors"].as_array().unwrap();
+        assert!(!errors.is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_list_fonts() {
+        let state = create_test_state(None);
+        let app = create_app(state);
+        
+        let req = Request::builder()
+            .method("GET")
+            .uri("/fonts")
+            .body(Body::empty())
+            .unwrap();
+            
+        let res = app.oneshot(req).await.unwrap();
+        assert_eq!(res.status(), StatusCode::OK);
+        
+        let body_bytes = to_bytes(res.into_body(), usize::MAX).await.unwrap();
+        let body_json: serde_json::Value = serde_json::from_slice(&body_bytes).unwrap();
+        assert!(body_json.get("fonts").is_some());
+    }
+}

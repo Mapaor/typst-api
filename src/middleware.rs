@@ -33,30 +33,8 @@ mod tests {
         body::Body,
     };
     use tower::ServiceExt;
-    use crate::{AppState, config::Config, fonts::FontState, create_app};
-    use std::sync::Arc;
-    use typst_kit::downloader::SystemDownloader;
-    use typst_kit::packages::SystemPackages;
-    
-    fn create_test_state(token: Option<String>) -> AppState {
-        let config = Config {
-            port: 8080,
-            font_paths: vec![],
-            max_payload_size: 1024,
-            compilation_timeout_secs: 10,
-            auth_token: token,
-            cors_allowed_origins: None,
-            max_concurrent_compilations: 10,
-        };
-        let font_state = Arc::new(tokio::sync::RwLock::new(Arc::new(FontState::new(&config.font_paths))));
-        let downloader = SystemDownloader::new("typst-api-test");
-        let packages = Arc::new(SystemPackages::new(downloader));
-        AppState {
-            config: Arc::new(config),
-            font_state,
-            packages,
-        }
-    }
+    use crate::create_app;
+    use crate::state::test_helpers::create_test_state;
     
     #[tokio::test]
     async fn test_auth_disabled() {
