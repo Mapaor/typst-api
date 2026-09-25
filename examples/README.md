@@ -4,7 +4,7 @@ If you have cloned this repo, in your terminal, from the root directory of the r
 (Changing the port `3000` to whatever port you have set in your `.env` file).
 
 ## With curl
-*Note: If compilation fails, curl will save the JSON error response into the `.pdf` file. To see the exact error in your console instead, remove the `--output` flag.*
+*Note: If compilation fails curl will save the JSON response in the pdf file. To see the error remove the `--output` flag.*
 
 ```bash
 curl -X POST http://localhost:3000/compile -F "main=@examples/simple/simple.typ" --output "examples/simple/simple.pdf"

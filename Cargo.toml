@@ -1,7 +1,11 @@
 [package]
 name = "typst-api"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2024"
+description = "A self-hostable HTTP API for compiling Typst documents"
+license = "MIT"
+repository = "https://github.com/Mapaor/typst-api"
+readme = "README.md"
 
 [dependencies]
 typst-kit = { version = "0.15.1", features = ["system-packages", "system-downloader", "system-files"] }
