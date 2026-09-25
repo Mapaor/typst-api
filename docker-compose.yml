@@ -24,4 +24,8 @@ services:
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-}
     volumes:
       - ./fonts:/fonts:ro
+      - typst-packages:/root/.cache/typst/packages
     restart: unless-stopped
+
+volumes:
+  typst-packages:

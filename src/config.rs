@@ -9,6 +9,8 @@ pub struct Config {
     pub compilation_timeout_secs: u64,
     pub auth_token: Option<String>,
     pub admin_token: Option<String>,
+    pub preload_packages: Option<Vec<String>>,
+    pub cache_all_packages: bool,
     pub cors_allowed_origins: Option<String>,
     pub max_concurrent_compilations: usize,
 }
@@ -51,6 +53,21 @@ impl Config {
 
         let cors_allowed_origins = env::var("CORS_ALLOWED_ORIGINS").ok().filter(|s| !s.trim().is_empty());
 
+        let preload_packages = env::var("PRELOAD_PACKAGES")
+            .ok()
+            .filter(|s| !s.trim().is_empty())
+            .map(|s| {
+                s.split(',')
+                    .map(|pkg| pkg.trim().to_string())
+                    .filter(|pkg| !pkg.is_empty())
+                    .collect()
+            });
+
+        let cache_all_packages = env::var("CACHE_ALL_PACKAGES")
+            .unwrap_or_else(|_| "false".to_string())
+            .to_lowercase()
+            == "true";
+
         let max_concurrent_compilations = env::var("MAX_CONCURRENT_COMPILATIONS")
             .map(|s| {
                 s.parse()
@@ -65,6 +82,8 @@ impl Config {
             compilation_timeout_secs,
             auth_token,
             admin_token,
+            preload_packages,
+            cache_all_packages,
             cors_allowed_origins,
             max_concurrent_compilations,
         }

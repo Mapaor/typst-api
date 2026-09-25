@@ -28,6 +28,8 @@ pub(crate) mod test_helpers {
             compilation_timeout_secs: 10,
             auth_token: token,
             admin_token: None,
+            preload_packages: None,
+            cache_all_packages: false,
             cors_allowed_origins: None,
             max_concurrent_compilations: 10,
         };

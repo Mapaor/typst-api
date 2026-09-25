@@ -70,6 +70,19 @@ If you have Postman desktop installed (and optionally the VSCode Extension as we
 #### More examples
 You can check a full set of examples in the `examples/` directory, which contain both the Typst and related files, the PowerShell and Curl commands to run the examples and the expected PDF output.
 
+### Admin Endpoints
+The API includes admin endpoints which are prefixed with `/admin`. To set them add an `ADMIN_TOKEN` to the `.env` file. If the variable is no set these endpoints fall back to `AUTH_TOKEN` authentication. If neither is set, all endpoints are they are publicly accessible.
+
+- `POST /admin/fonts/refresh` reloads local fonts (from the `TYPST_FONT_PATHS` directory) without having to restart the container.
+- `GET /admin/packages` returns a list of all cached Typst packages and their total size.
+- `POST /admin/packages/preload` receives a JSON array of packages to be downloaded and added to the cache.
+- `POST /admin/packages/sync-all` triggers a background sync of all packages from the [Typst registry](https://packages.typst.org/preview/index.json). As of september 2026 all the  versions of all the packages are about 1.8 GB. 
+- `DELETE /admin/packages/cache` clears the local package cache.
+
+By default, when using Docker Compose the package cache persists container restarts because it uses a docker named volume, additionaly you can configure in the `.env` file the following variables:
+- `PRELOAD_PACKAGES`: A list of comma-separated essential packages you want to have available on start up.
+- `CACHE_ALL_PACKAGES`: If set to true downloads the entire Typst registry (~1.8GB) in the background when the server starts.
+
 ## Exposing the API
 You can then use any reverse proxy, tunnel or VPN you might typically use to expose your containers to your other devices or the whole internet.
 
@@ -98,10 +111,9 @@ Note: If you do expose the API running on your server to the general public (the
 - [X] Allow to make a HTTP request with typst code (instead of a typst file). Using an `application/json` new endpoint (which we'll call `/compile/source`).
 - [X] Handle CORS with `tower-http` and add configuration options in the env file.
 - [X] Add concurrency limits (not only timeout of individual requests but also a maximum of active compilations)
-- [ ] Add other limits (maximum file count or maximum source size or maximum package fetching?) although maybe our current global payload limit already handles their combination correctly so that the API cannot be abused.
-- [ ] Should we maybe cache the top 100 most used typst packages? or something similar.
 - [X] Test the API authentication (token) manually.
 - [X] Publish the first image of the library to DockerHub
+- [X] Handle package cache properly, create config options in the env file as well as endpoints for handling them.
 
 #### After we have a first stable/complete version of the API
 - [X]  Create an initial test suite
@@ -136,6 +148,7 @@ We could also do this all with HTTP maybe and reuse the session. Or we could som
 - [ ] Allow output additional information (fomat eg. PDF or PDF-A, DPI, PDF metadata, etc.) Check the current output options of the typst compiler and the typst web app.
 - [ ] Create a way to generate versioned docker images corresponding to a few typst compiler versions. Find a way to name them properly, for example: `typst-api:0.1.0-v0.15.1` or `typst-api:latest-v0.14.2`.
 - [ ] Also create an endpoint to check the typst version and an endpoint to check a particular package version which typst requirements has. Maybe `typst-kit` already has some sort of package resolution/compatibility internal information(?).
+- [ ] Add other limits (maximum file count or maximum source size or maximum package fetching?) although maybe our current global payload limit already handles their combination correctly so that the API cannot be abused. No needed for now, if someone imports lots of packages they'll hit the timeout limit.
 
 ## License
 MIT

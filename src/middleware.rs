@@ -93,7 +93,7 @@ mod tests {
         
         let req2 = Request::builder()
             .method("POST")
-            .uri("/fonts/refresh")
+            .uri("/admin/fonts/refresh")
             .body(Body::empty())
             .unwrap();
         let res2 = app.oneshot(req2).await.unwrap();
@@ -123,7 +123,7 @@ mod tests {
         // Check admin token protects refresh endpoint
         let req2 = Request::builder()
             .method("POST")
-            .uri("/fonts/refresh")
+            .uri("/admin/fonts/refresh")
             .body(Body::empty())
             .unwrap();
         let res2 = app.clone().oneshot(req2).await.unwrap();
@@ -131,7 +131,7 @@ mod tests {
         
         let req3 = Request::builder()
             .method("POST")
-            .uri("/fonts/refresh")
+            .uri("/admin/fonts/refresh")
             .header(header::AUTHORIZATION, "Bearer admin_secret")
             .body(Body::empty())
             .unwrap();
@@ -173,7 +173,7 @@ mod tests {
         // user cannot refresh fonts
         let req3 = Request::builder()
             .method("POST")
-            .uri("/fonts/refresh")
+            .uri("/admin/fonts/refresh")
             .header(header::AUTHORIZATION, "Bearer user_secret")
             .body(Body::empty())
             .unwrap();
