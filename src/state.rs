@@ -27,6 +27,7 @@ pub(crate) mod test_helpers {
             max_payload_size: 1024 * 1024,
             compilation_timeout_secs: 10,
             auth_token: token,
+            admin_token: None,
             cors_allowed_origins: None,
             max_concurrent_compilations: 10,
         };

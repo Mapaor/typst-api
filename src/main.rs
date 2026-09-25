@@ -17,7 +17,7 @@ use utoipa::{
     Modify, OpenApi,
 };
 use utoipa_swagger_ui::SwaggerUi;
-use crate::middleware::auth_middleware;
+use crate::middleware::{auth_middleware, admin_auth_middleware};
 use tower::limit::ConcurrencyLimitLayer;
 use tower_http::cors::CorsLayer;
 use config::Config;
@@ -131,18 +131,19 @@ pub(crate) fn create_app(state: AppState) -> Router {
     let compile_router = Router::new()
         .route("/", post(compile_handler))
         .route("/source", post(compile_source_handler))
-        .layer(ConcurrencyLimitLayer::new(state.config.max_concurrent_compilations));
-
-    let protected_routes = Router::new()
-        .nest("/compile", compile_router)
-        .route("/fonts/refresh", post(refresh_fonts_handler))
+        .layer(ConcurrencyLimitLayer::new(state.config.max_concurrent_compilations))
         .route_layer(from_fn_with_state(state.clone(), auth_middleware));
+
+    let admin_router = Router::new()
+        .route("/fonts/refresh", post(refresh_fonts_handler))
+        .route_layer(from_fn_with_state(state.clone(), admin_auth_middleware));
 
     Router::new()
         .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .route("/health", get(|| async { "OK" }))
         .route("/fonts", get(list_fonts_handler))
-        .merge(protected_routes)
+        .nest("/compile", compile_router)
+        .merge(admin_router)
         .layer(cors_layer)
         .layer(DefaultBodyLimit::max(state.config.max_payload_size))
         .with_state(state)

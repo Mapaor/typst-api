@@ -8,6 +8,7 @@ pub struct Config {
     pub max_payload_size: usize,
     pub compilation_timeout_secs: u64,
     pub auth_token: Option<String>,
+    pub admin_token: Option<String>,
     pub cors_allowed_origins: Option<String>,
     pub max_concurrent_compilations: usize,
 }
@@ -46,6 +47,8 @@ impl Config {
 
         let auth_token = env::var("AUTH_TOKEN").ok().filter(|s| !s.trim().is_empty());
 
+        let admin_token = env::var("ADMIN_TOKEN").ok().filter(|s| !s.trim().is_empty()).or_else(|| auth_token.clone());
+
         let cors_allowed_origins = env::var("CORS_ALLOWED_ORIGINS").ok().filter(|s| !s.trim().is_empty());
 
         let max_concurrent_compilations = env::var("MAX_CONCURRENT_COMPILATIONS")
@@ -61,6 +64,7 @@ impl Config {
             max_payload_size,
             compilation_timeout_secs,
             auth_token,
+            admin_token,
             cors_allowed_origins,
             max_concurrent_compilations,
         }
