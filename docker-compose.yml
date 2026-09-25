@@ -8,6 +8,9 @@ services:
     # build: .
     # ---- DockerHub ----
     image: mapaor4/typst-api:latest
+    # THE ACTUAL DESIGN
+    # There is no need to change anything here, simply use or not the override file
+    # (See docker-compose.override.yml if you are a developer)
     
     ports:
       - "${PORT:-8080}:${PORT:-8080}"

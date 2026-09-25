@@ -12,19 +12,20 @@ docker run -p 8080:8080 -e mapaor4/typst-api:latest
 The API will be available at `http://localhost:8080/compile`.
 
 ### Running with Docker Compose
-1. Create a `.env` and add the variables you need for your case.
-2. Run `docker compose up -d`
+1. Create a `.env` and add the variables you need for your case. See `.env.example` to understand the allowed variables.
+2. Download de `docker-compose.yml` file from this repo and then do `docker compose up -d`.
 3. The API will be available at `http://localhost:8080/compile` or whatever port you have specified.
 
 ### Running with Docker Compose (Local Development)
 
-1. Clone this repo
+1. Clone this repo `git clone https://github.com/Mapaor/typst-api` (and `cd typst-api`).
 2. Copy `.env.example` to `.env` and adjust the variables if needed.
-3. Modify the `docker-compose.yml` to use the local image.
-4. Run `docker compose up --build -d`. This will trigger the `Dockerfile` actions.
+3. No need to modify the `docker-compose.yml` because we have a `docker-compose.override.yml` that already does the job.
+4. Run `docker compose up --build -d`. This will trigger the `Dockerfile` actions and start building the docker image and after that starting the container.
 5. The API will be available at `http://localhost:8080/compile`.
 
 ## Using the API
+
 ### Source code simple request
 Send an `application/json` request with your typst source code like shown in [`examples/typst-source-code/README.md`](./examples/typst-source-code/README.md).
 

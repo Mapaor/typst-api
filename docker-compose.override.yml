@@ -1,0 +1,9 @@
+services:
+  typst-api:
+    build: .
+
+# THE KEY IDEA
+# An end-user can just copy/download the docker-compose.yml which uses the DockerHub image.
+# Where as a developer will clone the repo (and therefore this override file)
+# If a developer runs `docker compose up -d` it will use the image from DockerHub,
+# but if it uses `docker compose up --build -d` it will build it from source.
