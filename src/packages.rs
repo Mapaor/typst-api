@@ -55,21 +55,19 @@ pub fn get_cached_packages() -> Result<CacheInfo, String> {
     let mut packages = Vec::new();
     let mut total_size_bytes = 0;
 
-    if cache_dir.exists() {
-        if let Ok(entries) = fs::read_dir(&cache_dir) {
-            for entry in entries.flatten() {
-                let name = entry.file_name().to_string_lossy().to_string();
-                if let Ok(versions) = fs::read_dir(entry.path()) {
-                    for version_entry in versions.flatten() {
-                        let version = version_entry.file_name().to_string_lossy().to_string();
-                        if let Ok(size) = get_dir_size(version_entry.path()) {
-                            total_size_bytes += size;
-                            packages.push(CachedPackage {
-                                name: name.clone(),
-                                version,
-                                size_bytes: size,
-                            });
-                        }
+    if cache_dir.exists() && let Ok(entries) = fs::read_dir(&cache_dir) {
+        for entry in entries.flatten() {
+            let name = entry.file_name().to_string_lossy().to_string();
+            if let Ok(versions) = fs::read_dir(entry.path()) {
+                for version_entry in versions.flatten() {
+                    let version = version_entry.file_name().to_string_lossy().to_string();
+                    if let Ok(size) = get_dir_size(version_entry.path()) {
+                        total_size_bytes += size;
+                        packages.push(CachedPackage {
+                            name: name.clone(),
+                            version,
+                            size_bytes: size,
+                        });
                     }
                 }
             }

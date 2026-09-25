@@ -24,12 +24,10 @@ pub async fn auth_middleware(
             }
         }
         
-        if !allowed {
-            if let Some(token) = &state.config.admin_token {
-                let expected = format!("Bearer {}", token);
-                if auth_header == Some(&expected) {
-                    allowed = true;
-                }
+        if !allowed && let Some(token) = &state.config.admin_token {
+            let expected = format!("Bearer {}", token);
+            if auth_header == Some(&expected) {
+                allowed = true;
             }
         }
 
