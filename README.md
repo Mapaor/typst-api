@@ -188,7 +188,8 @@ Note: If you do expose the API running on your server to the general public (the
 #### After we have a first stable/complete version of the API
 - [X] Create an initial test suite
 - [X] Create an OpenAPI documentation
-- [X] Add ARM support
+- [X] Generate also a `linux/arm64` docker image (besides the current `linux/amd64`).
+- [X] Handle the creation and publishing of binaries for new releases with `cargo-dist`
 
 #### In the far future
 - [ ] Implement something similar like a 'watch' option (like the CLI) for compiling a file that is constantly changing without having to compile it all again (only the parts that have changed). In other words, implement caching of compiled results. Typst already allows incremental compilation. We could maybe expose another layer of the API that works with websockets instead of http. Something like:
