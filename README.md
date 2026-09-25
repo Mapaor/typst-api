@@ -77,15 +77,15 @@ My recommendations:
 - If you are the only one who is gonna use the API from a specific set of devices, use Tailscale and make the requests to the tailnet IP of your server.
 - If you want the API to be accessible through the internet, use Caddy as a reverse proxy on your server and then Cloudflare Tunnel (Cloudflared) for creating a tunnel between your host and the world.
 Quick tip, use `http` instead of `https` or nothing (``) in the URL of the subdomain where you'll host your server in your Caddyfile.
-```
-http://my.subdomain.com {
-    reverse_proxy typst-api:8080 {
-        header_up X-Forwarded-Proto https
-        header_up Host {host}
-        header_up X-Real-IP {remote_host}
+    ```
+    http://my.subdomain.com {
+        reverse_proxy typst-api:8080 {
+            header_up X-Forwarded-Proto https
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+        }
     }
-}
-```
+    ```
 - Use Pangolin (instead of Cloudflare Tunnel) running on a VPS if you plan to work with very big documents or concurrent requests and want to avoid the Cloudflare 100MB/s limitation.
 
 Note: If you do expose the API running on your server to the general public (the internet) make sure to either enable token authentication (so that only you and people who you trust can  use the API) or enforce limits like maximum payload size and maximum concurrent compilation to prevent API usage.
@@ -101,10 +101,11 @@ Note: If you do expose the API running on your server to the general public (the
 - [ ] Add other limits (maximum file count or maximum source size or maximum package fetching?) although maybe our current global payload limit already handles their combination correctly so that the API cannot be abused.
 - [ ] Should we maybe cache the top 100 most used typst packages? or something similar.
 - [X] Test the API authentication (token) manually.
+- [X] Publish the first image of the library to DockerHub
 
 #### After we have a first stable/complete version of the API
 - [X]  Create an initial test suite
-- [ ]  Create an OpenAPI documentation
+- [X]  Create an OpenAPI documentation
 
 #### In the far future
 - [ ] Implement something similar like a 'watch' option (like the CLI) for compiling a file that is constantly changing without having to compile it all again (only the parts that have changed). In other words, implement caching of compiled results. Typst already allows incremental compilation. We could maybe expose another layer of the API that works with websockets instead of http. Something like:

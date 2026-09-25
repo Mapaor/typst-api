@@ -45,10 +45,8 @@ impl ApiWorld {
             let bytes = Bytes::new(data.clone());
             files.insert(id, bytes.clone());
 
-            if name.ends_with(".typ") {
-                if let Ok(text) = String::from_utf8(data) {
-                    sources.insert(id, Source::new(id, text));
-                }
+            if name.ends_with(".typ") && let Ok(text) = String::from_utf8(data) {
+                sources.insert(id, Source::new(id, text));
             }
         }
 

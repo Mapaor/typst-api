@@ -12,6 +12,11 @@ use axum::{
     routing::{get, post},
 };
 use axum::middleware::from_fn_with_state;
+use utoipa::{
+    openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme},
+    Modify, OpenApi,
+};
+use utoipa_swagger_ui::SwaggerUi;
 use crate::middleware::auth_middleware;
 use tower::limit::ConcurrencyLimitLayer;
 use tower_http::cors::CorsLayer;
@@ -24,7 +29,47 @@ use typst_kit::packages::SystemPackages;
 use state::AppState;
 use handlers::{compile_handler, compile_source_handler, list_fonts_handler, refresh_fonts_handler};
 
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        handlers::compile_handler,
+        handlers::compile_source_handler,
+        handlers::list_fonts_handler,
+        handlers::refresh_fonts_handler,
+    ),
+    components(
+        schemas(
+            handlers::CompileSourceRequest,
+            handlers::CompileRequest,
+            handlers::ErrorResponse,
+            handlers::ErrorInfo,
+            handlers::SimpleErrorResponse,
+            handlers::FontsResponse,
+            handlers::FontInfo,
+            handlers::RefreshFontsResponse
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct ApiDoc;
 
+struct SecurityAddon;
+
+impl Modify for SecurityAddon {
+    fn modify(&self, openapi: &mut utoipa::openapi::OpenApi) {
+        if let Some(components) = openapi.components.as_mut() {
+            components.add_security_scheme(
+                "bearer_auth",
+                SecurityScheme::Http(
+                    HttpBuilder::new()
+                        .scheme(HttpAuthScheme::Bearer)
+                        .bearer_format("Token")
+                        .build(),
+                ),
+            )
+        }
+    }
+}
 
 #[tokio::main]
 async fn main() {
@@ -94,6 +139,7 @@ pub(crate) fn create_app(state: AppState) -> Router {
         .route_layer(from_fn_with_state(state.clone(), auth_middleware));
 
     Router::new()
+        .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .route("/health", get(|| async { "OK" }))
         .route("/fonts", get(list_fonts_handler))
         .merge(protected_routes)

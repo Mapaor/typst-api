@@ -19,3 +19,5 @@ tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
 typst = "0.15.1"
 typst-pdf = "0.15.1"
 tower = { version = "0.5.3", features = ["limit"] }
+utoipa = { version = "6.0.0", features = ["axum_extras"] }
+utoipa-swagger-ui = { version = "10.0.1", features = ["axum"] }

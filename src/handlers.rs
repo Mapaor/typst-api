@@ -14,13 +14,61 @@ use typst::{World, WorldExt};
 use crate::state::AppState;
 use crate::fonts::FontState;
 use crate::world::ApiWorld;
+use utoipa::ToSchema;
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, ToSchema)]
 pub(crate) struct CompileSourceRequest {
+    #[schema(example = "= Hello Typst!\nThis is a simple document.")]
     pub(crate) source: String,
+    #[schema(example = "main.typ")]
     pub(crate) filename: Option<String>,
 }
 
+#[derive(serde::Serialize, ToSchema)]
+pub(crate) struct ErrorInfo {
+    pub message: String,
+    pub severity: String,
+    pub file: Option<String>,
+    pub line: Option<usize>,
+    pub column: Option<usize>,
+    pub hints: Option<Vec<String>>,
+}
+
+#[derive(serde::Serialize, ToSchema)]
+pub(crate) struct ErrorResponse {
+    pub errors: Vec<ErrorInfo>,
+}
+
+#[derive(serde::Serialize, ToSchema)]
+pub(crate) struct SimpleErrorResponse {
+    pub error: String,
+}
+
+#[derive(ToSchema)]
+#[allow(dead_code)]
+pub(crate) struct CompileRequest {
+    /// The main typst file. Field can be named `main` or anything if the filename ends with `.typ`
+    #[schema(value_type = String, format = Binary)]
+    pub main: String,
+    /// Any additional files (images, typst modules, fonts)
+    #[schema(value_type = Option<Vec<String>>, format = Binary)]
+    pub _other_files: Option<Vec<String>>,
+}
+
+#[utoipa::path(
+    post,
+    path = "/compile",
+    request_body(content_type = "multipart/form-data", content = CompileRequest),
+    responses(
+        (status = 200, description = "Successfully compiled PDF", body = [u8], content_type = "application/pdf"),
+        (status = 400, description = "Compilation error or bad request", body = ErrorResponse),
+        (status = 408, description = "Compilation timed out", body = SimpleErrorResponse),
+        (status = 500, description = "Internal server error", body = SimpleErrorResponse)
+    ),
+    security(
+        ("bearer_auth" = [])
+    )
+)]
 pub(crate) async fn compile_handler(
     State(state): State<AppState>,
     mut multipart: Multipart,
@@ -131,6 +179,20 @@ async fn perform_compilation(
     }
 }
 
+#[utoipa::path(
+    post,
+    path = "/compile/source",
+    request_body = CompileSourceRequest,
+    responses(
+        (status = 200, description = "Successfully compiled PDF", body = [u8], content_type = "application/pdf"),
+        (status = 400, description = "Compilation error or bad request", body = ErrorResponse),
+        (status = 408, description = "Compilation timed out", body = SimpleErrorResponse),
+        (status = 500, description = "Internal server error", body = SimpleErrorResponse)
+    ),
+    security(
+        ("bearer_auth" = [])
+    )
+)]
 pub(crate) async fn compile_source_handler(
     State(state): State<AppState>,
     Json(payload): Json<CompileSourceRequest>,
@@ -167,14 +229,13 @@ fn format_errors(world: &ApiWorld, errors: &[SourceDiagnostic]) -> Vec<serde_jso
 
             if let Some(id) = e.span.id() {
                 map.insert("file".to_string(), json!(format!("{:?}", id)));
-                if let Ok(source) = world.source(id) {
-                    if let Some(range) = world.range(e.span) {
-                        if let Some((line, col)) = source.lines().byte_to_line_column(range.start) {
-                            map.insert("line".to_string(), json!(line + 1));
-                            map.insert("column".to_string(), json!(col + 1));
-                        }
+                if let Ok(source) = world.source(id)
+                    && let Some(range) = world.range(e.span)
+                    && let Some((line, col)) = source.lines().byte_to_line_column(range.start)
+                {
+                    map.insert("line".to_string(), json!(line + 1));
+                    map.insert("column".to_string(), json!(col + 1));
                     }
-                }
             }
 
             if !e.hints.is_empty() {
@@ -187,6 +248,26 @@ fn format_errors(world: &ApiWorld, errors: &[SourceDiagnostic]) -> Vec<serde_jso
         .collect()
 }
 
+#[derive(serde::Serialize, ToSchema)]
+pub(crate) struct FontInfo {
+    pub family: String,
+    pub style: String,
+    pub weight: u16,
+    pub stretch: String,
+}
+
+#[derive(serde::Serialize, ToSchema)]
+pub(crate) struct FontsResponse {
+    pub fonts: Vec<FontInfo>,
+}
+
+#[utoipa::path(
+    get,
+    path = "/fonts",
+    responses(
+        (status = 200, description = "List of available system and configured fonts", body = FontsResponse)
+    )
+)]
 pub(crate) async fn list_fonts_handler(State(state): State<AppState>) -> Json<serde_json::Value> {
     let font_state = state.font_state.read().await;
     let mut fonts = Vec::new();
@@ -202,6 +283,22 @@ pub(crate) async fn list_fonts_handler(State(state): State<AppState>) -> Json<se
     Json(json!({ "fonts": fonts }))
 }
 
+#[derive(serde::Serialize, ToSchema)]
+pub(crate) struct RefreshFontsResponse {
+    pub status: String,
+    pub message: String,
+}
+
+#[utoipa::path(
+    post,
+    path = "/fonts/refresh",
+    responses(
+        (status = 200, description = "Fonts reloaded successfully", body = RefreshFontsResponse)
+    ),
+    security(
+        ("bearer_auth" = [])
+    )
+)]
 pub(crate) async fn refresh_fonts_handler(
     State(state): State<AppState>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, Json<serde_json::Value>)> {
