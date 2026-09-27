@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   typst-api:
     # CHOOSING THE IMAGE
