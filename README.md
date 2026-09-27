@@ -21,7 +21,7 @@ Note: if you are exposing your API to the public be sure to prevent API abuse by
 
 ## Starting the server
 
-### Running with Docker Compose
+### Running with Docker Compose (Recommended)
 1. In a directory of your choice on your server create 2 files, a `.env` and a `docker-compose.yml`, and create a `fonts` directory.
 2. Add to the `.env` the contents of [`.env.example`](.env.example), configure the variables to your needs.
 3. Put the contents of the [`docker-compose.yml`](docker-compose.yml) into your local docker compose file. It already has the proper configuration and pulls the Docker image from DockerHub.
