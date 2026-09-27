@@ -26,7 +26,7 @@ Note: if you are exposing your API to the public be sure to prevent API abuse by
 2. Add to the `.env` the contents of [`.env.example`](.env.example), configure the variables to your needs.
 3. Put the contents of the [`docker-compose.yml`](docker-compose.yml) into your local docker compose file. It already has the proper configuration and pulls the Docker image from DockerHub.
 4. From this same local directory, do `docker compose up -d`.
-5. The API will be available at `http://localhost:8080/compile`, or replacing `8080` with whatever port you have specified.
+5. Check `http://localhost:8080/health`, it should return 200 (Ok). The root endpoint `http://localhost:8080` should return a welcome json with the API version, the swagger-ui docs endpoint and other useful information.
 
 ### Running with Docker Compose (Local Development)
 
@@ -34,7 +34,7 @@ Note: if you are exposing your API to the public be sure to prevent API abuse by
 2. Copy the `.env.example` to `.env` and adjust the variables if needed.
 3. No need to modify the `docker-compose.yml` because we have a `docker-compose.override.yml` that already does the job.
 4. Run `docker compose up --build -d`. This will trigger the `Dockerfile` actions and start building the docker image and after that starting the container.
-5. The API will be available at `http://localhost:8080/compile`.
+5. The API will be available at `http://localhost:8080`
 6. Now you can modify the Rust source code as you please and every time you hit a `docker compose up --build -d` the container will restart with your new custom image. This way you can tweak the API even further to fit your exact needs.
 
 ### Running with Docker
@@ -42,12 +42,12 @@ You can pull and run the image directly from Docker Hub by using:
 ```bash
 docker run -p 8080:8080 mapaor4/typst-api:latest
 ```
-The API will be available at `http://localhost:8080/compile`. You can of course set any another port you like. For example, you can map the container's default port (`8080`) to the host's `3001` port:
+The API will be available at `http://localhost:8080`. You can of course set any another port you like. For example, you can map the container's default port (`8080`) to the host's `3001` port:
 
 ```bash
 docker run -p 3001:8080 mapaor4/typst-api:latest
 ```
-The API will now be available at `http://localhost:3001/compile`. 
+The API will now be available at `http://localhost:3001`. 
 
 ### Running the standalone compiled binary
 
