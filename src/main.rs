@@ -1,37 +1,39 @@
 mod config;
 mod fonts;
-mod world;
-mod middleware;
-mod state;
 mod handlers;
+mod middleware;
 mod packages;
+mod state;
+mod world;
 
+use crate::middleware::{admin_auth_middleware, auth_middleware};
+use axum::middleware::from_fn_with_state;
 use axum::{
-    Router,
+    Json, Router,
     extract::DefaultBodyLimit,
     http::{HeaderValue, Method, header},
-    routing::{get, post, delete},
+    routing::{delete, get, post},
 };
-use axum::middleware::from_fn_with_state;
-use utoipa::{
-    openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme},
-    Modify, OpenApi,
-};
-use utoipa_swagger_ui::SwaggerUi;
-use crate::middleware::{auth_middleware, admin_auth_middleware};
-use tower::limit::ConcurrencyLimitLayer;
-use tower_http::cors::CorsLayer;
 use config::Config;
 use fonts::FontState;
+use serde_json::{Value, json};
 use std::sync::Arc;
+use tower::limit::ConcurrencyLimitLayer;
+use tower_http::cors::CorsLayer;
 use typst_kit::downloader::SystemDownloader;
 use typst_kit::packages::SystemPackages;
-
-use state::AppState;
-use handlers::{
-    compile_handler, compile_source_handler, list_fonts_handler, refresh_fonts_handler,
-    list_packages_handler, preload_packages_handler, sync_all_packages_handler, clear_packages_cache_handler,
+use utoipa::{
+    Modify, OpenApi,
+    openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme},
 };
+use utoipa_swagger_ui::SwaggerUi;
+
+use handlers::{
+    clear_packages_cache_handler, compile_handler, compile_source_handler, list_fonts_handler,
+    list_packages_handler, preload_packages_handler, refresh_fonts_handler,
+    sync_all_packages_handler,
+};
+use state::AppState;
 
 #[derive(OpenApi)]
 #[openapi(
@@ -91,7 +93,9 @@ async fn main() {
     tracing::info!("Starting server on port {}", config.port);
     tracing::info!("Font paths: {:?}", config.font_paths);
 
-    let font_state = Arc::new(tokio::sync::RwLock::new(Arc::new(FontState::new(&config.font_paths))));
+    let font_state = Arc::new(tokio::sync::RwLock::new(Arc::new(FontState::new(
+        &config.font_paths,
+    ))));
 
     let downloader = SystemDownloader::new("typst-api");
     let packages = Arc::new(SystemPackages::new(downloader));
@@ -112,7 +116,9 @@ async fn main() {
             } else {
                 println!("Preloading complete.");
             }
-        }).await.unwrap();
+        })
+        .await
+        .unwrap();
     }
 
     if state.config.cache_all_packages {
@@ -143,18 +149,18 @@ pub(crate) fn create_app(state: AppState) -> Router {
                 .split(',')
                 .map(|s| s.trim().to_string())
                 .collect();
-            
-            let allow_origin = tower_http::cors::AllowOrigin::predicate(
-                move |origin: &HeaderValue, _| {
+
+            let allow_origin =
+                tower_http::cors::AllowOrigin::predicate(move |origin: &HeaderValue, _| {
                     if let Ok(origin_str) = origin.to_str() {
                         allowed_patterns.iter().any(|pattern| {
-                            origin_str == pattern || origin_str.starts_with(&format!("{}:", pattern))
+                            origin_str == pattern
+                                || origin_str.starts_with(&format!("{}:", pattern))
                         })
                     } else {
                         false
                     }
-                },
-            );
+                });
 
             CorsLayer::new()
                 .allow_origin(allow_origin)
@@ -168,7 +174,9 @@ pub(crate) fn create_app(state: AppState) -> Router {
     let compile_router = Router::new()
         .route("/", post(compile_handler))
         .route("/source", post(compile_source_handler))
-        .layer(ConcurrencyLimitLayer::new(state.config.max_concurrent_compilations))
+        .layer(ConcurrencyLimitLayer::new(
+            state.config.max_concurrent_compilations,
+        ))
         .route_layer(from_fn_with_state(state.clone(), auth_middleware));
 
     let admin_router = Router::new()
@@ -176,10 +184,14 @@ pub(crate) fn create_app(state: AppState) -> Router {
         .route("/admin/packages", get(list_packages_handler))
         .route("/admin/packages/preload", post(preload_packages_handler))
         .route("/admin/packages/sync-all", post(sync_all_packages_handler))
-        .route("/admin/packages/cache", delete(clear_packages_cache_handler))
+        .route(
+            "/admin/packages/cache",
+            delete(clear_packages_cache_handler),
+        )
         .route_layer(from_fn_with_state(state.clone(), admin_auth_middleware));
 
     Router::new()
+        .route("/", get(apex_handler))
         .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .route("/health", get(|| async { "OK" }))
         .route("/fonts", get(list_fonts_handler))
@@ -188,4 +200,16 @@ pub(crate) fn create_app(state: AppState) -> Router {
         .layer(cors_layer)
         .layer(DefaultBodyLimit::max(state.config.max_payload_size))
         .with_state(state)
+}
+
+async fn apex_handler() -> Json<Value> {
+    Json(json!({
+        "name": env!("CARGO_PKG_NAME"),
+        "version": env!("CARGO_PKG_VERSION"),
+        "description": env!("CARGO_PKG_DESCRIPTION"),
+        "github": env!("CARGO_PKG_REPOSITORY"),
+        "docs": "/swagger-ui",
+        "openapi": "/api-docs/openapi.json",
+        "health": "/health"
+    }))
 }
