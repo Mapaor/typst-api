@@ -13,21 +13,18 @@ pub async fn auth_middleware(
     req: Request,
     next: Next,
 ) -> Result<Response, (StatusCode, Json<serde_json::Value>)> {
-    if state.config.auth_token.is_some() || state.config.admin_token.is_some() {
+    if let Some(auth_token) = &state.config.auth_token {
         let auth_header = req.headers().get("Authorization").and_then(|h| h.to_str().ok());
-        let mut allowed = false;
+        let expected_auth = format!("Bearer {}", auth_token);
 
-        if let Some(token) = &state.config.auth_token {
-            let expected = format!("Bearer {}", token);
-            if auth_header == Some(&expected) {
-                allowed = true;
-            }
-        }
-        
-        if !allowed && let Some(token) = &state.config.admin_token {
-            let expected = format!("Bearer {}", token);
-            if auth_header == Some(&expected) {
-                allowed = true;
+        let mut allowed = auth_header == Some(&expected_auth);
+
+        if !allowed {
+            if let Some(admin_token) = &state.config.admin_token {
+                let expected_admin = format!("Bearer {}", admin_token);
+                if auth_header == Some(&expected_admin) {
+                    allowed = true;
+                }
             }
         }
 
@@ -99,7 +96,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_auth_admin_only() {
+    async fn test_auth_admin_token_only() {
         let mut config = crate::config::Config::load();
         config.auth_token = None;
         config.admin_token = Some("admin_secret".to_string());
@@ -110,7 +107,6 @@ mod tests {
         let req = Request::builder()
             .method("POST")
             .uri("/compile/source")
-            .header(header::AUTHORIZATION, "Bearer admin_secret")
             .header("Content-Type", "application/json")
             .body(Body::from(r#"{"source": "= Hello", "filename": "main.typ"}"#))
             .unwrap();
@@ -135,6 +131,58 @@ mod tests {
             .unwrap();
         let res3 = app.oneshot(req3).await.unwrap();
         assert_ne!(res3.status(), StatusCode::UNAUTHORIZED);
+    }
+
+    #[tokio::test]
+    async fn test_auth_token_only() {
+        let mut config = crate::config::Config::load();
+        config.auth_token = Some("user_secret".to_string());
+        // Simulate the fallback from Config::load()
+        config.admin_token = Some("user_secret".to_string());
+        
+        let mut state = create_test_state(None);
+        state.config = std::sync::Arc::new(config);
+        let app = create_app(state);
+        
+        // 1. Compile WITHOUT token SHOULD fail
+        let req = Request::builder()
+            .method("POST")
+            .uri("/compile/source")
+            .header("Content-Type", "application/json")
+            .body(Body::from(r#"{"source": "= Hello", "filename": "main.typ"}"#))
+            .unwrap();
+        let res = app.clone().oneshot(req).await.unwrap();
+        assert_eq!(res.status(), StatusCode::UNAUTHORIZED);
+        
+        // 2. Compile WITH token SHOULD succeed
+        let req2 = Request::builder()
+            .method("POST")
+            .uri("/compile/source")
+            .header(header::AUTHORIZATION, "Bearer user_secret")
+            .header("Content-Type", "application/json")
+            .body(Body::from(r#"{"source": "= Hello", "filename": "main.typ"}"#))
+            .unwrap();
+        let res2 = app.clone().oneshot(req2).await.unwrap();
+        assert_ne!(res2.status(), StatusCode::UNAUTHORIZED);
+        
+        // 3. Admin request WITHOUT token SHOULD fail
+        let req3 = Request::builder()
+            .method("POST")
+            .uri("/admin/fonts/refresh")
+            .body(Body::empty())
+            .unwrap();
+        let res3 = app.clone().oneshot(req3).await.unwrap();
+        assert_eq!(res3.status(), StatusCode::UNAUTHORIZED);
+        
+        // 4. Admin request WITH token SHOULD succeed
+        let req4 = Request::builder()
+            .method("POST")
+            .uri("/admin/fonts/refresh")
+            .header(header::AUTHORIZATION, "Bearer user_secret")
+            .body(Body::empty())
+            .unwrap();
+        let res4 = app.clone().oneshot(req4).await.unwrap();
+        assert_ne!(res4.status(), StatusCode::UNAUTHORIZED);
     }
 
     #[tokio::test]
