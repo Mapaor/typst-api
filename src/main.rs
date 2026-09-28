@@ -20,6 +20,8 @@ use serde_json::{Value, json};
 use std::sync::Arc;
 use tower::limit::ConcurrencyLimitLayer;
 use tower_http::cors::CorsLayer;
+use tower_http::trace::TraceLayer;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
 use typst_kit::downloader::SystemDownloader;
 use typst_kit::packages::SystemPackages;
 use utoipa::{
@@ -87,7 +89,10 @@ impl Modify for SecurityAddon {
 
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::fmt::init();
+    tracing_subscriber::registry()
+        .with(EnvFilter::try_from_default_env().unwrap_or_else(|_| "typst_api=info,tower_http=info".into()))
+        .with(tracing_subscriber::fmt::layer())
+        .init();
 
     let config = Config::load();
     tracing::info!("Starting server on port {}", config.port);
@@ -198,6 +203,7 @@ pub(crate) fn create_app(state: AppState) -> Router {
         .nest("/compile", compile_router)
         .merge(admin_router)
         .layer(cors_layer)
+        .layer(TraceLayer::new_for_http())
         .layer(DefaultBodyLimit::max(state.config.max_payload_size))
         .with_state(state)
 }
