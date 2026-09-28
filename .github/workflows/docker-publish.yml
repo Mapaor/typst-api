@@ -83,7 +83,7 @@ jobs:
 
           ## Standalone Binaries"
 
-          NEW_BODY="${BODY/$SEARCH/$REPLACE}"
+          NEW_BODY="${BODY/"$SEARCH"/$REPLACE}"
 
           # Update the GitHub Release
           gh release edit "$TAG" --notes "$NEW_BODY"
