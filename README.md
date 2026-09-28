@@ -12,12 +12,12 @@ The requirements for most cases are:
 - 1 GB of disk space
 - 1 core of CPU/vCPU
 
-For cases where you are exposing your API to the public you should be try to have:
+For cases where you are exposing your API to the public you should try to have:
 - 2 GB of RAM
 - 3 GB of disk space
 - 1 core of CPU/vCPU
 
-Note: if you are exposing your API to the public be sure to prevent API abuse by configuring maximum payload size and maximum concurrent compilations as explained below.
+Note: if you are exposing your API to the public, be sure to prevent API abuse by configuring maximum payload size and maximum concurrent compilations as explained below.
 
 ## Starting the server
 
@@ -150,7 +150,7 @@ If you have Postman desktop installed (and optionally the VSCode Extension as we
 You can check a full set of examples in the `examples/` directory, which contain both the Typst and related files, the PowerShell and Curl commands to run the examples and the expected PDF output.
 
 ### Admin Endpoints
-The API includes admin endpoints which are prefixed with `/admin`. To set them add an `ADMIN_TOKEN` to the `.env` file. If the variable is no set these endpoints fall back to `AUTH_TOKEN` authentication. If neither is set, all endpoints are they are publicly accessible.
+The API includes admin endpoints which are prefixed with `/admin`. To set authentication for them add an `ADMIN_TOKEN` to the `.env` file. If the variable is not set, these endpoints fall back to `AUTH_TOKEN` authentication. If neither is set, all endpoints are publicly accessible.
 
 - `POST /admin/fonts/refresh` reloads local fonts (from the `TYPST_FONT_PATHS` directory) without having to restart the container.
 - `GET /admin/packages` returns a list of all cached Typst packages and their total size.
@@ -158,7 +158,7 @@ The API includes admin endpoints which are prefixed with `/admin`. To set them a
 - `POST /admin/packages/sync-all` triggers a background sync of all packages from the [Typst registry](https://packages.typst.org/preview/index.json). As of september 2026 all the  versions of all the packages are about 1.8 GB. 
 - `DELETE /admin/packages/cache` clears the local package cache.
 
-By default, when using Docker Compose the package cache persists container restarts because it uses a docker named volume, additionaly you can configure in the `.env` file the following variables:
+By default, when using Docker Compose the package cache persists across container restarts because it uses a docker named volume, additionally you can configure in the `.env` file the following variables:
 - `PRELOAD_PACKAGES`: A list of comma-separated essential packages you want to have available on start up.
 - `CACHE_ALL_PACKAGES`: If set to true downloads the entire Typst registry (~1.8GB) in the background when the server starts.
 
@@ -166,10 +166,14 @@ By default, when using Docker Compose the package cache persists container resta
 You can then use any reverse proxy, tunnel or VPN you might typically use to expose your containers to your other devices or the whole internet.
 
 My recommendations:
-- If you are the only one who is gonna use the API from a specific set owned devices, use Tailscale and make the requests to the tailnet IP of your server or home server.
-- If you have a home server (without a public IP) and you want the API to be accessible through the internet, use Caddy as a reverse proxy on your server and then Cloudflare Tunnel (Cloudflared) for creating a tunnel between your host and the world, you'll need a domain of course.
-  -> Checkout my the guide to set it up with Caddy and Cloudflare Tunnel on a Ubuntu Server.
-- Use Pangolin (instead of Cloudflare Tunnel) running on a VPS if you plan to work with very big documents or concurrent requests and want to avoid the Cloudflare 100MB limitation.
+- If you are the only one who is gonna use the API from a specific set of owned devices, use Tailscale and make the requests to the tailnet IP of your server or home server.
+- If you have a home server (without a public IP) and you want the API to be accessible through the internet use Tailscale Funnel to expose your api.
+  
+  ⟶ Check out my guide to expose your API in less than 5 minutes: [`FUNNEL_GUIDE.md`](FUNNEL_GUIDE.md).
+- If you have a home server without a public IP and you want the API to be accessible through the internet and also at a custom domain, use Caddy as a reverse proxy on your server and then Cloudflare Tunnel (Cloudflared) for creating a tunnel between your host and the world.
+  
+  ⟶ Checkout my guide to set up `typst-api` with Caddy and Cloudflare Tunnel on a Debian-based OS on a custom domain: [`CUSTOM_DOMAIN_GUIDE.md`](CUSTOM_DOMAIN_GUIDE.md)
+- Use Pangolin (instead of Cloudflare Tunnel) running on a VPS if you plan to work with very big documents or concurrent requests and want to avoid the Cloudflare 100MB limitation, or if you want to serve your api at a subsubdomain (api.typst.mydomain.com) and don't want to pay for Cloudflare Advanced Certificate Manager.
 
 Note: If you do expose the API running on your server to the general public (the internet) make sure to either enable token authentication (so that only you and people who you trust can  use the API) or enforce limits like maximum payload size and maximum concurrent compilation to prevent API usage.
 
