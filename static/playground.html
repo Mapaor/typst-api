@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typst API Playground</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Typst API Playground</h1>
+    </header>
+    <div class="container">
+        <div class="left-panel">
+            <div>
+                <label for="token">Authorization Token (Optional)</label>
+                <input type="text" id="token" placeholder="Bearer token (if required)">
+            </div>
+            
+            <div style="flex: 1; display: flex; flex-direction: column;">
+                <label for="source">Typst Source Code</label>
+                <textarea id="source">= Hello Typst!
+
+This playground is a simple use case for the API. Edit this text and then hit 'Compile PDF'. It internally will do an HTTP request to the `/compile/source` endpoint using javascript. 
+
+Here's a Feynmann diagram made using the `fletcher` package:
+
+#import "@preview/fletcher:0.5.8": diagram, edge
+
+#align(center)[
+#diagram($
+	e^- edge("rd", "-<|-") & & & edge("ld", "-|>-") e^+ \
+	& edge(gamma, "wave") \
+	e^+ edge("ru", "-|>-") & & & edge("lu", "-<|-") e^- \
+$)
+]
+
+You can also use custom fonts, let's try it!
+
+#set text(font: "IBM Plex Sans")
+
+This is written in IBM Plex Sans. #lorem(40)
+
+You can check the full list of fonts currently present in the server with `GET fonts/`.
+</textarea>
+            </div>
+
+            <button id="compileBtn">Compile PDF</button>
+            <div id="status" class="status"></div>
+        </div>
+        <div class="right-panel">
+            <iframe id="pdfPreview" title="PDF Preview"></iframe>
+        </div>
+    </div>
+
+    <script src="script.js"> </script>
+</body>
+</html>

@@ -27,6 +27,7 @@ Note: if you are exposing your API to the public, be sure to prevent API abuse b
 3. Put the contents of the [`docker-compose.yml`](docker-compose.yml) into your local docker compose file. It already has the proper configuration and pulls the Docker image from DockerHub.
 4. From this same local directory, do `docker compose up -d`.
 5. Check `http://localhost:8080/health`, it should return 200 (Ok). The root endpoint `http://localhost:8080` should return a welcome json with the API version, the swagger-ui docs endpoint and other useful information.
+6. Visit `http://localhost:8080/playground` to interactively test the API in your browser.
 
 ### Running with Docker Compose (Local Development)
 
@@ -112,7 +113,17 @@ Send an `application/json` request with your typst source code like shown in [`e
 curl -X POST http://localhost:8080/compile/source -H "Content-Type: application/json" -d '{"source": "= Hello Typst!\nThis is a very simple document.", "filename": "main.typ"}' --output "examples/typst-source-code/example.pdf"
 ```
 
-You can also set CORS to `*` (permissive) in the env file and open the [`examples/typst-source-code/index.html`](examples/typst-source-code/index.html) file in your browser for a more interactive example.
+You can also visit `http://localhost:8080/playground` to test the API in the browser. If you check the `static/` folder of this repo you'll see how the playground is internally doing the API call in vanilla javascript.
+```js
+const response = await fetch('/compile/source', {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify({
+        source: sourceCode,
+        filename: "main.typ"
+    })
+});
+```
 
 ### Multipart example Request
 

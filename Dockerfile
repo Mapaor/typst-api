@@ -17,6 +17,7 @@ RUN mkdir src && \
 
 # Copy the actual source code and build the final binary
 COPY src src
+COPY static static
 # Update timestamps to force rebuild of main.rs
 RUN touch src/main.rs
 RUN cargo build --release

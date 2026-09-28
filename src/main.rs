@@ -32,7 +32,7 @@ use utoipa_swagger_ui::SwaggerUi;
 
 use handlers::{
     clear_packages_cache_handler, compile_handler, compile_source_handler, list_fonts_handler,
-    list_packages_handler, preload_packages_handler, refresh_fonts_handler,
+    list_packages_handler, playground_handler, preload_packages_handler, refresh_fonts_handler,
     sync_all_packages_handler,
 };
 use state::AppState;
@@ -197,6 +197,7 @@ pub(crate) fn create_app(state: AppState) -> Router {
 
     Router::new()
         .route("/", get(apex_handler))
+        .route("/playground", get(playground_handler))
         .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .route("/health", get(|| async { "OK" }))
         .route("/fonts", get(list_fonts_handler))

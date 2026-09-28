@@ -1,0 +1,152 @@
+:root {
+    --bg-color: #fcfcfc;
+    --text-color: #333;
+    --border-color: #ccc;
+    --primary: #007bff;
+    --primary-hover: #0056b3;
+    --error-bg: #ffe6e6;
+    --error-color: #d8000c;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #1e1e1e;
+        --text-color: #eee;
+        --border-color: #444;
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --error-bg: #5c1616;
+        --error-color: #ff9999;
+    }
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.left-panel {
+    width: 40%;
+    min-width: 300px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+    gap: 1rem;
+    overflow-y: auto;
+}
+
+.right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff; /* Keep preview area white for PDF standard */
+}
+
+@media (prefers-color-scheme: dark) {
+    .right-panel {
+        background-color: #525659; /* PDF viewer dark bg */
+    }
+}
+
+label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+    display: block;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+textarea {
+    flex: 1;
+    resize: none;
+    min-height: 200px;
+}
+
+button {
+    padding: 0.6rem 1rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: var(--primary-hover);
+}
+
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.status {
+    padding: 0.8rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    display: none;
+    white-space: pre-wrap;
+    font-family: monospace;
+}
+
+.status.error {
+    display: block;
+    background-color: var(--error-bg);
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+}
+
+.status.info {
+    display: block;
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}

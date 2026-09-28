@@ -1,6 +1,7 @@
 pub mod compile;
 pub mod fonts;
 pub mod packages;
+pub mod playground;
 
 pub(crate) use compile::{compile_handler, compile_source_handler};
 pub(crate) use fonts::{list_fonts_handler, refresh_fonts_handler};
@@ -8,6 +9,7 @@ pub(crate) use packages::{
     list_packages_handler, preload_packages_handler, sync_all_packages_handler,
     clear_packages_cache_handler,
 };
+pub(crate) use playground::playground_handler;
 
 pub(crate) use compile::{CompileRequest, CompileSourceRequest, ErrorInfo, ErrorResponse};
 pub(crate) use fonts::{FontInfo, FontsResponse, RefreshFontsResponse};
