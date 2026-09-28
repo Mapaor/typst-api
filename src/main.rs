@@ -31,9 +31,9 @@ use utoipa::{
 use utoipa_swagger_ui::SwaggerUi;
 
 use handlers::{
-    clear_packages_cache_handler, compile_handler, compile_source_handler, list_fonts_handler,
-    list_packages_handler, playground_handler, preload_packages_handler, refresh_fonts_handler,
-    sync_all_packages_handler,
+    admin_info_handler, clear_packages_cache_handler, compile_handler, compile_source_handler,
+    list_fonts_handler, list_packages_handler, playground_handler, preload_packages_handler,
+    refresh_fonts_handler, sync_all_packages_handler,
 };
 use state::AppState;
 
@@ -48,6 +48,7 @@ use state::AppState;
         handlers::packages::preload_packages_handler,
         handlers::packages::sync_all_packages_handler,
         handlers::packages::clear_packages_cache_handler,
+        handlers::admin::admin_info_handler,
     ),
     components(
         schemas(
@@ -62,7 +63,10 @@ use state::AppState;
             handlers::PackageInfoResponse,
             handlers::PackagesCacheResponse,
             handlers::PreloadPackagesRequest,
-            handlers::SimpleSuccessResponse
+            handlers::SimpleSuccessResponse,
+            handlers::AdminInfoResponse,
+            handlers::AdminConfigInfo,
+            handlers::AdminStatsInfo
         )
     ),
     modifiers(&SecurityAddon)
@@ -109,6 +113,7 @@ async fn main() {
         config: Arc::new(config.clone()),
         font_state,
         packages,
+        startup_time: std::time::Instant::now(),
     };
 
     // Startup routines for packages
@@ -185,6 +190,7 @@ pub(crate) fn create_app(state: AppState) -> Router {
         .route_layer(from_fn_with_state(state.clone(), auth_middleware));
 
     let admin_router = Router::new()
+        .route("/admin/info", get(admin_info_handler))
         .route("/admin/fonts/refresh", post(refresh_fonts_handler))
         .route("/admin/packages", get(list_packages_handler))
         .route("/admin/packages/preload", post(preload_packages_handler))
@@ -217,6 +223,7 @@ async fn apex_handler() -> Json<Value> {
         "github": env!("CARGO_PKG_REPOSITORY"),
         "docs": "/swagger-ui",
         "openapi": "/api-docs/openapi.json",
+        "playground": "/playground",
         "health": "/health"
     }))
 }
