@@ -4,10 +4,14 @@ const tokenInput = document.getElementById('token');
 const pdfPreview = document.getElementById('pdfPreview');
 const statusDiv = document.getElementById('status');
 
+statusDiv.className = 'status info';
+statusDiv.textContent = 'Waiting for initial compilation...';
+
 async function compilePdf() {
     compileBtn.disabled = true;
     compileBtn.textContent = 'Compiling...';
-    statusDiv.className = 'status'; // hide
+    statusDiv.className = 'status info';
+    statusDiv.textContent = 'Compiling...';
     
     const sourceCode = sourceTextarea.value;
     const token = tokenInput.value.trim();
@@ -48,8 +52,6 @@ async function compilePdf() {
         pdfPreview.src = blobUrl;
         statusDiv.className = 'status info';
         statusDiv.textContent = 'Compiled successfully.';
-        // Auto hide success after 3 seconds
-        setTimeout(() => { if(statusDiv.className === 'status info') statusDiv.className = 'status'; }, 3000);
     } catch (err) {
         statusDiv.className = 'status error';
         statusDiv.textContent = err.message;
