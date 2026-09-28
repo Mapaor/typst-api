@@ -163,6 +163,7 @@ You can check a full set of examples in the `examples/` directory, which contain
 ### Admin Endpoints
 The API includes admin endpoints which are prefixed with `/admin`. To set authentication for them add an `ADMIN_TOKEN` to the `.env` file. If the variable is not set, these endpoints fall back to `AUTH_TOKEN` authentication. If neither is set, all endpoints are publicly accessible.
 
+- `GET /admin/info` returns a json with useful info like status, config options and stats.
 - `POST /admin/fonts/refresh` reloads local fonts (from the `TYPST_FONT_PATHS` directory) without having to restart the container.
 - `GET /admin/packages` returns a list of all cached Typst packages and their total size.
 - `POST /admin/packages/preload` receives a JSON array of packages to be downloaded and added to the cache.
