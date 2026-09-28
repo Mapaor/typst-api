@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Fixed `ADMIN_TOKEN` only case, now `compile` and `compile/source` can be public while protecting the `admin/` routes.
-- Fixed `docker-publish` workflow to properly update the release notes.
-- Improved current tests and added 2 more.
+## [0.2.4] - 2026-09-29
+### Added
+- Added `/playground` route, a simple static website to test the API in the browser.
+- Added `/admin/info` endpoint to check status, config values and stats.
 - Added tower-http `trace` feature to improve logs.
 - Added guides [`CUSTOM_DOMAIN_GUIDE.md`](CUSTOM_DOMAIN_GUIDE.md) and [`FUNNEL_GUIDE.md`](FUNNEL_GUIDE.md) for exposing the API publicly if you have a home server under CG-NAT.
+- Added some more tests.
+
+### Changed
+- Now if `ADMIN_TOKEN` but `AUTH_TOKEN` isn't, `/compile` and `/compile/source` remain publicly accessible. This is better than everything under `ADMIN_TOKEN` (old logic). Now you can make your API public while still protecting the `admin/` routes.
+- Fixed `docker-publish` workflow to properly update the release notes (internal detail).
 
 ## [0.2.3] - 2026-09-27
 ### Added
@@ -59,7 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CORS configuration support.
 - Example requests for different Typst documents using cURL and PowerShell.
 
-[Unreleased]: https://github.com/Mapaor/typst-api/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/Mapaor/typst-api/compare/v0.2.4...HEAD
+[0.2.4]: https://github.com/Mapaor/typst-api/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/Mapaor/typst-api/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/Mapaor/typst-api/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/Mapaor/typst-api/compare/v0.2.0...v0.2.1
