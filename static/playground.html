@@ -13,15 +13,15 @@
     <div class="container">
         <div class="left-panel">
             <div>
-                <label for="token">Authorization Token (Optional)</label>
-                <input type="text" id="token" placeholder="Bearer token (if required)">
+                <label for="token">Authorization Token</label>
+                <input type="text" id="token" placeholder="Bearer token (only required if `AUTH_TOKEN` is set)">
             </div>
             
             <div style="flex: 1; display: flex; flex-direction: column;">
                 <label for="source">Typst Source Code</label>
                 <textarea id="source">= Hello Typst!
 
-This playground is a simple use case for the API. Edit this text and then hit 'Compile PDF'. It internally will do an HTTP request to the `/compile/source` endpoint using javascript. 
+This playground is a simple use case for the API. Edit this text and then hit `Ctrl+Enter` or click the 'Compile PDF' button. It internally does an HTTP request to the `/compile/source` endpoint using JavaScript. 
 
 Here's a Feynmann diagram made using the `fletcher` package:
 

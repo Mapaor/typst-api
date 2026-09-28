@@ -9,6 +9,7 @@ pub(crate) struct AppState {
     pub(crate) config: Arc<Config>,
     pub(crate) font_state: Arc<RwLock<Arc<FontState>>>,
     pub(crate) packages: Arc<SystemPackages>,
+    pub(crate) startup_time: std::time::Instant,
 }
 
 #[cfg(test)]
@@ -47,6 +48,7 @@ pub(crate) mod test_helpers {
             config: Arc::new(config),
             font_state,
             packages,
+            startup_time: std::time::Instant::now(),
         }
     }
 }
