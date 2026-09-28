@@ -298,4 +298,39 @@ mod tests {
         let errors = body_json["errors"].as_array().unwrap();
         assert!(!errors.is_empty());
     }
+
+    #[tokio::test]
+    async fn test_compile_multipart_success() {
+        let state = create_test_state(None);
+        let app = create_app(state);
+        
+        let boundary = "------------------------14737809831466499882746641449";
+        let body = format!(
+            "--{0}\r\n\
+            Content-Disposition: form-data; name=\"main\"; filename=\"main.typ\"\r\n\
+            \r\n\
+            = Hello World\n\
+            #include \"other.typ\"\r\n\
+            --{0}\r\n\
+            Content-Disposition: form-data; name=\"other.typ\"; filename=\"other.typ\"\r\n\
+            \r\n\
+            This is from the other file.\r\n\
+            --{0}--\r\n",
+            boundary
+        );
+        
+        let req = Request::builder()
+            .method("POST")
+            .uri("/compile")
+            .header("Content-Type", format!("multipart/form-data; boundary={}", boundary))
+            .body(Body::from(body))
+            .unwrap();
+            
+        let res = app.oneshot(req).await.unwrap();
+        assert_eq!(res.status(), StatusCode::OK);
+        assert_eq!(res.headers().get("Content-Type").unwrap(), "application/pdf");
+        
+        let body_bytes = to_bytes(res.into_body(), usize::MAX).await.unwrap();
+        assert!(body_bytes.starts_with(b"%PDF-"));
+    }
 }
