@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fixed `ADMIN_TOKEN` only case, now `compile` and `compile/source` can be public while protecting the `admin/` routes.
+- Fixed `docker-publish` workflow to properly update the release notes.
+- Improved current tests and added 2 more.
+- Added tower-http `trace` feature to improve logs.
+- Added guides [`CUSTOM_DOMAIN_GUIDE.md`](CUSTOM_DOMAIN_GUIDE.md) and [`FUNNEL_GUIDE.md`](FUNNEL_GUIDE.md) for exposing the API publicly if you have a home server under CG-NAT.
+
 ## [0.2.3] - 2026-09-27
 ### Added
 - Added a public root endpoint (`GET /`) that returns service metadata and links to the Swagger UI, OpenAPI specification, and health check.
