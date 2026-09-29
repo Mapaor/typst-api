@@ -232,17 +232,48 @@ EOF
 
   systemctl daemon-reload
   echo "Service installed at $SERVICE_FILE"
-  echo "IMPORTANT (MANUAL STEP): To start it run: \`sudo systemctl start typst-api\`"
-  echo "IMPORTANT (MANUAL STEP): To enable it starting automatically on boot run: \`sudo systemctl enable typst-api\`"
 fi
 
-# --- Health Check ---
-echo "Running health check..."
-if "$INSTALL_DIR/typst-api" --help >/dev/null 2>&1 || "$INSTALL_DIR/typst-api" --version >/dev/null 2>&1 || [ -x "$INSTALL_DIR/typst-api" ]; then
+# --- Installation Check ---
+echo "Checking installed executable..."
+if [ -x "$INSTALL_DIR/typst-api" ]; then
   echo "Installation completed successfully! 🎉"
-  if [[ "$WITH_SERVICE" != true ]]; then
+  if [[ "$WITH_SERVICE" == true ]]; then
+    SERVICE_ENV_FILE="/etc/typst-api/typst-api.env"
+    HEALTH_PORT=8080
+    if [[ -f "$SERVICE_ENV_FILE" ]]; then
+      CONFIGURED_PORT=$(sed -nE 's/^PORT=([0-9]+).*/\1/p' "$SERVICE_ENV_FILE" | head -n 1)
+      if [[ -n "$CONFIGURED_PORT" ]]; then
+        HEALTH_PORT="$CONFIGURED_PORT"
+      fi
+    fi
+
+    echo "Starting and enabling typst-api service..."
+    systemctl enable --now typst-api
+    HEALTH_URL="http://127.0.0.1:${HEALTH_PORT}/health"
+    echo "Waiting for $HEALTH_URL..."
+    SERVICE_HEALTHY=false
+    for _ in {1..15}; do
+      if curl -fsS --max-time 2 "$HEALTH_URL" >/dev/null; then
+        SERVICE_HEALTHY=true
+        break
+      fi
+      sleep 1
+    done
+
+    if [[ "$SERVICE_HEALTHY" == true ]]; then
+      echo "Health check passed: $HEALTH_URL"
+      systemctl --no-pager --full status typst-api
+    else
+      echo "Error: typst-api did not become healthy at $HEALTH_URL"
+      systemctl --no-pager --full status typst-api || true
+      exit 1
+    fi
+  else
     echo "You can run the server using:"
     echo "  cd \"$INSTALL_DIR\" && ./typst-api"
+    echo "Then check its health with:"
+    echo "  curl http://127.0.0.1:8080/health"
   fi
 else
   echo "Warning: Executable check failed. It might require additional libraries or a different architecture."
