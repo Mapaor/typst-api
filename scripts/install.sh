@@ -122,6 +122,36 @@ fi
 mkdir -p "$INSTALL_DIR"
 mkdir -p "$INSTALL_DIR/fonts"
 
+port_in_use() {
+  if command -v ss >/dev/null 2>&1; then
+    ss -ltnH "sport = :$1" | grep -q .
+  elif command -v lsof >/dev/null 2>&1; then
+    lsof -nP -iTCP:"$1" -sTCP:LISTEN -t 2>/dev/null | grep -q .
+  else
+    return 1
+  fi
+}
+
+PORT=8080
+if [[ ! -f "$INSTALL_DIR/.env" ]]; then
+  while true; do
+    if [[ -r /dev/tty ]]; then
+      read -r -p "Enter the server port [8080]: " PORT_INPUT < /dev/tty
+    else
+      PORT_INPUT=""
+    fi
+    PORT_INPUT=${PORT_INPUT:-8080}
+    if [[ ! "$PORT_INPUT" =~ ^[0-9]+$ ]] || (( PORT_INPUT < 1 || PORT_INPUT > 65535 )); then
+      echo "Please enter a valid port between 1 and 65535."
+    elif port_in_use "$PORT_INPUT"; then
+      echo "Port $PORT_INPUT is already in use. Please choose another port."
+    else
+      PORT="$PORT_INPUT"
+      break
+    fi
+  done
+fi
+
 # --- Download & Verify ---
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"' EXIT
@@ -173,10 +203,11 @@ fi
 if [[ ! -f "$INSTALL_DIR/.env" ]]; then
   if [[ -f "$EXTRACT_DIR/.env.example" ]]; then
     echo "Generating .env file from .env.example..."
-    cp "$EXTRACT_DIR/.env.example" "$INSTALL_DIR/.env"
+    sed -E "s/^PORT=.*/PORT=$PORT/" "$EXTRACT_DIR/.env.example" > "$INSTALL_DIR/.env"
   else
     echo "Creating basic .env file..."
     cat > "$INSTALL_DIR/.env" <<EOF
+PORT=$PORT
 MAX_CONCURRENT_COMPILATIONS=10
 # AUTH_TOKEN=my-secret-token
 # ADMIN_TOKEN=my-admin-secret-token
@@ -238,9 +269,10 @@ fi
 echo "Checking installed executable..."
 if [ -x "$INSTALL_DIR/typst-api" ]; then
   echo "Installation completed successfully! 🎉"
+  CONFIGURED_PORT=$(sed -nE 's/^PORT=([0-9]+).*/\1/p' "$INSTALL_DIR/.env" | head -n 1)
+  HEALTH_PORT=${CONFIGURED_PORT:-8080}
   if [[ "$WITH_SERVICE" == true ]]; then
     SERVICE_ENV_FILE="/etc/typst-api/typst-api.env"
-    HEALTH_PORT=8080
     if [[ -f "$SERVICE_ENV_FILE" ]]; then
       CONFIGURED_PORT=$(sed -nE 's/^PORT=([0-9]+).*/\1/p' "$SERVICE_ENV_FILE" | head -n 1)
       if [[ -n "$CONFIGURED_PORT" ]]; then
@@ -273,7 +305,7 @@ if [ -x "$INSTALL_DIR/typst-api" ]; then
     echo "You can run the server using:"
     echo "  cd \"$INSTALL_DIR\" && ./typst-api"
     echo "Then check its health with:"
-    echo "  curl http://127.0.0.1:8080/health"
+    echo "  curl http://127.0.0.1:$HEALTH_PORT/health"
   fi
 else
   echo "Warning: Executable check failed. It might require additional libraries or a different architecture."

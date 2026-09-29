@@ -87,6 +87,42 @@ if (-not (Test-Path -Path $FontsDir)) {
     New-Item -ItemType Directory -Path $FontsDir | Out-Null
 }
 
+$Port = 8080
+$EnvPath = Join-Path $InstallDir ".env"
+if (-not (Test-Path -Path $EnvPath)) {
+    function Test-PortInUse([int]$PortNumber) {
+        try {
+            if (Get-Command Get-NetTCPConnection -ErrorAction SilentlyContinue) {
+                return $null -ne (Get-NetTCPConnection -LocalPort $PortNumber -State Listen -ErrorAction SilentlyContinue)
+            }
+
+            $Matches = netstat -ano -p TCP | Select-String -Pattern "LISTENING\s+\S+:$PortNumber\s"
+            return $null -ne $Matches
+        }
+        catch {
+            return $false
+        }
+    }
+
+    do {
+        $PortInput = Read-Host "Enter the server port [8080]"
+        if ([string]::IsNullOrWhiteSpace($PortInput)) {
+            $Port = 8080
+            $ValidPort = $true
+        }
+        else {
+            $ValidPort = [int]::TryParse($PortInput, [ref]$Port)
+        }
+        if (-not $ValidPort -or $Port -lt 1 -or $Port -gt 65535) {
+            Write-Host "Please enter a valid port between 1 and 65535."
+        }
+        elseif (Test-PortInUse $Port) {
+            Write-Host "Port $Port is already in use. Please choose another port."
+            $ValidPort = $false
+        }
+    } while (-not $ValidPort -or $Port -lt 1 -or $Port -gt 65535)
+}
+
 # --- Download & Verify ---
 $TempDir = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath ([guid]::NewGuid().ToString())
 New-Item -ItemType Directory -Path $TempDir | Out-Null
@@ -149,16 +185,16 @@ try {
     }
 
     # --- Configuration Setup ---
-    $EnvPath = Join-Path $InstallDir ".env"
     if (-not (Test-Path -Path $EnvPath)) {
         $ExampleEnv = Join-Path $ExtractDir ".env.example"
         if (Test-Path -Path $ExampleEnv) {
             Write-Host "Generating .env file from .env.example..."
-            Copy-Item -Path $ExampleEnv -Destination $EnvPath
+            (Get-Content $ExampleEnv) -replace '^PORT=.*', "PORT=$Port" | Set-Content $EnvPath
         }
         else {
             Write-Host "Creating basic .env file..."
             $EnvContent = @"
+PORT=$Port
 MAX_CONCURRENT_COMPILATIONS=10
 # AUTH_TOKEN=my-secret-token
 # ADMIN_TOKEN=my-admin-secret-token
