@@ -86,7 +86,13 @@ fi
 # Determine the prefix which is sometimes used by cargo-dist older versions vs newer
 # Try to fetch release metadata for the specific version to get the exact asset name
 RELEASE_DATA=$(curl -s "https://api.github.com/repos/$REPO/releases/tags/$VERSION")
-ASSET_NAME=$(echo "$RELEASE_DATA" | grep -Eo "\"name\": \"[^\"]*${TARGET}\.(tar\.xz|tar\.gz)\"" | head -n 1 | cut -d'"' -f4)
+ASSET_NAME=$(echo "$RELEASE_DATA" \
+  | grep '"name":' \
+  | grep "${TARGET}" \
+  | grep -E '\.(tar\.xz|tar\.gz)"' \
+  | grep -v '\.sha256"' \
+  | head -n 1 \
+  | sed -E 's/.*"name": "([^"]+)".*/\1/')
 
 if [[ -z "$ASSET_NAME" ]]; then
     echo "Error: Could not find an asset for target $TARGET in release $VERSION."
@@ -123,31 +129,28 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 echo "Downloading $ASSET_NAME..."
 curl -L -f -o "$TMP_DIR/$ASSET_NAME" "$DOWNLOAD_URL"
 echo "Downloading checksum..."
-if curl -L -s -f -o "$TMP_DIR/checksum.sha256" "$CHECKSUM_URL"; then
-  echo "Verifying checksum..."
-  cd "$TMP_DIR"
-  EXPECTED_HASH=$(cat checksum.sha256 | awk '{print $1}')
-  
-  if command -v sha256sum >/dev/null 2>&1; then
-    ACTUAL_HASH=$(sha256sum "$ASSET_NAME" | awk '{print $1}')
-  elif command -v shasum >/dev/null 2>&1; then
-    ACTUAL_HASH=$(shasum -a 256 "$ASSET_NAME" | awk '{print $1}')
-  else
-    echo "Warning: Neither sha256sum nor shasum found. Skipping verification."
-  fi
-  
-  if [[ -n "$ACTUAL_HASH" && "$EXPECTED_HASH" != "$ACTUAL_HASH" && -n "$EXPECTED_HASH" ]]; then
-    echo "Error: Checksum verification failed!"
-    echo "Expected: $EXPECTED_HASH"
-    echo "Actual:   $ACTUAL_HASH"
-    exit 1
-  elif [[ -n "$ACTUAL_HASH" ]]; then
-    echo "Checksum verified."
-  fi
-  cd - > /dev/null
+curl -L -s -f -o "$TMP_DIR/checksum.sha256" "$CHECKSUM_URL"
+echo "Verifying checksum..."
+cd "$TMP_DIR"
+EXPECTED_HASH=$(awk '{print $1}' checksum.sha256)
+
+if command -v sha256sum >/dev/null 2>&1; then
+  ACTUAL_HASH=$(sha256sum "$ASSET_NAME" | awk '{print $1}')
+elif command -v shasum >/dev/null 2>&1; then
+  ACTUAL_HASH=$(shasum -a 256 "$ASSET_NAME" | awk '{print $1}')
 else
-  echo "Warning: Checksum file not found. Skipping verification."
+  echo "Error: Neither sha256sum nor shasum is available for checksum verification."
+  exit 1
 fi
+
+if [[ -z "$EXPECTED_HASH" || "$EXPECTED_HASH" != "$ACTUAL_HASH" ]]; then
+  echo "Error: Checksum verification failed!"
+  echo "Expected: $EXPECTED_HASH"
+  echo "Actual:   $ACTUAL_HASH"
+  exit 1
+fi
+echo "Checksum verified."
+cd - > /dev/null
 
 # --- Extraction ---
 echo "Extracting archive..."
