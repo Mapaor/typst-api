@@ -265,7 +265,9 @@ if [[ "$WITH_SERVICE" == true ]]; then
   # Create service file configuration paths
   mkdir -p /etc/typst-api
   mkdir -p /var/lib/typst-api
-  chown typst-api:typst-api /var/lib/typst-api
+  mkdir -p /var/lib/typst-api/.cache
+  mkdir -p /var/lib/typst-api/tmp
+  chown -R typst-api:typst-api /var/lib/typst-api
   
   # Move or symlink .env to /etc/typst-api/typst-api.env for systemd
   if [[ -f "$INSTALL_DIR/.env" && ! -f "/etc/typst-api/typst-api.env" ]]; then
@@ -292,6 +294,9 @@ Type=simple
 User=typst-api
 Group=typst-api
 WorkingDirectory=$INSTALL_DIR
+Environment=HOME=/var/lib/typst-api
+Environment=XDG_CACHE_HOME=/var/lib/typst-api/.cache
+Environment=TMPDIR=/var/lib/typst-api/tmp
 EnvironmentFile=-/etc/typst-api/typst-api.env
 ExecStart=$INSTALL_DIR/typst-api
 Restart=on-failure
@@ -338,6 +343,9 @@ if [ -x "$INSTALL_DIR/typst-api" ]; then
     if [[ "$SERVICE_HEALTHY" == true ]]; then
       echo "Health check passed: $HEALTH_URL"
       systemctl --no-pager --full status typst-api
+      echo
+      echo "Finished! typst-api is installed, running, and enabled at boot. Congratulations! 🎉"
+      echo "Health endpoint: $HEALTH_URL"
     else
       echo "Error: typst-api did not become healthy at $HEALTH_URL"
       systemctl --no-pager --full status typst-api || true
