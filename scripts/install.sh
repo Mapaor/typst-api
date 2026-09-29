@@ -345,7 +345,7 @@ if [ -x "$INSTALL_DIR/typst-api" ]; then
       echo "Health check passed: $HEALTH_URL"
       systemctl --no-pager --full status typst-api
       echo
-      echo "Finished! typst-api is installed, running, and enabled at boot. Congratulations! 🎉"
+      echo "Finished! typst-api is installed, running, and enabled at boot. Congratulations!! 🎉"
       echo "Health endpoint: $HEALTH_URL"
     else
       echo "Error: typst-api did not become healthy at $HEALTH_URL"
