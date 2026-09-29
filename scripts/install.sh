@@ -5,6 +5,7 @@ REPO="Mapaor/typst-api"
 INSTALL_DIR=""
 VERSION=""
 WITH_SERVICE=false
+REQUESTED_PORT=""
 
 # --- Parse Arguments ---
 while [[ $# -gt 0 ]]; do
@@ -17,6 +18,10 @@ while [[ $# -gt 0 ]]; do
       INSTALL_DIR="$2"
       shift 2
       ;;
+    --port)
+      REQUESTED_PORT="$2"
+      shift 2
+      ;;
     --with-service)
       WITH_SERVICE=true
       shift
@@ -26,6 +31,7 @@ while [[ $# -gt 0 ]]; do
       echo "Options:"
       echo "  --version <ver>      Install a specific version (e.g., v0.2.4)"
       echo "  --install-dir <dir>  Custom installation directory"
+      echo "  --port <port>        Server port (otherwise prompt; default: 8080)"
       echo "  --with-service       Set up systemd service (Linux only)"
       exit 0
       ;;
@@ -140,15 +146,33 @@ if [[ -f "$INSTALL_DIR/.env" ]]; then
   fi
 fi
 while true; do
-  if [[ -r /dev/tty ]]; then
-    read -r -p "Enter the server port [$PORT]: " PORT_INPUT < /dev/tty
+  if [[ -n "$REQUESTED_PORT" ]]; then
+    PORT_INPUT="$REQUESTED_PORT"
   else
-    PORT_INPUT=""
+    if [[ ! -r /dev/tty || ! -w /dev/tty ]]; then
+      echo "Error: An interactive terminal is required to select the server port." >&2
+      echo "Run the installer from a terminal, or provide --port in a non-interactive environment." >&2
+      exit 1
+    fi
+    printf "Enter the server port [%s]: " "$PORT" > /dev/tty
+    IFS= read -r PORT_INPUT < /dev/tty || {
+      echo >&2
+      echo "Error: Could not read the server port from the terminal." >&2
+      exit 1
+    }
   fi
   PORT_INPUT=${PORT_INPUT:-$PORT}
   if [[ ! "$PORT_INPUT" =~ ^[0-9]+$ ]] || (( PORT_INPUT < 1 || PORT_INPUT > 65535 )); then
+    if [[ -n "$REQUESTED_PORT" ]]; then
+      echo "Error: Port must be a number between 1 and 65535." >&2
+      exit 1
+    fi
     echo "Please enter a valid port between 1 and 65535."
   elif port_in_use "$PORT_INPUT" && { [[ "$PORT_INPUT" != "$EXISTING_PORT" ]] || ! systemctl is-active --quiet typst-api 2>/dev/null; }; then
+    if [[ -n "$REQUESTED_PORT" ]]; then
+      echo "Error: Port $PORT_INPUT is already in use. Please choose another port." >&2
+      exit 1
+    fi
     echo "Port $PORT_INPUT is already in use. Please choose another port."
   else
     PORT="$PORT_INPUT"
