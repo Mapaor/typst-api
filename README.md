@@ -29,6 +29,18 @@ Note: if you are exposing your API to the public, be sure to prevent API abuse b
 5. Check `http://localhost:8080/health`, it should return 200 (Ok). The root endpoint `http://localhost:8080` should return a welcome json with the API version, the swagger-ui docs endpoint and other useful information.
 6. Visit `http://localhost:8080/playground` to interactively test the API in your browser.
 
+#### Updating
+To update simply do from the same directory:
+```bash
+docker compose pull
+```
+Or update the image used in the `docker-compose.yml` if you want a specific version that it's no the latest.
+
+Now restart the container:
+```bash
+docker compose up -d --force-recreate
+```
+
 ### Running with Docker Compose (Local Development)
 
 1. Clone this repo `git clone https://github.com/Mapaor/typst-api` (and do `cd typst-api`).
@@ -50,26 +62,66 @@ docker run -p 3001:8080 mapaor4/typst-api:latest
 ```
 The API will now be available at `http://localhost:3001`. 
 
-### Running the standalone compiled binary
+### Running it as a compiled binary
 
-Download the binary from [GitHub releases](https://github.com/Mapaor/typst-api/releases), then execute it.
+You can download the binary from [GitHub releases](https://github.com/Mapaor/typst-api/releases) and then execute it, but for ease of use an installer script is provided that already downloads the correct binary, configures a local directory, and optionally (only for Linux) sets up a systemd service.
 
-The server listens on `http://localhost:8080` by default. If you want to set some environment variables, set them before starting it.
 
-On bash (Linux and macOS):
+#### Linux / macOS
+
+Run the installation script:
 
 ```bash
-PORT=3001 ./typst-api
+# Default installation (gets installed at `~/.local/typst-api`)
+curl -sSL https://raw.githubusercontent.com/Mapaor/typst-api/main/scripts/install.sh | bash
+
+# Install a specific version
+curl -sSL https://raw.githubusercontent.com/Mapaor/typst-api/main/scripts/install.sh | bash -s -- --version v0.2.4
+
+# Install with a systemd service (Linux only)
+curl -sSL https://raw.githubusercontent.com/Mapaor/typst-api/main/scripts/install.sh | sudo bash -s -- --with-service
 ```
 
-On PowerShell:
+If you are on macOS or are on Linux but chose not to install the systemd service, you'll need to run the server manually:
+```bash
+cd ~/.local/typst-api
+./typst-api
+```
 
-```powershell
-$env:PORT = "3001"
+To run it in the background (detached), you can use `nohup`:
+```bash
+cd ~/.local/typst-api
+nohup ./typst-api > typst-api.log 2>&1 &
+```
+
+#### Windows
+
+Run the PowerShell installation script:
+
+```pwsh
+# Default installation (gets installed at `$env:USERPROFILE\.local\typst-api`)
+Invoke-Expression (Invoke-RestMethod -Uri "https://raw.githubusercontent.com/Mapaor/typst-api/main/scripts/install.ps1")
+```
+
+Run the server manually with:
+```pwsh
+cd $env:USERPROFILE\.local\typst-api
 .\typst-api.exe
 ```
 
-If you prefer to use a `.env` file, put it in the same directory as the binary and (important or it won't work) also run the binary from that same directory. See `.env.example` for the complete list of allowed variables.
+To run it in the background (detached), you can start it as a hidden process:
+```pwsh
+cd $env:USERPROFILE\.local\typst-api
+Start-Process -FilePath ".\typst-api.exe" -WindowStyle Hidden
+```
+
+#### Configuration & Updating
+The installer creates a `.env` file in the installation directory. You can edit this file to configure your server. If you installed the systemd service, the `.env` configuration is copied to `/etc/typst-api/typst-api.env`.
+
+To update to a newer version simply re-run the installer script, and also don't forget to restart the service if you had set it up (`sudo systemctl restart typst-api`).
+
+#### Uninstalling
+To uninstall, delete the installation directory (e.g., `rm -rf ~/.local/typst-api`) and, if using systemd, disable and remove the service (`sudo systemctl disable typst-api && sudo rm /etc/systemd/system/typst-api.service`).
 
 ### Compiling from source (Local Development)
 
@@ -213,7 +265,7 @@ Note: If you do expose the API running on your server to the general public (the
 - [X] Create a root endpoint `GET /` whose json response contains useful information
 - [X] Create a `GET /admin/info` with useful admin information like config options and stats
 - [X] Create a very simple static client-side example `/playground` to test the API in the browser . 
-- [ ] Create a bash script to run the download the standalone binaries and set up a running service
+- [X] Create a bash script to run the download the standalone binaries and set up a running service
 
 #### Next steps
 - [ ] Allow different outputs (PDF, SVG, PNG, HTML?). SVG can be generated with `typst-svg` and PNG probably from the SVG. I'll have to investigate how the Typst web app handles the (still experimental) HTML export, probably with `typst-html`.

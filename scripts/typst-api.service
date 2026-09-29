@@ -1,0 +1,17 @@
+[Unit]
+Description=Typst API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=typst-api
+Group=typst-api
+WorkingDirectory=/var/lib/typst-api
+EnvironmentFile=-/etc/typst-api/typst-api.env
+ExecStart=/opt/typst-api/typst-api
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
