@@ -298,6 +298,7 @@ Environment=HOME=/var/lib/typst-api
 Environment=XDG_CACHE_HOME=/var/lib/typst-api/.cache
 Environment=TMPDIR=/var/lib/typst-api/tmp
 EnvironmentFile=-/etc/typst-api/typst-api.env
+Environment=TYPST_FONT_PATHS=$INSTALL_DIR/fonts
 ExecStart=$INSTALL_DIR/typst-api
 Restart=on-failure
 RestartSec=5
