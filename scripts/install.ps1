@@ -126,7 +126,6 @@ do {
         $ValidPort = $false
     }
 } while (-not $ValidPort -or $Port -lt 1 -or $Port -gt 65535)
-}
 
 # --- Download & Verify ---
 $TempDir = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath ([guid]::NewGuid().ToString())
@@ -184,7 +183,10 @@ try {
         Copy-Item -Path $ExePath -Destination $InstallDir -Force
     }
 
-    $ExtractFontsDir = Join-Path $ExtractDir "assets\fonts"
+    $ExtractFontsDir = Join-Path $ExtractDir "fonts"
+    if (-not (Test-Path -Path $ExtractFontsDir)) {
+        $ExtractFontsDir = Join-Path $ExtractDir "assets\fonts"
+    }
     if (Test-Path -Path $ExtractFontsDir) {
         Copy-Item -Path "$ExtractFontsDir\*" -Destination $FontsDir -Recurse -Force
     }
