@@ -291,7 +291,7 @@ Wants=network-online.target
 Type=simple
 User=typst-api
 Group=typst-api
-WorkingDirectory=/var/lib/typst-api
+WorkingDirectory=$INSTALL_DIR
 EnvironmentFile=-/etc/typst-api/typst-api.env
 ExecStart=$INSTALL_DIR/typst-api
 Restart=on-failure
@@ -321,12 +321,14 @@ if [ -x "$INSTALL_DIR/typst-api" ]; then
     fi
 
     echo "Starting and enabling typst-api service..."
-    systemctl enable --now typst-api
+    systemctl reset-failed typst-api 2>/dev/null || true
+    systemctl enable typst-api
+    systemctl restart typst-api
     HEALTH_URL="http://127.0.0.1:${HEALTH_PORT}/health"
     echo "Waiting for $HEALTH_URL..."
     SERVICE_HEALTHY=false
     for _ in {1..15}; do
-      if curl -fsS --max-time 2 "$HEALTH_URL" >/dev/null; then
+      if curl -fsS --max-time 2 "$HEALTH_URL" >/dev/null 2>&1; then
         SERVICE_HEALTHY=true
         break
       fi
