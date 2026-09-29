@@ -86,7 +86,7 @@ fi
 # Determine the prefix which is sometimes used by cargo-dist older versions vs newer
 # Try to fetch release metadata for the specific version to get the exact asset name
 RELEASE_DATA=$(curl -s "https://api.github.com/repos/$REPO/releases/tags/$VERSION")
-ASSET_NAME=$(echo "$RELEASE_DATA" | grep -o "\"name\": \"[^\"]*${TARGET}.tar.gz\"" | head -n 1 | cut -d'"' -f4)
+ASSET_NAME=$(echo "$RELEASE_DATA" | grep -Eo "\"name\": \"[^\"]*${TARGET}\.(tar\.xz|tar\.gz)\"" | head -n 1 | cut -d'"' -f4)
 
 if [[ -z "$ASSET_NAME" ]]; then
     echo "Error: Could not find an asset for target $TARGET in release $VERSION."
@@ -151,10 +151,11 @@ fi
 
 # --- Extraction ---
 echo "Extracting archive..."
-tar -xzf "$TMP_DIR/$ASSET_NAME" -C "$TMP_DIR"
+tar -xf "$TMP_DIR/$ASSET_NAME" -C "$TMP_DIR"
 
-# cargo-dist extracts into a directory named after the asset (without .tar.gz)
-EXTRACT_DIR="$TMP_DIR/${ASSET_NAME%.tar.gz}"
+# cargo-dist extracts into a directory named after the asset (without its archive extension)
+EXTRACT_DIR="$TMP_DIR/${ASSET_NAME%.tar.xz}"
+EXTRACT_DIR="${EXTRACT_DIR%.tar.gz}"
 if [[ ! -d "$EXTRACT_DIR" ]]; then
   # Fallback if the extracted dir structure is different
   EXTRACT_DIR="$TMP_DIR"
