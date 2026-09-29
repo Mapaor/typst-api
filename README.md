@@ -1,8 +1,14 @@
 # Typst API
 
-A high-performance, Dockerized REST API built in Rust to compile [Typst](https://typst.app/) documents into PDFs. It supports compiling documents with local assets, caching fonts for performance, and configurable resource limits.
+A high-performance REST API built in Rust to compile [Typst](https://typst.app/) documents into PDFs. It supports multiple files, source code, caching fonts, typst packages, authentication, configurable limits and more.
 
-The recommended way to run the server is with Docker Compose and an environment file. You can also run a standalone binary from the GitHub releases, or compile and run the source code with Cargo. The intended use of this repository is to let people self-host a simple Typst server without complications.
+There are two main ways to run the API:
+1. As a standalone binary (the recommended way is using the install script provided below).
+2. As a docker container (the recommended way it to use Docker Compose). The recommended way to run it with Docker is using Docker Compose.
+
+You can also of course compile and run the source code with Cargo. 
+
+The intended use of this repository is to allow people self-host a Typst server without much complications.
 
 ## Requirements
 For most documents you only need about 35MB of RAM, however for a very large textbook with images, custom fonts, etc. you might require about ~200MB.
@@ -21,7 +27,9 @@ Note: if you are exposing your API to the public, be sure to prevent API abuse b
 
 ## Starting the server
 
-### Running with Docker Compose (Recommended)
+### As a Docker container
+
+#### Running with Docker Compose (Recommended)
 1. In a directory of your choice on your server create 2 files, a `.env` and a `docker-compose.yml`, and create a `fonts` directory.
 2. Add to the `.env` the contents of [`.env.example`](.env.example), configure the variables to your needs.
 3. Put the contents of the [`docker-compose.yml`](docker-compose.yml) into your local docker compose file. It already has the proper configuration and pulls the Docker image from DockerHub.
@@ -29,19 +37,19 @@ Note: if you are exposing your API to the public, be sure to prevent API abuse b
 5. Check `http://localhost:8080/health`, it should return 200 (Ok). The root endpoint `http://localhost:8080` should return a welcome json with the API version, the swagger-ui docs endpoint and other useful information.
 6. Visit `http://localhost:8080/playground` to interactively test the API in your browser.
 
-#### Updating
+##### Updating
 To update simply do from the same directory:
 ```bash
 docker compose pull
 ```
-Or update the image used in the `docker-compose.yml` if you want a specific version that it's no the latest.
+Or update the image used in the `docker-compose.yml` if you want a specific version that it's not the latest.
 
 Now restart the container:
 ```bash
 docker compose up -d --force-recreate
 ```
 
-### Running with Docker Compose (Local Development)
+#### Running with Docker Compose (Local Development)
 
 1. Clone this repo `git clone https://github.com/Mapaor/typst-api` (and do `cd typst-api`).
 2. Copy the `.env.example` to `.env` and adjust the variables if needed.
@@ -50,7 +58,7 @@ docker compose up -d --force-recreate
 5. The API will be available at `http://localhost:8080`
 6. Now you can modify the Rust source code as you please and every time you hit a `docker compose up --build -d` the container will restart with your new custom image. This way you can tweak the API even further to fit your exact needs.
 
-### Running with Docker
+#### Running with Docker
 You can pull and run the image directly from Docker Hub by using:
 ```bash
 docker run -p 8080:8080 mapaor4/typst-api:latest
@@ -62,7 +70,9 @@ docker run -p 3001:8080 mapaor4/typst-api:latest
 ```
 The API will now be available at `http://localhost:3001`. 
 
-### Running it as a compiled binary
+## As a standalone binary
+
+### Running it with an install script (Recommended)
 
 You can download the binary from [GitHub releases](https://github.com/Mapaor/typst-api/releases) and then execute it, but for ease of use an installer script is provided that already downloads the correct binary, configures a local directory, and optionally (only for Linux) sets up a systemd service.
 
@@ -82,7 +92,9 @@ curl -sSL https://raw.githubusercontent.com/Mapaor/typst-api/main/scripts/instal
 curl -sSL https://raw.githubusercontent.com/Mapaor/typst-api/main/scripts/install.sh | sudo bash -s -- --with-service
 ```
 
-If you are on macOS or are on Linux but chose not to install the systemd service, you'll need to run the server manually:
+If you are on a Linux server I recommend the latter because it sets up a service to automatically run the API on boot.
+
+If you are on macOS (or Linux but chose not to use the systemd service flag), you'll need to run the server manually:
 ```bash
 cd ~/.local/typst-api
 ./typst-api
@@ -118,10 +130,17 @@ Start-Process -FilePath ".\typst-api.exe" -WindowStyle Hidden
 #### Configuration & Updating
 The installer creates a `.env` file in the installation directory. You can edit this file to configure your server. If you installed the systemd service, the `.env` configuration is copied to `/etc/typst-api/typst-api.env`.
 
-To update to a newer version simply re-run the installer script, and also don't forget to restart the service if you had set it up (`sudo systemctl restart typst-api`).
+To update to a newer or re-read an updated `.env` file, simply re-run the installer script. Also don't forget to restart the service if you had set it up (`sudo systemctl restart typst-api`).
+
+You can also re-run the installer script as many times as you want, it will simply override the previous installation.
 
 #### Uninstalling
 To uninstall, delete the installation directory (e.g., `rm -rf ~/.local/typst-api`) and, if using systemd, disable and remove the service (`sudo systemctl disable typst-api && sudo rm /etc/systemd/system/typst-api.service`).
+
+### Running it as a standalone binary
+1. Download the artifact for your OS and architecture from the GH releases. 
+2. Put in the same directory where you want to save your binary a `.env` file (contents copied from `.env.example`) and a `fonts/` empty folder.
+3. Execute the binary from that same directory.
 
 ### Compiling from source (Local Development)
 
