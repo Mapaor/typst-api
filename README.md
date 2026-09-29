@@ -96,13 +96,13 @@ cargo run --release
 
 Or you can simply create a `.env` file (or copy and rename the `.env.example`) in the root of the repository and set the variables there, it will be loaded automatically.
 
-You can also use `cargo build --release` to build the binary without running it, and then run the binary located in `target/release/typst-api` like if it were a pre-compiled binary.
+You can also use `cargo build --release` to build the binary without running it, and then run the binary located in `target/release/typst-api` like we explained before.
 
-You could do `cargo run` or `cargo build` without the `--release` flag for local development but for production (the actual API usage) the flag is recommended (it does additional performance optimizations for the final binary whereas without the flag these are avoided to reduce the build time).
+You could do `cargo run` or `cargo build` without the `--release` flag for local development but for production (the actual API usage) the flag is recommended (it does additional performance optimizations for the final binary).
 
-### Why there is no crates.io package
+### Why there is no crates.io crate
 
-`typst-api` is an application binary rather than a Rust library you can reuse. The Docker image lives on Docker Hub and the standalone binaries on GitHub. If you want you can still compile it from source using Cargo. The crate has not been published to crates.io on the one hand to state that the recommended way to host the API is with Docker, and on the other hand to avoid any potential confusion with the official Typst crates such as `typst-pdf`, `typst-cli`, `typst-kit`, etc.
+`typst-api` is an application binary rather than a Rust library you can reuse. The Docker image lives on Docker Hub and the standalone binaries on GitHub. If you want you can still compile it from source using Cargo. The crate has not been published to crates.io because it wouldn't add much to the already existing standalone binaries and also to avoid any potential confusion with the official Typst crates such as `typst-pdf`, `typst-cli`, `typst-kit`, etc.
 
 ## Using the API
 
@@ -158,7 +158,7 @@ If you have Postman desktop installed (and optionally the VSCode Extension as we
 5. Click Send. Postman is great because it will show the visual PDF if the request is successful or it will show the JSON error if it fails.
 
 #### More examples
-You can check a full set of examples in the `examples/` directory, which contain both the Typst and related files, the PowerShell and Curl commands to run the examples and the expected PDF output.
+You can check a full set of examples in the [`examples/`](./examples/) directory, which contain both the Typst and related files, the PowerShell and Curl commands to run the examples and the expected PDF output.
 
 ### Admin Endpoints
 The API includes admin endpoints which are prefixed with `/admin`. To set authentication for them add an `ADMIN_TOKEN` to the `.env` file. If the variable is not set, these endpoints fall back to `AUTH_TOKEN` authentication. If neither is set, all endpoints are publicly accessible.
@@ -175,7 +175,7 @@ By default, when using Docker Compose the package cache persists across containe
 - `CACHE_ALL_PACKAGES`: If set to true downloads the entire Typst registry (~1.8GB) in the background when the server starts.
 
 ## Exposing the API
-You can then use any reverse proxy, tunnel or VPN you might typically use to expose your containers to your other devices or the whole internet.
+You can then use any reverse proxy, tunnel or VPN you might typically use to expose your containers or running services to your other devices or to the whole internet.
 
 My recommendations:
 - If you are the only one who is gonna use the API from a specific set of owned devices, use Tailscale and make the requests to the tailnet IP of your server or home server.
@@ -187,17 +187,17 @@ My recommendations:
   ⟶ Checkout my guide to set up `typst-api` with Caddy and Cloudflare Tunnel on a Debian-based OS on a custom domain: [`CUSTOM_DOMAIN_GUIDE.md`](CUSTOM_DOMAIN_GUIDE.md)
 - Use Pangolin (instead of Cloudflare Tunnel) running on a VPS if you plan to work with very big documents or concurrent requests and want to avoid the Cloudflare 100MB limitation, or if you want to serve your api at a subsubdomain (api.typst.mydomain.com) and don't want to pay for Cloudflare Advanced Certificate Manager.
 
-Note: If you do expose the API running on your server to the general public (the internet) make sure to either enable token authentication (so that only you and people who you trust can  use the API) or enforce limits like maximum payload size and maximum concurrent compilation to prevent API usage.
+Note: If you do expose the API running on your server to the general public (the internet) make sure to set the `ADMIN_TOKEN` to protect sensible routes. And also, either set authentication (so that only you and people who you trust can  use the API) or enforce limits like maximum payload size and maximum concurrent compilation to prevent API abuse.
 
 ## ROADMAP
 
-- [X] Dynamic Custom Fonts: Implement support for users to upload custom `.ttf` or `.otf` font files as part of the `multipart/form-data` payload (allowing ephemeral custom fonts per compile request).
+- [X] Dynamic custom fonts, allow users to upload custom `.ttf` or `.otf` files as part of the `multipart/form-data` payload (allowing ephemeral custom fonts per compile request).
 - [X] Allow to refresh the font cache without needing a container restart.
 - [X] Add better diagnostics (return line and column) in the format_errors response.
-- [X] Allow to make a HTTP request with typst code (instead of a typst file). Using an `application/json` new endpoint (which we'll call `/compile/source`).
+- [X] Allow to make a HTTP request with typst code (instead of a typst file). Using an `application/json` new endpoint `/compile/source`.
 - [X] Handle CORS with `tower-http` and add configuration options in the env file.
 - [X] Add concurrency limits (not only timeout of individual requests but also a maximum of active compilations)
-- [X] Test the API authentication (token) manually.
+- [X] Test the API authentication all the possible cases manually.
 - [X] Publish the first image of the library to DockerHub
 - [X] Handle package cache properly, create config options in the env file as well as endpoints for handling them.
 
@@ -207,36 +207,23 @@ Note: If you do expose the API running on your server to the general public (the
 - [X] Generate also a `linux/arm64` docker image (besides the current `linux/amd64`).
 - [X] Handle the creation and publishing of binaries for new releases with `cargo-dist`
 
+#### Polishing it
+- [X] Improve logs (with http-tower `trace` feature) and add the env variable of logging level to the env example
+- [X] Create guides to expose the API using Tailscale Funnel and Cloudflare Tunnel
+- [X] Create a root endpoint `GET /` whose json response contains useful information
+- [X] Create a `GET /admin/info` with useful admin information like config options and stats
+- [X] Create a very simple static client-side example `/playground` to test the API in the browser . 
+- [ ] Create a bash script to run the download the standalone binaries and set up a running service
+
+#### Next steps
+- [ ] Allow different outputs (PDF, SVG, PNG, HTML?). SVG can be generated with `typst-svg` and PNG probably from the SVG. I'll have to investigate how the Typst web app handles the (still experimental) HTML export, probably with `typst-html`.
+- [ ] Allow additional output configuration (eg. PDF or PDF-A, DPI, PDF metadata, etc.) Check the current output options of the typst compiler and the typst web app.
+
 #### In the far future
-- [ ] Implement something similar like a 'watch' option (like the CLI) for compiling a file that is constantly changing without having to compile it all again (only the parts that have changed). In other words, implement caching of compiled results. Typst already allows incremental compilation. We could maybe expose another layer of the API that works with websockets instead of http. Something like:
-```
-POST /sessions
-  Creates a compilation session
-
-WebSocket /sessions/{id}/watch
-  Sends source changes and receives results
-
-DELETE /sessions/{id}
-  Releases server-side state
-```
-The server should use one actor/task per session so updates are serialized:
-session actor
-  -> receive update
-  -> update virtual files
-  -> compile
-  -> render PDF/SVG
-  -> send result
-Without letting multiple concurrent requests mutate the same compilation state. The good thing is axum already supports websockets. We could also use socketioxide (like socket.io for rust). I don't know, I'll have to think about it.
-
-Edit: Or maybe a 2-layer is not needed, a single WebSocket endpoint (ws://localhost:8080/watch) can be used, where the client connects, sends an initial "setup" payload with files, and then sends diffs or update messages. And when the client disconnects, the watch actor gets killed.
-
-We could also do this all with HTTP maybe and reuse the session. Or we could somehow even provide a wasm of the typst compiler already initialized via http. I really don't know. Or maybe none of this is needed and debounce compilation on the client-side is already enough.
-
-- [ ] Allow different outputs (PDF, SVG, PNG, HTML?). SVG can be generated with `typst-svg` and PNG probably from the SVG. Investigate how the Typst web app handles the (still experimental) HTML export.
-- [ ] Allow output additional information (fomat eg. PDF or PDF-A, DPI, PDF metadata, etc.) Check the current output options of the typst compiler and the typst web app.
-- [ ] Create a way to generate versioned docker images corresponding to a few typst compiler versions. Find a way to name them properly, for example: `typst-api:0.1.0-v0.15.1` or `typst-api:latest-v0.14.2`.
-- [ ] Also create an endpoint to check the typst version and an endpoint to check a particular package version which typst requirements has. Maybe `typst-kit` already has some sort of package resolution/compatibility internal information(?).
-- [ ] Add other limits (maximum file count or maximum source size or maximum package fetching?) although maybe our current global payload limit already handles their combination correctly so that the API cannot be abused. No needed for now, if someone imports lots of packages they'll hit the timeout limit.
+- [ ] Implement something similar like a 'watch' option (like the CLI) for compiling a file that is constantly changing without having to compile it all again. Maybe a websockets layer of the API. The good thing is axum already supports websockets. We could also use socketioxide (like socket.io for rust). Or maybe a 2-layer is not needed, a single WebSocket endpoint (ws://localhost:8080/watch) where the client connects, sends an initial "setup" payload with files, and then sends diffs or update messages. Or maybe none of this is needed and debounce compilation on the client-side is already enough.
+- [ ] Create a way to generate versioned docker images corresponding to a few typst compiler versions. Find a way to name them properly, for example: `typst-api:0.2.2-v0.15.1` or `typst-api:latest-v0.14.2`.
+- [ ] Also create an endpoint to check for a particular package version which typst requirements it has. Maybe `typst-kit` already has some sort of package resolution/compatibility internal information(?).
+- [ ] Add other limits (maximum file count or maximum source size or maximum package fetching?) although maybe our current global payload limit already handles their combination correctly so that the API cannot be abused. Not very important for now as if someone imports lots of packages they'll hit the timeout limit.
 
 ## License
 [MIT](LICENSE)
