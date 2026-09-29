@@ -227,6 +227,7 @@ MAX_CONCURRENT_COMPILATIONS=10
         Write-Host "You can run the server using:"
         Write-Host "  cd `"$InstallDir`" ; .\typst-api.exe"
         Write-Host "Health endpoint: http://127.0.0.1:$Port/health"
+        Write-Host "Playground: http://127.0.0.1:$Port/playground"
     }
     else {
         Write-Host "Warning: Executable check failed. It might require additional libraries."

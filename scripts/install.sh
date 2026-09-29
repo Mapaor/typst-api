@@ -351,6 +351,7 @@ if [ -x "$INSTALL_DIR/typst-api" ]; then
       echo
       echo "Finished! typst-api is installed, running, and enabled at boot. Congratulations! 🎉"
       echo "Health endpoint: $HEALTH_URL"
+      echo "Playground: http://127.0.0.1:$HEALTH_PORT/playground"
     else
       echo "Error: typst-api did not become healthy at $HEALTH_URL"
       systemctl --no-pager --full status typst-api || true
