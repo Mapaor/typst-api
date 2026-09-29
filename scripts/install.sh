@@ -133,24 +133,28 @@ port_in_use() {
 }
 
 PORT=8080
-if [[ ! -f "$INSTALL_DIR/.env" ]]; then
-  while true; do
-    if [[ -r /dev/tty ]]; then
-      read -r -p "Enter the server port [8080]: " PORT_INPUT < /dev/tty
-    else
-      PORT_INPUT=""
-    fi
-    PORT_INPUT=${PORT_INPUT:-8080}
-    if [[ ! "$PORT_INPUT" =~ ^[0-9]+$ ]] || (( PORT_INPUT < 1 || PORT_INPUT > 65535 )); then
-      echo "Please enter a valid port between 1 and 65535."
-    elif port_in_use "$PORT_INPUT"; then
-      echo "Port $PORT_INPUT is already in use. Please choose another port."
-    else
-      PORT="$PORT_INPUT"
-      break
-    fi
-  done
+if [[ -f "$INSTALL_DIR/.env" ]]; then
+  EXISTING_PORT=$(sed -nE 's/^PORT=([0-9]+).*/\1/p' "$INSTALL_DIR/.env" | head -n 1)
+  if [[ -n "$EXISTING_PORT" ]]; then
+    PORT="$EXISTING_PORT"
+  fi
 fi
+while true; do
+  if [[ -r /dev/tty ]]; then
+    read -r -p "Enter the server port [$PORT]: " PORT_INPUT < /dev/tty
+  else
+    PORT_INPUT=""
+  fi
+  PORT_INPUT=${PORT_INPUT:-$PORT}
+  if [[ ! "$PORT_INPUT" =~ ^[0-9]+$ ]] || (( PORT_INPUT < 1 || PORT_INPUT > 65535 )); then
+    echo "Please enter a valid port between 1 and 65535."
+  elif port_in_use "$PORT_INPUT" && { [[ "$PORT_INPUT" != "$EXISTING_PORT" ]] || ! systemctl is-active --quiet typst-api 2>/dev/null; }; then
+    echo "Port $PORT_INPUT is already in use. Please choose another port."
+  else
+    PORT="$PORT_INPUT"
+    break
+  fi
+done
 
 # --- Download & Verify ---
 TMP_DIR=$(mktemp -d)
@@ -215,6 +219,11 @@ EOF
   fi
 else
   echo ".env file already exists. Skipping generation."
+  if grep -q '^PORT=' "$INSTALL_DIR/.env"; then
+    sed -i -E "s/^PORT=.*/PORT=$PORT/" "$INSTALL_DIR/.env"
+  else
+    printf '\nPORT=%s\n' "$PORT" >> "$INSTALL_DIR/.env"
+  fi
 fi
 
 # --- Service Installation ---
@@ -237,6 +246,13 @@ if [[ "$WITH_SERVICE" == true ]]; then
   # Move or symlink .env to /etc/typst-api/typst-api.env for systemd
   if [[ -f "$INSTALL_DIR/.env" && ! -f "/etc/typst-api/typst-api.env" ]]; then
     cp "$INSTALL_DIR/.env" "/etc/typst-api/typst-api.env"
+  fi
+  if [[ -f "/etc/typst-api/typst-api.env" ]]; then
+    if grep -q '^PORT=' /etc/typst-api/typst-api.env; then
+      sed -i -E "s/^PORT=.*/PORT=$PORT/" /etc/typst-api/typst-api.env
+    else
+      printf '\nPORT=%s\n' "$PORT" >> /etc/typst-api/typst-api.env
+    fi
   fi
   
   SERVICE_FILE="/etc/systemd/system/typst-api.service"

@@ -89,38 +89,43 @@ if (-not (Test-Path -Path $FontsDir)) {
 
 $Port = 8080
 $EnvPath = Join-Path $InstallDir ".env"
-if (-not (Test-Path -Path $EnvPath)) {
-    function Test-PortInUse([int]$PortNumber) {
-        try {
-            if (Get-Command Get-NetTCPConnection -ErrorAction SilentlyContinue) {
-                return $null -ne (Get-NetTCPConnection -LocalPort $PortNumber -State Listen -ErrorAction SilentlyContinue)
-            }
-
-            $Matches = netstat -ano -p TCP | Select-String -Pattern "LISTENING\s+\S+:$PortNumber\s"
-            return $null -ne $Matches
-        }
-        catch {
-            return $false
-        }
+if (Test-Path -Path $EnvPath) {
+    $ExistingPort = (Get-Content $EnvPath | Select-String -Pattern '^PORT=([0-9]+)' | Select-Object -First 1).Matches.Groups[1].Value
+    if ($ExistingPort) {
+        $Port = [int]$ExistingPort
     }
+}
 
-    do {
-        $PortInput = Read-Host "Enter the server port [8080]"
-        if ([string]::IsNullOrWhiteSpace($PortInput)) {
-            $Port = 8080
-            $ValidPort = $true
+function Test-PortInUse([int]$PortNumber) {
+    try {
+        if (Get-Command Get-NetTCPConnection -ErrorAction SilentlyContinue) {
+            return $null -ne (Get-NetTCPConnection -LocalPort $PortNumber -State Listen -ErrorAction SilentlyContinue)
         }
-        else {
-            $ValidPort = [int]::TryParse($PortInput, [ref]$Port)
-        }
-        if (-not $ValidPort -or $Port -lt 1 -or $Port -gt 65535) {
-            Write-Host "Please enter a valid port between 1 and 65535."
-        }
-        elseif (Test-PortInUse $Port) {
-            Write-Host "Port $Port is already in use. Please choose another port."
-            $ValidPort = $false
-        }
-    } while (-not $ValidPort -or $Port -lt 1 -or $Port -gt 65535)
+
+        $Matches = netstat -ano -p TCP | Select-String -Pattern "LISTENING\s+\S+:$PortNumber\s"
+        return $null -ne $Matches
+    }
+    catch {
+        return $false
+    }
+}
+
+do {
+    $PortInput = Read-Host "Enter the server port [$Port]"
+    if ([string]::IsNullOrWhiteSpace($PortInput)) {
+        $ValidPort = $true
+    }
+    else {
+        $ValidPort = [int]::TryParse($PortInput, [ref]$Port)
+    }
+    if (-not $ValidPort -or $Port -lt 1 -or $Port -gt 65535) {
+        Write-Host "Please enter a valid port between 1 and 65535."
+    }
+    elseif (Test-PortInUse $Port) {
+        Write-Host "Port $Port is already in use. Please choose another port."
+        $ValidPort = $false
+    }
+} while (-not $ValidPort -or $Port -lt 1 -or $Port -gt 65535)
 }
 
 # --- Download & Verify ---
@@ -204,6 +209,12 @@ MAX_CONCURRENT_COMPILATIONS=10
     }
     else {
         Write-Host ".env file already exists. Skipping generation."
+        if (Get-Content $EnvPath | Select-String -Pattern '^PORT=') {
+            (Get-Content $EnvPath) -replace '^PORT=.*', "PORT=$Port" | Set-Content $EnvPath
+        }
+        else {
+            Add-Content -Path $EnvPath -Value "PORT=$Port"
+        }
     }
 
     # --- Health Check ---
