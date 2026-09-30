@@ -11,7 +11,8 @@
       "file_format": "ttf",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -35,7 +36,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -78,7 +80,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -121,7 +124,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -141,7 +145,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -193,7 +198,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -327,7 +333,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -358,7 +365,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -378,7 +386,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -398,7 +407,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -418,7 +428,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "Bitstream-Vera",
-        "url": "https://www.gnu.org/licenses/license-list.html#bitstream"
+        "url": "https://www.gnu.org/licenses/license-list.html#bitstream",
+        "download_url": "https://raw.githubusercontent.com/dejavu-fonts/dejavu-fonts/master/LICENSE"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -461,7 +472,8 @@
       "file_format": "ttf",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -485,7 +497,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -541,7 +554,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -597,7 +611,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -617,7 +632,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -641,7 +657,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "Bitstream-Vera",
-        "url": "https://www.gnu.org/licenses/license-list.html#bitstream"
+        "url": "https://www.gnu.org/licenses/license-list.html#bitstream",
+        "download_url": "https://raw.githubusercontent.com/dejavu-fonts/dejavu-fonts/master/LICENSE"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -684,7 +701,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "Bitstream-Vera",
-        "url": "https://www.gnu.org/licenses/license-list.html#bitstream"
+        "url": "https://www.gnu.org/licenses/license-list.html#bitstream",
+        "download_url": "https://raw.githubusercontent.com/dejavu-fonts/dejavu-fonts/master/LICENSE"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -727,7 +745,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "Bitstream-Vera",
-        "url": "https://www.gnu.org/licenses/license-list.html#bitstream"
+        "url": "https://www.gnu.org/licenses/license-list.html#bitstream",
+        "download_url": "https://raw.githubusercontent.com/dejavu-fonts/dejavu-fonts/master/LICENSE"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -770,7 +789,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -826,7 +846,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -846,7 +867,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -902,7 +924,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -932,7 +955,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -962,7 +986,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -982,7 +1007,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -1002,7 +1028,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1045,7 +1072,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -1065,7 +1093,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1089,7 +1118,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1127,7 +1157,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1261,7 +1292,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1304,7 +1336,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1328,7 +1361,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1394,7 +1428,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1454,7 +1489,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -1474,7 +1510,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1540,7 +1577,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1606,7 +1644,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1672,7 +1711,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -1696,7 +1736,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-4.0",
-        "url": "https://creativecommons.org/licenses/by-nd/4.0/"
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "download_url": "https://creativecommons.org/licenses/by-nd/4.0/legalcode.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1733,7 +1774,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-4.0",
-        "url": "https://creativecommons.org/licenses/by-nd/4.0/"
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "download_url": "https://creativecommons.org/licenses/by-nd/4.0/legalcode.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1757,7 +1799,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1813,7 +1856,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1869,7 +1913,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -1893,7 +1938,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1924,7 +1970,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1967,7 +2014,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -1991,7 +2039,8 @@
       "file_format": "tar.gz",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2034,7 +2083,8 @@
       "file_format": "tar.gz",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2077,7 +2127,8 @@
       "file_format": "tar.gz",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2120,7 +2171,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2144,7 +2196,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2168,7 +2221,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2192,7 +2246,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2229,7 +2284,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2285,7 +2341,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2309,7 +2366,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2333,7 +2391,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2357,7 +2416,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2381,7 +2441,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2418,7 +2479,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2455,7 +2517,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2479,7 +2542,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2535,7 +2599,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2559,7 +2624,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2583,7 +2649,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2607,7 +2674,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -2627,7 +2695,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2670,7 +2739,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2694,7 +2764,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -2714,7 +2785,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2765,7 +2837,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2802,7 +2875,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -2822,7 +2896,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-3.0-TW",
-        "url": "https://creativecommons.org/licenses/by-nd/3.0/tw/"
+        "url": "https://creativecommons.org/licenses/by-nd/3.0/tw/",
+        "download_url": "https://creativecommons.org/licenses/by-nd/3.0/tw/legalcode.zh-hant"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2846,7 +2921,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2889,7 +2965,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2913,7 +2990,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2956,7 +3034,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -2993,7 +3072,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3017,7 +3097,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3041,7 +3122,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3061,7 +3143,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3081,7 +3164,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3105,7 +3189,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3129,7 +3214,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3153,7 +3239,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3177,7 +3264,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3214,7 +3302,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3238,7 +3327,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3279,7 +3369,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3322,7 +3413,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3346,7 +3438,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3377,7 +3470,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3401,7 +3495,8 @@
       "file_format": "ttf",
       "license": {
         "spdx": "Apache-2.0",
-        "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        "url": "https://www.apache.org/licenses/LICENSE-2.0",
+        "download_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3425,7 +3520,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3456,7 +3552,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3499,7 +3596,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3530,7 +3628,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3573,7 +3672,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3597,7 +3697,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-4.0",
-        "url": "https://creativecommons.org/licenses/by-nd/4.0/"
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "download_url": "https://creativecommons.org/licenses/by-nd/4.0/legalcode.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3640,7 +3741,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-4.0",
-        "url": "https://creativecommons.org/licenses/by-nd/4.0/"
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "download_url": "https://creativecommons.org/licenses/by-nd/4.0/legalcode.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3683,7 +3785,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-4.0",
-        "url": "https://creativecommons.org/licenses/by-nd/4.0/"
+        "url": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "download_url": "https://creativecommons.org/licenses/by-nd/4.0/legalcode.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3726,7 +3829,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3750,7 +3854,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3770,7 +3875,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3798,7 +3904,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3835,7 +3942,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3855,7 +3963,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3875,7 +3984,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3895,7 +4005,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -3915,7 +4026,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3963,7 +4075,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -3987,7 +4100,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -4007,7 +4121,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
@@ -4027,7 +4142,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4051,7 +4167,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4075,7 +4192,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4118,7 +4236,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4161,7 +4280,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4185,7 +4305,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4209,7 +4330,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4252,7 +4374,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4295,7 +4418,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4338,7 +4462,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4362,7 +4487,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4405,7 +4531,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4429,7 +4556,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4472,7 +4600,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
-        "url": "https://www.latex-project.org/lppl/"
+        "url": "https://www.latex-project.org/lppl/",
+        "download_url": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4496,7 +4625,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-3.0-TW",
-        "url": "https://creativecommons.org/licenses/by-nd/3.0/tw/"
+        "url": "https://creativecommons.org/licenses/by-nd/3.0/tw/",
+        "download_url": "https://creativecommons.org/licenses/by-nd/3.0/tw/legalcode.zh-hant"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4520,7 +4650,8 @@
       "file_format": "ttf",
       "license": {
         "spdx": "CC-BY-4.0",
-        "url": "https://creativecommons.org/licenses/by/4.0/"
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "download_url": "https://creativecommons.org/licenses/by/4.0/legalcode.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4544,7 +4675,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": false,
       "available_weights": [
@@ -4568,7 +4700,8 @@
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
-        "url": "https://scripts.sil.org/OFL"
+        "url": "https://scripts.sil.org/OFL",
+        "download_url": "https://openfontlicense.org/documents/OFL.txt"
       },
       "is_variable_font": true,
       "variable_axes": {
