@@ -374,7 +374,7 @@
       "name": "Cascadia Code",
       "category": "monospace",
       "homepage_url": "https://github.com/microsoft/cascadia-code",
-      "download_url": "https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode.zip",
+      "download_url": "https://fonts.google.com/download?family=Cascadia+Code",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -394,7 +394,7 @@
       "name": "Cascadia Mono",
       "category": "monospace",
       "homepage_url": "https://github.com/microsoft/cascadia-code",
-      "download_url": "https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode.zip",
+      "download_url": "https://fonts.google.com/download?family=Cascadia+Mono",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -414,7 +414,7 @@
       "name": "Charter",
       "category": "serif",
       "homepage_url": "https://practicaltypography.com/charter.html",
-      "download_url": "https://practicaltypography.com/fonts/charter.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/charter.zip",
       "file_format": "zip",
       "license": {
         "spdx": "Bitstream-Vera",
@@ -537,7 +537,7 @@
       "name": "Comic Neue Angular",
       "category": "sans-serif",
       "homepage_url": "https://github.com/crox3/comicneue",
-      "download_url": "https://github.com/crox3/comicneue/archive/refs/heads/master.zip",
+      "download_url": "http://comicneue.com/comic-neue-2.1.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -593,7 +593,7 @@
       "name": "Crimson Pro",
       "category": "serif",
       "homepage_url": "https://github.com/Fonthausen/CrimsonPro",
-      "download_url": "https://github.com/Fonthausen/CrimsonPro/releases/latest/download/CrimsonPro.zip",
+      "download_url": "https://fonts.google.com/download?family=Crimson+Pro",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -613,7 +613,7 @@
       "name": "DejaVu Math TeX Gyre",
       "category": "math",
       "homepage_url": "https://github.com/dejavu-fonts/dejavu-fonts",
-      "download_url": "https://github.com/dejavu-fonts/dejavu-fonts/releases/latest/download/dejavu-fonts-ttf.zip",
+      "download_url": "https://github.com/dejavu-fonts/dejavu-fonts/archive/refs/heads/master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -637,7 +637,7 @@
       "name": "DejaVu Sans",
       "category": "sans-serif",
       "homepage_url": "https://dejavu-fonts.github.io/",
-      "download_url": "https://github.com/dejavu-fonts/dejavu-fonts/releases/latest/download/dejavu-fonts-ttf.zip",
+      "download_url": "https://github.com/dejavu-fonts/dejavu-fonts/archive/refs/heads/master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "Bitstream-Vera",
@@ -680,7 +680,7 @@
       "name": "DejaVu Sans Mono",
       "category": "monospace",
       "homepage_url": "https://dejavu-fonts.github.io/",
-      "download_url": "https://github.com/dejavu-fonts/dejavu-fonts/releases/latest/download/dejavu-fonts-ttf.zip",
+      "download_url": "https://github.com/dejavu-fonts/dejavu-fonts/archive/refs/heads/master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "Bitstream-Vera",
@@ -723,7 +723,7 @@
       "name": "DejaVu Serif",
       "category": "serif",
       "homepage_url": "https://dejavu-fonts.github.io/",
-      "download_url": "https://github.com/dejavu-fonts/dejavu-fonts/releases/latest/download/dejavu-fonts-ttf.zip",
+      "download_url": "https://github.com/dejavu-fonts/dejavu-fonts/archive/refs/heads/master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "Bitstream-Vera",
@@ -822,7 +822,7 @@
       "name": "DM Sans",
       "category": "sans-serif",
       "homepage_url": "https://github.com/googlefonts/dm-sans",
-      "download_url": "https://github.com/googlefonts/dm-sans/releases/latest/download/DMSans.zip",
+      "download_url": "https://fonts.google.com/download?family=DM+Sans",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -842,7 +842,7 @@
       "name": "DM Sans 9pt",
       "category": "sans-serif",
       "homepage_url": "https://github.com/googlefonts/dm-sans",
-      "download_url": "https://github.com/googlefonts/dm-sans/releases/latest/download/DMSans.zip",
+      "download_url": "https://fonts.google.com/download?family=DM+Sans",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1061,7 +1061,7 @@
       "name": "Fira Math",
       "category": "math",
       "homepage_url": "https://github.com/firamath/firamath",
-      "download_url": "https://github.com/firamath/firamath/releases/latest/download/firamath.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/firamath.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1257,7 +1257,7 @@
       "name": "GFS Neohellenic",
       "category": "sans-serif",
       "homepage_url": "https://greekfontsociety-gfs.gr/",
-      "download_url": "https://greekfontsociety-gfs.gr/download/GFS_Neohellenic.zip",
+      "download_url": "https://fonts.google.com/download?family=GFS+Neohellenic",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1300,7 +1300,7 @@
       "name": "GFS Neohellenic Math",
       "category": "math",
       "homepage_url": "https://greekfontsociety-gfs.gr/",
-      "download_url": "https://greekfontsociety-gfs.gr/download/GFS_Neohellenic_Math.zip",
+      "download_url": "https://fonts.google.com/download?family=GFS+Neohellenic",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1450,7 +1450,7 @@
       "name": "HK Grotesk",
       "category": "sans-serif",
       "homepage_url": "https://github.com/hanken-co/hk-grotesk",
-      "download_url": "https://github.com/hanken-co/hk-grotesk/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=Hanken+Grotesk",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1470,7 +1470,7 @@
       "name": "IBM Plex Mono",
       "category": "monospace",
       "homepage_url": "https://github.com/IBM/plex",
-      "download_url": "https://github.com/IBM/plex/releases/latest/download/OpenType.zip",
+      "download_url": "https://fonts.google.com/download?family=IBM+Plex+Mono",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1536,7 +1536,7 @@
       "name": "IBM Plex Sans",
       "category": "sans-serif",
       "homepage_url": "https://github.com/IBM/plex",
-      "download_url": "https://github.com/IBM/plex/releases/latest/download/OpenType.zip",
+      "download_url": "https://fonts.google.com/download?family=IBM+Plex+Sans",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1602,7 +1602,7 @@
       "name": "IBM Plex Serif",
       "category": "serif",
       "homepage_url": "https://github.com/IBM/plex",
-      "download_url": "https://github.com/IBM/plex/releases/latest/download/OpenType.zip",
+      "download_url": "https://fonts.google.com/download?family=IBM+Plex+Serif",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1668,7 +1668,7 @@
       "name": "Inconsolata",
       "category": "monospace",
       "homepage_url": "https://github.com/googlefonts/Inconsolata",
-      "download_url": "https://github.com/googlefonts/Inconsolata/releases/latest/download/Inconsolata.zip",
+      "download_url": "https://fonts.google.com/download?family=Inconsolata",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1692,7 +1692,7 @@
       "name": "Infini",
       "category": "sans-serif",
       "homepage_url": "http://www.cnap.graphismeenfrance.fr/infini/",
-      "download_url": "http://www.cnap.graphismeenfrance.fr/infini/en/download/Infini-font.zip",
+      "download_url": "https://fontlibrary.org/assets/downloads/infini/c9c4562095ccdc76c49cc8b728564da1/infini.zip",
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-4.0",
@@ -1729,7 +1729,7 @@
       "name": "Infini Picto",
       "category": "symbols",
       "homepage_url": "http://www.cnap.graphismeenfrance.fr/infini/",
-      "download_url": "http://www.cnap.graphismeenfrance.fr/infini/en/download/Infini-font.zip",
+      "download_url": "https://fontlibrary.org/assets/downloads/infini/c9c4562095ccdc76c49cc8b728564da1/infini.zip",
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-4.0",
@@ -1865,7 +1865,7 @@
       "name": "Inter",
       "category": "sans-serif",
       "homepage_url": "https://rsms.me/inter/",
-      "download_url": "https://github.com/rsms/inter/releases/latest/download/Inter.zip",
+      "download_url": "https://fonts.google.com/download?family=Inter",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1920,7 +1920,7 @@
       "name": "Lato",
       "category": "sans-serif",
       "homepage_url": "https://www.latofonts.com/",
-      "download_url": "https://www.latofonts.com/download/Lato2OFL.zip",
+      "download_url": "https://fonts.google.com/download?family=Lato",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1963,7 +1963,7 @@
       "name": "Lete Sans Math",
       "category": "math",
       "homepage_url": "https://github.com/khaledhosny/lete-sans-math",
-      "download_url": "https://github.com/khaledhosny/lete-sans-math/releases/latest/download/LeteSansMath.zip",
+      "download_url": "https://github.com/abccsss/LeteSansMath/archive/refs/heads/master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1987,7 +1987,7 @@
       "name": "Liberation Mono",
       "category": "monospace",
       "homepage_url": "https://github.com/liberationfonts/liberation-fonts",
-      "download_url": "https://github.com/liberationfonts/liberation-fonts/releases/latest/download/liberation-fonts-ttf.tar.gz",
+      "download_url": "https://github.com/liberationfonts/liberation-fonts/archive/refs/heads/main.zip",
       "file_format": "tar.gz",
       "license": {
         "spdx": "OFL-1.1",
@@ -2030,7 +2030,7 @@
       "name": "Liberation Sans",
       "category": "sans-serif",
       "homepage_url": "https://github.com/liberationfonts/liberation-fonts",
-      "download_url": "https://github.com/liberationfonts/liberation-fonts/releases/latest/download/liberation-fonts-ttf.tar.gz",
+      "download_url": "https://github.com/liberationfonts/liberation-fonts/archive/refs/heads/main.zip",
       "file_format": "tar.gz",
       "license": {
         "spdx": "OFL-1.1",
@@ -2073,7 +2073,7 @@
       "name": "Liberation Serif",
       "category": "serif",
       "homepage_url": "https://github.com/liberationfonts/liberation-fonts",
-      "download_url": "https://github.com/liberationfonts/liberation-fonts/releases/latest/download/liberation-fonts-ttf.tar.gz",
+      "download_url": "https://github.com/liberationfonts/liberation-fonts/archive/refs/heads/main.zip",
       "file_format": "tar.gz",
       "license": {
         "spdx": "OFL-1.1",
@@ -2116,7 +2116,7 @@
       "name": "Libertinus Keyboard",
       "category": "symbols",
       "homepage_url": "https://github.com/alerque/libertinus",
-      "download_url": "https://github.com/alerque/libertinus/releases/latest/download/Libertinus.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/libertinus-fonts.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2140,7 +2140,7 @@
       "name": "Libertinus Math",
       "category": "math",
       "homepage_url": "https://github.com/alerque/libertinus",
-      "download_url": "https://github.com/alerque/libertinus/releases/latest/download/Libertinus.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/libertinus-fonts.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2164,7 +2164,7 @@
       "name": "Libertinus Mono",
       "category": "monospace",
       "homepage_url": "https://github.com/alerque/libertinus",
-      "download_url": "https://github.com/alerque/libertinus/releases/latest/download/Libertinus.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/libertinus-fonts.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2188,7 +2188,7 @@
       "name": "Libertinus Sans",
       "category": "sans-serif",
       "homepage_url": "https://github.com/alerque/libertinus",
-      "download_url": "https://github.com/alerque/libertinus/releases/latest/download/Libertinus.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/libertinus-fonts.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2225,7 +2225,7 @@
       "name": "Libertinus Serif",
       "category": "serif",
       "homepage_url": "https://github.com/alerque/libertinus",
-      "download_url": "https://github.com/alerque/libertinus/releases/latest/download/Libertinus.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/libertinus-fonts.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2281,7 +2281,7 @@
       "name": "Libertinus Serif Display",
       "category": "display",
       "homepage_url": "https://github.com/alerque/libertinus",
-      "download_url": "https://github.com/alerque/libertinus/releases/latest/download/Libertinus.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/libertinus-fonts.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2305,7 +2305,7 @@
       "name": "Libertinus Serif Initials",
       "category": "display",
       "homepage_url": "https://github.com/alerque/libertinus",
-      "download_url": "https://github.com/alerque/libertinus/releases/latest/download/Libertinus.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/libertinus-fonts.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2329,7 +2329,7 @@
       "name": "Libre Barcode 128",
       "category": "display",
       "homepage_url": "https://github.com/graphicore/librebarcode",
-      "download_url": "https://github.com/graphicore/librebarcode/releases/latest/download/librebarcode.zip",
+      "download_url": "https://fonts.google.com/download?family=Libre+Barcode+128",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2353,7 +2353,7 @@
       "name": "Libre Barcode 128 Text",
       "category": "display",
       "homepage_url": "https://github.com/graphicore/librebarcode",
-      "download_url": "https://github.com/graphicore/librebarcode/releases/latest/download/librebarcode.zip",
+      "download_url": "https://fonts.google.com/download?family=Libre+Barcode+128+Text",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2414,7 +2414,7 @@
       "name": "Linux Biolinum",
       "category": "sans-serif",
       "homepage_url": "https://sourceforge.net/projects/linuxlibertine/",
-      "download_url": "https://sourceforge.net/projects/linuxlibertine/files/latest/download",
+      "download_url": "https://mirrors.ctan.org/fonts/libertine.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2451,7 +2451,7 @@
       "name": "Linux Biolinum Keyboard",
       "category": "symbols",
       "homepage_url": "https://sourceforge.net/projects/linuxlibertine/",
-      "download_url": "https://sourceforge.net/projects/linuxlibertine/files/latest/download",
+      "download_url": "https://mirrors.ctan.org/fonts/libertine.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2475,7 +2475,7 @@
       "name": "Linux Libertine",
       "category": "serif",
       "homepage_url": "https://sourceforge.net/projects/linuxlibertine/",
-      "download_url": "https://sourceforge.net/projects/linuxlibertine/files/latest/download",
+      "download_url": "https://mirrors.ctan.org/fonts/libertine.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2531,7 +2531,7 @@
       "name": "Linux Libertine Display",
       "category": "display",
       "homepage_url": "https://sourceforge.net/projects/linuxlibertine/",
-      "download_url": "https://sourceforge.net/projects/linuxlibertine/files/latest/download",
+      "download_url": "https://mirrors.ctan.org/fonts/libertine.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2555,7 +2555,7 @@
       "name": "Linux Libertine Initials",
       "category": "display",
       "homepage_url": "https://sourceforge.net/projects/linuxlibertine/",
-      "download_url": "https://sourceforge.net/projects/linuxlibertine/files/latest/download",
+      "download_url": "https://mirrors.ctan.org/fonts/libertine.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2579,7 +2579,7 @@
       "name": "Linux Libertine Mono",
       "category": "monospace",
       "homepage_url": "https://sourceforge.net/projects/linuxlibertine/",
-      "download_url": "https://sourceforge.net/projects/linuxlibertine/files/latest/download",
+      "download_url": "https://mirrors.ctan.org/fonts/libertine.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2623,7 +2623,7 @@
       "name": "Luciole",
       "category": "sans-serif",
       "homepage_url": "https://www.luciole-vision.com/",
-      "download_url": "https://www.luciole-vision.com/luciole.zip",
+      "download_url": "https://www.luciole-vision.com/fonts/Luciole.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2666,7 +2666,7 @@
       "name": "Luciole Math",
       "category": "math",
       "homepage_url": "https://www.luciole-vision.com/",
-      "download_url": "https://www.luciole-vision.com/luciole.zip",
+      "download_url": "https://www.luciole-vision.com/fonts/Luciole-Math.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2690,7 +2690,7 @@
       "name": "Manrope",
       "category": "sans-serif",
       "homepage_url": "https://manropefont.com/",
-      "download_url": "https://github.com/sharanda/manrope/releases/latest/download/manrope.zip",
+      "download_url": "https://fonts.google.com/download?family=Manrope",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2710,7 +2710,7 @@
       "name": "Merriweather",
       "category": "serif",
       "homepage_url": "https://github.com/SorkinType/Merriweather",
-      "download_url": "https://github.com/SorkinType/Merriweather/releases/latest/download/Merriweather.zip",
+      "download_url": "https://fonts.google.com/download?family=Merriweather",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2761,7 +2761,7 @@
       "name": "Merriweather 7pt",
       "category": "serif",
       "homepage_url": "https://github.com/SorkinType/Merriweather",
-      "download_url": "https://github.com/SorkinType/Merriweather/releases/latest/download/Merriweather.zip",
+      "download_url": "https://fonts.google.com/download?family=Merriweather",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2798,7 +2798,7 @@
       "name": "Merriweather Sans",
       "category": "sans-serif",
       "homepage_url": "https://github.com/SorkinType/Merriweather-Sans",
-      "download_url": "https://github.com/SorkinType/Merriweather-Sans/releases/latest/download/MerriweatherSans.zip",
+      "download_url": "https://fonts.google.com/download?family=Merriweather+Sans",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2818,7 +2818,7 @@
       "name": "MOESongUN",
       "category": "serif",
       "homepage_url": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/index.html",
-      "download_url": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/MOESongUN.zip",
+      "download_url": "https://github.com/typst-doc-cn/moe-tw-fonts/archive/refs/heads/main.zip",
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-3.0-TW",
@@ -3037,7 +3037,7 @@
       "name": "Noto Color Emoji",
       "category": "emoji",
       "homepage_url": "https://github.com/googlefonts/noto-emoji",
-      "download_url": "https://github.com/googlefonts/noto-emoji/releases/latest/download/NotoColorEmoji.zip",
+      "download_url": "https://fonts.google.com/download?family=Noto+Color+Emoji",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3057,7 +3057,7 @@
       "name": "Noto Emoji",
       "category": "emoji",
       "homepage_url": "https://github.com/googlefonts/noto-emoji",
-      "download_url": "https://github.com/googlefonts/noto-emoji/releases/latest/download/NotoEmoji.zip",
+      "download_url": "https://fonts.google.com/download?family=Noto+Emoji",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3077,7 +3077,7 @@
       "name": "Noto Sans",
       "category": "sans-serif",
       "homepage_url": "https://github.com/notofonts/latin-greek-cyrillic",
-      "download_url": "https://github.com/notofonts/latin-greek-cyrillic/releases/latest/download/NotoSans.zip",
+      "download_url": "https://fonts.google.com/download?family=Noto+Sans",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3101,7 +3101,7 @@
       "name": "Noto Sans Display",
       "category": "sans-serif",
       "homepage_url": "https://github.com/notofonts/latin-greek-cyrillic",
-      "download_url": "https://github.com/notofonts/latin-greek-cyrillic/releases/latest/download/NotoSansDisplay.zip",
+      "download_url": "https://fonts.google.com/download?family=Noto+Sans+Display",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3125,7 +3125,7 @@
       "name": "Noto Serif",
       "category": "serif",
       "homepage_url": "https://github.com/notofonts/latin-greek-cyrillic",
-      "download_url": "https://github.com/notofonts/latin-greek-cyrillic/releases/latest/download/NotoSerif.zip",
+      "download_url": "https://fonts.google.com/download?family=Noto+Serif",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3149,7 +3149,7 @@
       "name": "Noto Serif Display",
       "category": "serif",
       "homepage_url": "https://github.com/notofonts/latin-greek-cyrillic",
-      "download_url": "https://github.com/notofonts/latin-greek-cyrillic/releases/latest/download/NotoSerifDisplay.zip",
+      "download_url": "https://fonts.google.com/download?family=Noto+Serif+Display",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3173,7 +3173,7 @@
       "name": "Old Standard",
       "category": "serif",
       "homepage_url": "https://github.com/alerque/oldstandard",
-      "download_url": "https://github.com/alerque/oldstandard/releases/latest/download/OldStandard.zip",
+      "download_url": "https://fonts.google.com/download?family=Old+Standard+TT",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3210,7 +3210,7 @@
       "name": "OldStandard-Math",
       "category": "math",
       "homepage_url": "https://github.com/alerque/oldstandard-math",
-      "download_url": "https://github.com/alerque/oldstandard-math/releases/latest/download/OldStandardMath.zip",
+      "download_url": "https://fonts.google.com/download?family=Old+Standard+TT",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3234,7 +3234,7 @@
       "name": "Open Sauce One",
       "category": "sans-serif",
       "homepage_url": "https://github.com/supercomputra/OpenSauce",
-      "download_url": "https://github.com/supercomputra/OpenSauce/archive/refs/heads/master.zip",
+      "download_url": "https://github.com/marcologous/Open-Sauce-Fonts/archive/refs/heads/master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3275,7 +3275,7 @@
       "name": "OpenDyslexic",
       "category": "sans-serif",
       "homepage_url": "https://opendyslexic.org/",
-      "download_url": "https://github.com/antijingoist/opendyslexic/releases/latest/download/opendyslexic.zip",
+      "download_url": "https://github.com/antijingoist/opendyslexic/archive/refs/heads/master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3318,7 +3318,7 @@
       "name": "OpenDyslexicMono",
       "category": "monospace",
       "homepage_url": "https://opendyslexic.org/",
-      "download_url": "https://github.com/antijingoist/opendyslexic/releases/latest/download/opendyslexic.zip",
+      "download_url": "https://github.com/antijingoist/opendyslexic/archive/refs/heads/master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3342,7 +3342,7 @@
       "name": "Pennstander",
       "category": "sans-serif",
       "homepage_url": "https://github.com/pennstander/pennstander-fonts",
-      "download_url": "https://github.com/pennstander/pennstander-fonts/releases/latest/download/Pennstander.zip",
+      "download_url": "https://github.com/juliusross1/Pennstander/archive/refs/heads/main.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3373,7 +3373,7 @@
       "name": "Pennstander Math",
       "category": "math",
       "homepage_url": "https://github.com/pennstander/pennstander-fonts",
-      "download_url": "https://github.com/pennstander/pennstander-fonts/releases/latest/download/PennstanderMath.zip",
+      "download_url": "https://github.com/juliusross1/Pennstander/archive/refs/heads/main.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3421,7 +3421,7 @@
       "name": "PT Mono",
       "category": "monospace",
       "homepage_url": "https://paratype.com/fonts/pt/pt-mono",
-      "download_url": "https://company.paratype.com/system/attachments/6344/original/ptmono.zip",
+      "download_url": "https://fonts.google.com/download?family=PT+Mono",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3452,7 +3452,7 @@
       "name": "PT Sans",
       "category": "sans-serif",
       "homepage_url": "https://paratype.com/fonts/pt/pt-sans",
-      "download_url": "https://company.paratype.com/system/attachments/6276/original/ptsans.zip",
+      "download_url": "https://fonts.google.com/download?family=PT+Sans",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3495,7 +3495,7 @@
       "name": "PT Sans Caption",
       "category": "sans-serif",
       "homepage_url": "https://paratype.com/fonts/pt/pt-sans",
-      "download_url": "https://company.paratype.com/system/attachments/6276/original/ptsans.zip",
+      "download_url": "https://fonts.google.com/download?family=PT+Sans+Caption",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3526,7 +3526,7 @@
       "name": "PT Serif",
       "category": "serif",
       "homepage_url": "https://paratype.com/fonts/pt/pt-serif",
-      "download_url": "https://company.paratype.com/system/attachments/6341/original/ptserif.zip",
+      "download_url": "https://fonts.google.com/download?family=PT+Serif",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3569,7 +3569,7 @@
       "name": "Public Sans",
       "category": "sans-serif",
       "homepage_url": "https://public-sans.digital.gov/",
-      "download_url": "https://github.com/uswds/public-sans/releases/latest/download/public-sans.zip",
+      "download_url": "https://fonts.google.com/download?family=Public+Sans",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3593,7 +3593,7 @@
       "name": "Reforma 1918",
       "category": "serif",
       "homepage_url": "https://reforma.unc.edu.ar/",
-      "download_url": "https://reforma.unc.edu.ar/downloads/Reforma1918.zip",
+      "download_url": "https://github.com/pampatype/reforma/archive/refs/heads/master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-4.0",
@@ -3636,7 +3636,7 @@
       "name": "Reforma 1969",
       "category": "serif",
       "homepage_url": "https://reforma.unc.edu.ar/",
-      "download_url": "https://reforma.unc.edu.ar/downloads/Reforma1969.zip",
+      "download_url": "https://github.com/pampatype/reforma/archive/refs/heads/master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-4.0",
@@ -3679,7 +3679,7 @@
       "name": "Reforma 2018",
       "category": "sans-serif",
       "homepage_url": "https://reforma.unc.edu.ar/",
-      "download_url": "https://reforma.unc.edu.ar/downloads/Reforma2018.zip",
+      "download_url": "https://github.com/pampatype/reforma/archive/refs/heads/master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-4.0",
@@ -3746,7 +3746,7 @@
       "name": "Roboto Mono",
       "category": "monospace",
       "homepage_url": "https://github.com/googlefonts/RobotoMono",
-      "download_url": "https://github.com/googlefonts/RobotoMono/releases/latest/download/RobotoMono.zip",
+      "download_url": "https://fonts.google.com/download?family=Roboto+Mono",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3766,7 +3766,7 @@
       "name": "Roboto Serif",
       "category": "serif",
       "homepage_url": "https://github.com/googlefonts/roboto-serif",
-      "download_url": "https://github.com/googlefonts/roboto-serif/releases/latest/download/RobotoSerif.zip",
+      "download_url": "https://fonts.google.com/download?family=Roboto+Serif",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3794,7 +3794,7 @@
       "name": "Roboto Serif 20pt",
       "category": "serif",
       "homepage_url": "https://github.com/googlefonts/roboto-serif",
-      "download_url": "https://github.com/googlefonts/roboto-serif/releases/latest/download/RobotoSerif.zip",
+      "download_url": "https://fonts.google.com/download?family=Roboto+Serif",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3831,7 +3831,7 @@
       "name": "Roboto Slab",
       "category": "serif",
       "homepage_url": "https://github.com/googlefonts/robotoslab",
-      "download_url": "https://github.com/googlefonts/robotoslab/releases/latest/download/RobotoSlab.zip",
+      "download_url": "https://fonts.google.com/download?family=Roboto+Slab",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3851,7 +3851,7 @@
       "name": "Source Code Pro",
       "category": "monospace",
       "homepage_url": "https://github.com/adobe-fonts/source-code-pro",
-      "download_url": "https://github.com/adobe-fonts/source-code-pro/releases/latest/download/OTF-source-code-pro.zip",
+      "download_url": "https://fonts.google.com/download?family=Source+Code+Pro",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3871,7 +3871,7 @@
       "name": "Source Sans Pro",
       "category": "sans-serif",
       "homepage_url": "https://github.com/adobe-fonts/source-sans",
-      "download_url": "https://github.com/adobe-fonts/source-sans/releases/latest/download/OTF-source-sans.zip",
+      "download_url": "https://fonts.google.com/download?family=Source+Sans+3",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3891,7 +3891,7 @@
       "name": "Source Serif Pro",
       "category": "serif",
       "homepage_url": "https://github.com/adobe-fonts/source-serif",
-      "download_url": "https://github.com/adobe-fonts/source-serif/releases/latest/download/OTF-source-serif.zip",
+      "download_url": "https://fonts.google.com/download?family=Source+Serif+4",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3911,7 +3911,7 @@
       "name": "Spectral",
       "category": "serif",
       "homepage_url": "https://github.com/productiontype/Spectral",
-      "download_url": "https://github.com/productiontype/Spectral/releases/latest/download/Spectral.zip",
+      "download_url": "https://fonts.google.com/download?family=Spectral",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3959,7 +3959,7 @@
       "name": "STIX Two Math",
       "category": "math",
       "homepage_url": "https://github.com/stipub/stixfonts",
-      "download_url": "https://github.com/stipub/stixfonts/releases/latest/download/STIX2.zip",
+      "download_url": "https://fonts.google.com/download?family=STIX+Two+Math",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -3983,7 +3983,7 @@
       "name": "STIX Two Text",
       "category": "serif",
       "homepage_url": "https://github.com/stipub/stixfonts",
-      "download_url": "https://github.com/stipub/stixfonts/releases/latest/download/STIX2.zip",
+      "download_url": "https://fonts.google.com/download?family=STIX+Two+Text",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -4071,7 +4071,7 @@
       "name": "TeX Gyre Adventor",
       "category": "sans-serif",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/adventor",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/whole/tg-2.501.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4114,7 +4114,7 @@
       "name": "TeX Gyre Bonum",
       "category": "serif",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/bonum",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/whole/tg-2.501.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4157,7 +4157,7 @@
       "name": "TeX Gyre Bonum Math",
       "category": "math",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tg-math",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tg-math/download/texgyrebonum-math-1005.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre-math.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4181,7 +4181,7 @@
       "name": "TeX Gyre Chorus",
       "category": "cursive",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/chorus",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/whole/tg-2.501.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4205,7 +4205,7 @@
       "name": "TeX Gyre Cursor",
       "category": "monospace",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/cursor",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/whole/tg-2.501.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4248,7 +4248,7 @@
       "name": "TeX Gyre Heros",
       "category": "sans-serif",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/heros",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/whole/tg-2.501.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4291,7 +4291,7 @@
       "name": "TeX Gyre Pagella",
       "category": "serif",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/pagella",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/whole/tg-2.501.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4334,7 +4334,7 @@
       "name": "TeX Gyre Pagella Math",
       "category": "math",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tg-math",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tg-math/download/texgyrepagella-math-1632.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre-math.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4358,7 +4358,7 @@
       "name": "TeX Gyre Schola",
       "category": "serif",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/schola",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/whole/tg-2.501.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4401,7 +4401,7 @@
       "name": "TeX Gyre Schola Math",
       "category": "math",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tg-math",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tg-math/download/texgyreschola-math-1538.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre-math.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4425,7 +4425,7 @@
       "name": "TeX Gyre Termes",
       "category": "serif",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/termes",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tex-gyre/whole/tg-2.501.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4468,7 +4468,7 @@
       "name": "TeX Gyre Termes Math",
       "category": "math",
       "homepage_url": "http://www.gust.org.pl/projects/e-fonts/tg-math",
-      "download_url": "http://www.gust.org.pl/projects/e-fonts/tg-math/download/texgyretermes-math-1543.zip",
+      "download_url": "https://mirrors.ctan.org/fonts/tex-gyre-math.zip",
       "file_format": "zip",
       "license": {
         "spdx": "LPPL-1.3c",
@@ -4492,7 +4492,7 @@
       "name": "TW-MOE-Std-Kai",
       "category": "serif",
       "homepage_url": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/index.html",
-      "download_url": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/TW-Kai-98_1.zip",
+      "download_url": "https://github.com/typst-doc-cn/moe-tw-fonts/archive/refs/heads/main.zip",
       "file_format": "zip",
       "license": {
         "spdx": "CC-BY-ND-3.0-TW",
@@ -4516,7 +4516,7 @@
       "name": "Twitter Color Emoji",
       "category": "emoji",
       "homepage_url": "https://github.com/twitter/twemoji",
-      "download_url": "https://github.com/mozilla/twemoji-colr/releases/latest/download/twemoji.ttf",
+      "download_url": "https://github.com/twitter/twemoji/archive/refs/heads/master.zip",
       "file_format": "ttf",
       "license": {
         "spdx": "CC-BY-4.0",
@@ -4540,7 +4540,7 @@
       "name": "VG5000",
       "category": "display",
       "homepage_url": "https://velvetyne.fr/fonts/vg5000/",
-      "download_url": "https://velvetyne.fr/downloads/vg5000.zip",
+      "download_url": "https://gitlab.com/velvetyne/vg5000/-/archive/master/vg5000-master.zip",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
