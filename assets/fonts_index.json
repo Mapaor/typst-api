@@ -31,7 +31,7 @@
       "name": "Atkinson Hyperlegible",
       "category": "sans-serif",
       "homepage_url": "https://brailleinstitute.org/freefont",
-      "download_url": "https://github.com/googlefonts/atkinson-hyperlegible/archive/refs/heads/main.zip",
+      "download_url": "https://fonts.google.com/download?family=Atkinson+Hyperlegible",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -74,7 +74,7 @@
       "name": "Atkinson Hyperlegible Mono",
       "category": "monospace",
       "homepage_url": "https://brailleinstitute.org/freefont",
-      "download_url": "https://github.com/googlefonts/atkinson-hyperlegible-mono/archive/refs/heads/main.zip",
+      "download_url": "https://fonts.google.com/download?family=Atkinson+Hyperlegible+Mono",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -117,7 +117,7 @@
       "name": "Atkinson Hyperlegible Next",
       "category": "sans-serif",
       "homepage_url": "https://brailleinstitute.org/freefont",
-      "download_url": "https://github.com/googlefonts/atkinson-hyperlegible-next/archive/refs/heads/main.zip",
+      "download_url": "https://fonts.google.com/download?family=Atkinson+Hyperlegible+Next",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -137,7 +137,7 @@
       "name": "Atma",
       "category": "display",
       "homepage_url": "https://github.com/itfoundry/atma",
-      "download_url": "https://github.com/itfoundry/atma/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=Atma",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -189,7 +189,7 @@
       "name": "Barlow",
       "category": "sans-serif",
       "homepage_url": "https://github.com/jpt/barlow",
-      "download_url": "https://github.com/jpt/barlow/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=Barlow",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -323,7 +323,7 @@
       "name": "Buenard",
       "category": "serif",
       "homepage_url": "https://fonts.google.com/specimen/Buenard",
-      "download_url": "https://github.com/google/fonts/archive/refs/heads/main.zip",
+      "download_url": "https://fonts.google.com/download?family=Buenard",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -354,7 +354,7 @@
       "name": "Cantarell",
       "category": "sans-serif",
       "homepage_url": "https://gitlab.gnome.org/GNOME/cantarell-fonts",
-      "download_url": "https://gitlab.gnome.org/GNOME/cantarell-fonts/-/archive/master/cantarell-fonts-master.zip",
+      "download_url": "https://fonts.google.com/download?family=Cantarell",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -481,7 +481,7 @@
       "name": "Comic Neue",
       "category": "sans-serif",
       "homepage_url": "https://github.com/crox3/comicneue",
-      "download_url": "https://github.com/crox3/comicneue/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=Comic+Neue",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -766,7 +766,7 @@
       "name": "DM Mono",
       "category": "monospace",
       "homepage_url": "https://github.com/googlefonts/dm-mono",
-      "download_url": "https://github.com/googlefonts/dm-mono/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=DM+Mono",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -898,7 +898,7 @@
       "name": "DM Serif Display",
       "category": "display",
       "homepage_url": "https://github.com/googlefonts/dm-serif",
-      "download_url": "https://github.com/googlefonts/dm-serif/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=DM+Serif+Display",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -928,7 +928,7 @@
       "name": "DM Serif Text",
       "category": "serif",
       "homepage_url": "https://github.com/googlefonts/dm-serif",
-      "download_url": "https://github.com/googlefonts/dm-serif/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=DM+Serif+Text",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -958,7 +958,7 @@
       "name": "EB Garamond",
       "category": "serif",
       "homepage_url": "https://github.com/octaviopardo/EBGaramond12",
-      "download_url": "https://github.com/octaviopardo/EBGaramond12/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=EB+Garamond",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -978,7 +978,7 @@
       "name": "Exo 2",
       "category": "sans-serif",
       "homepage_url": "https://github.com/NDISCOVER/Exo-2.0",
-      "download_url": "https://github.com/NDISCOVER/Exo-2.0/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=Exo+2",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1085,7 +1085,7 @@
       "name": "Fira Mono",
       "category": "monospace",
       "homepage_url": "https://github.com/mozilla/Fira",
-      "download_url": "https://github.com/mozilla/Fira/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=Fira+Mono",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1123,7 +1123,7 @@
       "name": "Fira Sans",
       "category": "sans-serif",
       "homepage_url": "https://github.com/mozilla/Fira",
-      "download_url": "https://github.com/mozilla/Fira/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=Fira+Sans",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1753,7 +1753,7 @@
       "name": "Inria Sans",
       "category": "sans-serif",
       "homepage_url": "https://github.com/BlackFoundryCom/InriaFonts",
-      "download_url": "https://github.com/BlackFoundryCom/InriaFonts/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=Inria+Sans",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -1809,7 +1809,7 @@
       "name": "Inria Serif",
       "category": "serif",
       "homepage_url": "https://github.com/BlackFoundryCom/InriaFonts",
-      "download_url": "https://github.com/BlackFoundryCom/InriaFonts/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=Inria+Serif",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -2377,7 +2377,7 @@
       "name": "Libre Baskerville",
       "category": "serif",
       "homepage_url": "https://github.com/impallari/Libre-Baskerville",
-      "download_url": "https://github.com/impallari/Libre-Baskerville/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=Libre+Baskerville",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -4003,7 +4003,7 @@
       "name": "Syne",
       "category": "sans-serif",
       "homepage_url": "https://gitlab.com/bonjour-monde/fonderie/syne-typeface",
-      "download_url": "https://gitlab.com/bonjour-monde/fonderie/syne-typeface/-/archive/master/syne-typeface-master.zip",
+      "download_url": "https://fonts.google.com/download?family=Syne",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -4023,7 +4023,7 @@
       "name": "Syne Mono",
       "category": "monospace",
       "homepage_url": "https://gitlab.com/bonjour-monde/fonderie/syne-typeface",
-      "download_url": "https://gitlab.com/bonjour-monde/fonderie/syne-typeface/-/archive/master/syne-typeface-master.zip",
+      "download_url": "https://fonts.google.com/download?family=Syne+Mono",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -4047,7 +4047,7 @@
       "name": "Syne Tactile",
       "category": "display",
       "homepage_url": "https://gitlab.com/bonjour-monde/fonderie/syne-typeface",
-      "download_url": "https://gitlab.com/bonjour-monde/fonderie/syne-typeface/-/archive/master/syne-typeface-master.zip",
+      "download_url": "https://fonts.google.com/download?family=Syne+Tactile",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
@@ -4564,7 +4564,7 @@
       "name": "Vollkorn",
       "category": "serif",
       "homepage_url": "http://vollkorn-typeface.com/",
-      "download_url": "https://github.com/FAlthausen/Vollkorn-1905/archive/refs/heads/master.zip",
+      "download_url": "https://fonts.google.com/download?family=Vollkorn",
       "file_format": "zip",
       "license": {
         "spdx": "OFL-1.1",
