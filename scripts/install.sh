@@ -224,9 +224,9 @@ fi
 
 cp -f "$EXTRACT_DIR/typst-api" "$INSTALL_DIR/"
 if [[ -d "$EXTRACT_DIR/fonts" ]]; then
-  cp -rf "$EXTRACT_DIR/fonts/"* "$INSTALL_DIR/fonts/"
+  cp -rfn "$EXTRACT_DIR/fonts/"* "$INSTALL_DIR/fonts/"
 elif [[ -d "$EXTRACT_DIR/assets/fonts" ]]; then
-  cp -rf "$EXTRACT_DIR/assets/fonts/"* "$INSTALL_DIR/fonts/"
+  cp -rfn "$EXTRACT_DIR/assets/fonts/"* "$INSTALL_DIR/fonts/"
 else
   echo "Warning: Bundled fonts were not found in the release archive."
 fi
