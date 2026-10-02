@@ -1,6 +1,6 @@
 [package]
 name = "typst-api"
-version = "0.2.5"
+version = "0.2.6"
 edition = "2024"
 description = "A self-hostable HTTP API for compiling Typst documents"
 license = "MIT"
