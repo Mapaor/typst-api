@@ -6,3 +6,4 @@ fonts/*.ttc
 /reference-crates
 TYPST.md
 implementation_plan.md
+implementation-plan.md
