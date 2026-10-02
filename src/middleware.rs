@@ -19,12 +19,12 @@ pub async fn auth_middleware(
 
         let mut allowed = auth_header == Some(&expected_auth);
 
-        if !allowed {
-            if let Some(admin_token) = &state.config.admin_token {
-                let expected_admin = format!("Bearer {}", admin_token);
-                if auth_header == Some(&expected_admin) {
-                    allowed = true;
-                }
+        if !allowed
+            && let Some(admin_token) = &state.config.admin_token 
+        {
+            let expected_admin = format!("Bearer {}", admin_token);
+            if auth_header == Some(&expected_admin) {
+                allowed = true;
             }
         }
 
