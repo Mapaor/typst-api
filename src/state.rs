@@ -33,6 +33,9 @@ pub(crate) mod test_helpers {
             cache_all_packages: false,
             cors_allowed_origins: None,
             max_concurrent_compilations: 10,
+            cache_all_mirror_fonts: false,
+            fonts_cache_dir: std::path::PathBuf::from("./fonts/mirror"),
+            fonts_index_url: "https://raw.githubusercontent.com/Mapaor/typst-fonts-mirror/main/fonts_mirror_index.json".to_string(),
         };
         
         let font_state = SHARED_FONT_STATE.get_or_init(|| {

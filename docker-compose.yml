@@ -15,7 +15,9 @@ services:
     environment:
       - PORT=${PORT:-8080}
       - RUST_LOG=${RUST_LOG:-info}
-      - TYPST_FONT_PATHS=/fonts
+      - TYPST_FONT_PATHS=/fonts,/var/lib/typst-api/fonts
+      - CACHE_ALL_133_TYPST_FONTS=${CACHE_ALL_133_TYPST_FONTS:-false}
+      - FONTS_CACHE_DIR=/var/lib/typst-api/fonts
       - MAX_PAYLOAD_SIZE=${MAX_PAYLOAD_SIZE:-52428800} # 50MB
       - COMPILATION_TIMEOUT=${COMPILATION_TIMEOUT:-10}
       - MAX_CONCURRENT_COMPILATIONS=${MAX_CONCURRENT_COMPILATIONS:-10}
@@ -27,7 +29,9 @@ services:
     volumes:
       - ./fonts:/fonts:ro
       - typst-packages:/root/.cache/typst/packages
+      - typst-fonts:/var/lib/typst-api/fonts
     restart: unless-stopped
 
 volumes:
   typst-packages:
+  typst-fonts:

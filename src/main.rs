@@ -1,3 +1,4 @@
+mod font_cache;
 mod config;
 mod fonts;
 mod handlers;
@@ -49,6 +50,7 @@ use state::AppState;
         handlers::packages::sync_all_packages_handler,
         handlers::packages::clear_packages_cache_handler,
         handlers::admin::admin_info_handler,
+        handlers::admin::sync_mirror_fonts_handler,
     ),
     components(
         schemas(
@@ -143,6 +145,24 @@ async fn main() {
         });
     }
 
+    if state.config.cache_all_mirror_fonts {
+        println!("CACHE_ALL_133_TYPST_FONTS is enabled. Starting background font sync task...");
+        let config_clone = state.config.clone();
+        let font_state_clone = state.font_state.clone();
+        tokio::spawn(async move {
+            if let Err(e) = crate::font_cache::sync_mirror(config_clone.clone()).await {
+                eprintln!("Background font sync task failed: {}", e);
+            } else {
+                println!("Background font sync task complete. Rebuilding FontState...");
+                // Rebuild FontState to pick up the newly downloaded fonts
+                let new_font_state = Arc::new(FontState::new(&config_clone.font_paths));
+                let mut guard = font_state_clone.write().await;
+                *guard = new_font_state;
+                println!("FontState successfully rebuilt with mirrored fonts.");
+            }
+        });
+    }
+
     let app = create_app(state);
 
     let addr = format!("0.0.0.0:{}", config.port);
@@ -195,6 +215,7 @@ pub(crate) fn create_app(state: AppState) -> Router {
         .route("/admin/packages", get(list_packages_handler))
         .route("/admin/packages/preload", post(preload_packages_handler))
         .route("/admin/packages/sync-all", post(sync_all_packages_handler))
+        .route("/admin/fonts/sync", post(crate::handlers::sync_mirror_fonts_handler))
         .route(
             "/admin/packages/cache",
             delete(clear_packages_cache_handler),
