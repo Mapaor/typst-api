@@ -1,22 +1,33 @@
 name: Publish Docker image
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_run:
+    workflows:
+      - Release
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docker-publish-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
 
 jobs:
-  publish:
+  build-amd64:
+    name: Build AMD64 image
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.event.workflow_run.head_branch, 'v')
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    timeout-minutes: 180
 
     steps:
-      - name: Checkout repository
+      - name: Check out released commit
         uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -27,63 +38,145 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Generate image tags
+      - name: Generate AMD64 image tags and labels
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ vars.DOCKERHUB_USERNAME }}/typst-api
           tags: |
-            type=raw,value=latest
-            type=semver,pattern={{version}}
+            type=semver,pattern={{version}}-amd64,value=${{ github.event.workflow_run.head_branch }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.event.workflow_run.head_sha }}
 
-      - name: Build and push image
+      - name: Build and push AMD64 image
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=typst-api-amd64
+          cache-to: type=gha,mode=max,scope=typst-api-amd64
+          progress: plain
+
+  build-arm64:
+    name: Build ARM64 image
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.event.workflow_run.head_branch, 'v')
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 180
+
+    steps:
+      - name: Check out released commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Generate ARM64 image tags and labels
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ vars.DOCKERHUB_USERNAME }}/typst-api
+          tags: |
+            type=semver,pattern={{version}}-arm64,value=${{ github.event.workflow_run.head_branch }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.event.workflow_run.head_sha }}
+
+      - name: Build and push ARM64 image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=typst-api-arm64
+          cache-to: type=gha,mode=max,scope=typst-api-arm64
+          progress: plain
+
+  publish-manifest:
+    name: Publish multi-platform image
+    needs:
+      - build-amd64
+      - build-arm64
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.event.workflow_run.head_branch, 'v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Publish multi-platform manifest
+        env:
+          IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/typst-api
+          RELEASE_TAG: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          set -euo pipefail
+
+          VERSION="${RELEASE_TAG#v}"
+
+          echo "Publishing Docker image version: ${VERSION}"
+
+          docker buildx imagetools create \
+            --tag "${IMAGE}:${VERSION}" \
+            "${IMAGE}:${VERSION}-amd64" \
+            "${IMAGE}:${VERSION}-arm64"
+
+          docker buildx imagetools create \
+            --tag "${IMAGE}:latest" \
+            "${IMAGE}:${VERSION}-amd64" \
+            "${IMAGE}:${VERSION}-arm64"
 
       - name: Append Docker Hub link to GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.event.workflow_run.head_branch }}
+          IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/typst-api
         run: |
-          # Extract the exact tag name (e.g. v0.2.2)
-          TAG=${GITHUB_REF#refs/tags/}
-          # Extract version without the 'v' (e.g. 0.2.2)
-          VERSION=${TAG#v}
+          set -euo pipefail
 
-          echo "Waiting for GitHub Release $TAG to be published by cargo-dist..."
-          # Since this Docker workflow takes ~2 hours due to QEMU, the release
-          # should already exist. This loop is just a defensive fallback!
-          ATTEMPTS=0
-          while ! gh release view "$TAG" > /dev/null 2>&1; do
-            if [ $ATTEMPTS -gt 30 ]; then # (Wait a maximum of 30 minutes)
-              echo "Timed out waiting for GitHub Release. Exiting gracefully."
-              exit 0 
-            fi
-            echo "Release not found yet. Waiting 1 minute..."
-            sleep 60
-            ATTEMPTS=$((ATTEMPTS+1))
-          done
+          VERSION="${RELEASE_TAG#v}"
 
-          echo "Release found! Updating release notes..."
-          # Fetch the current release body (generated by cargo-dist)
-          BODY=$(gh release view "$TAG" --json body -q .body)
+          echo "Updating GitHub Release ${RELEASE_TAG}..."
 
-          # Use bash string replacement to insert the Docker section before the binaries and also rename the binaries section
-          SEARCH="## Download typst-api $VERSION"
+          BODY="$(gh release view "$RELEASE_TAG" --json body --jq '.body')"
+
+          SEARCH="## Download typst-api ${VERSION}"
+
           REPLACE="## Docker Image
+
           | Image | Registry | \`linux/amd64\` | \`linux/arm64\` |
           |---|---|---|---|
-          | [\`${{ vars.DOCKERHUB_USERNAME }}/typst-api:$VERSION\`](https://hub.docker.com/layers/${{ vars.DOCKERHUB_USERNAME }}/typst-api/$VERSION) | Docker Hub | ✓ | ✓ |
+          | [\`${IMAGE}:${VERSION}\`](https://hub.docker.com/layers/${IMAGE}/${VERSION}) | Docker Hub | ✓ | ✓ |
 
           ## Standalone Binaries"
 
-          NEW_BODY="${BODY/"$SEARCH"/$REPLACE}"
+          if [[ "$BODY" == *"$SEARCH"* ]]; then
+            NEW_BODY="${BODY/"$SEARCH"/"$REPLACE"}"
+          else
+            NEW_BODY="${BODY}
 
-          # Update the GitHub Release
-          gh release edit "$TAG" --notes "$NEW_BODY"
+          ${REPLACE}"
+          fi
+
+          gh release edit "$RELEASE_TAG" --notes "$NEW_BODY"
