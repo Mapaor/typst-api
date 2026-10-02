@@ -240,10 +240,12 @@ The API includes admin endpoints which are prefixed with `/admin`. To set authen
 - `POST /admin/packages/preload` receives a JSON array of packages to be downloaded and added to the cache.
 - `POST /admin/packages/sync-all` triggers a background sync of all packages from the [Typst registry](https://packages.typst.org/preview/index.json). As of september 2026 all the  versions of all the packages are about ~1.9 GB. 
 - `DELETE /admin/packages/cache` clears the local package cache.
+- `POST /admin/fonts/sync` triggers a background sync of the curated 133 fonts mirror repository (used in the Typst Web App).
 
 By default, when using Docker Compose the package cache persists across container restarts because it uses a docker named volume, additionally you can configure in the `.env` file the following variables:
 - `PRELOAD_PACKAGES`: A list of comma-separated essential packages you want to have available on start up.
 - `CACHE_ALL_PACKAGES`: If set to true downloads the entire Typst registry (~1.9GB) in the background when the server starts.
+- `CACHE_ALL_133_TYPST_FONTS`: If set to true downloads and caches all 133 curated fonts from the typst web app mirror in the background when the server starts.
 
 ## Exposing the API
 You can then use any reverse proxy, tunnel or VPN you might typically use to expose your containers or running services to your other devices or to the whole internet.
