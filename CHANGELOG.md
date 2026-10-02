@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added env var `CACHE_ALL_133_TYPST_FONTS` to download, extract, and cache the 133 fonts from the Typst web app, from a curated mirror I created, which is hosted on [`Mapaor/typst-fonts-mirror`](https://github.com/Mapaor/typst-fonts-mirror).
 - Also added the equivalent new endpoint `POST /admin/fonts/sync` to manually trigger a background sync of the font mirror repository. The idea is once again to run the server at startup with the env variable, and then use this endpoint to fetch updates.
 - Added a new Docker named volume `typst-fonts` in `docker-compose.yml` to persist mirrored fonts.
+- Fixed API hanging on startup if `CACHE_ALL_PACKAGES` was set.
 
 ## [0.2.5] - 2026-09-29
 ### Added

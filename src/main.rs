@@ -120,17 +120,20 @@ async fn main() {
 
     // Startup routines for packages
     if let Some(preload_list) = state.config.preload_packages.clone() {
-        println!("Preloading {} packages...", preload_list.len());
+        println!("Preloading {} packages in background...", preload_list.len());
         let packages_store = state.packages.clone();
-        tokio::task::spawn_blocking(move || {
-            if let Err(e) = crate::packages::preload_specific(packages_store, preload_list) {
+        tokio::spawn(async move {
+            let res = tokio::task::spawn_blocking(move || {
+                crate::packages::preload_specific(packages_store, preload_list)
+            })
+            .await;
+            
+            if let Ok(Err(e)) = res {
                 eprintln!("Error preloading packages: {}", e);
-            } else {
+            } else if res.is_ok() {
                 println!("Preloading complete.");
             }
-        })
-        .await
-        .unwrap();
+        });
     }
 
     if state.config.cache_all_packages {

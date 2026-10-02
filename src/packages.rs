@@ -129,7 +129,10 @@ pub async fn sync_missing_packages(packages_store: Arc<SystemPackages>) -> Resul
             let spec_str = format!("@preview/{}:{}", remote_pkg.name, remote_pkg.version);
             if let Ok(spec) = spec_str.parse::<PackageSpec>() {
                 // Ignore errors on individual packages to continue syncing others
-                let _ = packages_store.obtain(&spec);
+                let store = packages_store.clone();
+                let _ = tokio::task::spawn_blocking(move || {
+                    let _ = store.obtain(&spec);
+                }).await;
             }
         }
     }
