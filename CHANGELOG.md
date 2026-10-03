@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.2.7] - 2026-10-03
 ### Added
 - Added new endpoint `POST /admin/fonts` to add new fonts to the database using `multipart/form-data`
 - Created a static website `/add-fonts` that asks for `ADMIN_TOKEN` as input, and allows uploading font files. It internally calls `POST /admin/fonts`. The website is just for ease of use when adding new fonts to the font database.
@@ -85,7 +87,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CORS configuration support.
 - Example requests for different Typst documents using cURL and PowerShell.
 
-[Unreleased]: https://github.com/Mapaor/typst-api/compare/v0.2.6...HEAD
+[Unreleased]: https://github.com/Mapaor/typst-api/compare/v0.2.7...HEAD
+[0.2.7]: https://github.com/Mapaor/typst-api/compare/v0.2.6...v0.2.7
 [0.2.6]: https://github.com/Mapaor/typst-api/compare/v0.2.5...v0.2.6
 [0.2.5]: https://github.com/Mapaor/typst-api/compare/v0.2.4...v0.2.5
 [0.2.4]: https://github.com/Mapaor/typst-api/compare/v0.2.3...v0.2.4
