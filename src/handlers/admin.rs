@@ -159,12 +159,32 @@ pub(crate) async fn upload_fonts_handler(
     State(state): State<AppState>,
     mut multipart: Multipart,
 ) -> Result<Json<UploadFontsResponse>, (StatusCode, String)> {
-    let font_dir = state
-        .config
-        .font_paths
-        .first()
-        .cloned()
-        .unwrap_or_else(|| std::path::PathBuf::from("./fonts"));
+    let font_dir = {
+        let mut writable_dir = None;
+        for path in &state.config.font_paths {
+            if !path.exists() {
+                if std::fs::create_dir_all(path).is_ok() {
+                    writable_dir = Some(path.clone());
+                    break;
+                }
+            } else {
+                let test_file = path.join(".typst_api_write_test");
+                if std::fs::write(&test_file, b"").is_ok() {
+                    let _ = std::fs::remove_file(test_file);
+                    writable_dir = Some(path.clone());
+                    break;
+                }
+            }
+        }
+        writable_dir.unwrap_or_else(|| {
+            state
+                .config
+                .font_paths
+                .first()
+                .cloned()
+                .unwrap_or_else(|| std::path::PathBuf::from("./fonts"))
+        })
+    };
 
     if !font_dir.exists() {
         std::fs::create_dir_all(&font_dir).map_err(|e| {
