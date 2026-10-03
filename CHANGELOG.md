@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added new endpoint `POST /admin/fonts` to add new fonts to the database using `multipart/form-data`
+- Created a static website `/add-fonts` that asks for `ADMIN_TOKEN` as input, and allows uploading font files. It internally calls `POST /admin/fonts`. The website is just for ease of use when adding new fonts to the font database.
+### Changed
+- Improved logs for when `CACHE_ALL_133_TYPST_FONTS` is set, added a timeout for each download and made the `FontState` update every 20 downloaded fonts.
+- Improved the info returned for `GET /admin/info`.
 
 ## [0.2.6] - 2026-10-02
 ### Added

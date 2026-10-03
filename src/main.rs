@@ -1,5 +1,5 @@
-mod font_cache;
 mod config;
+mod font_cache;
 mod fonts;
 mod handlers;
 mod middleware;
@@ -22,7 +22,7 @@ use std::sync::Arc;
 use tower::limit::ConcurrencyLimitLayer;
 use tower_http::cors::CorsLayer;
 use tower_http::trace::TraceLayer;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
+use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 use typst_kit::downloader::SystemDownloader;
 use typst_kit::packages::SystemPackages;
 use utoipa::{
@@ -51,6 +51,7 @@ use state::AppState;
         handlers::packages::clear_packages_cache_handler,
         handlers::admin::admin_info_handler,
         handlers::admin::sync_mirror_fonts_handler,
+        handlers::admin::upload_fonts_handler,
     ),
     components(
         schemas(
@@ -68,7 +69,8 @@ use state::AppState;
             handlers::SimpleSuccessResponse,
             handlers::AdminInfoResponse,
             handlers::AdminConfigInfo,
-            handlers::AdminStatsInfo
+            handlers::AdminStatsInfo,
+            handlers::UploadFontsResponse
         )
     ),
     modifiers(&SecurityAddon)
@@ -96,7 +98,10 @@ impl Modify for SecurityAddon {
 #[tokio::main]
 async fn main() {
     tracing_subscriber::registry()
-        .with(EnvFilter::try_from_default_env().unwrap_or_else(|_| "typst_api=info,tower_http=info".into()))
+        .with(
+            EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| "typst_api=info,tower_http=info".into()),
+        )
         .with(tracing_subscriber::fmt::layer())
         .init();
 
@@ -120,14 +125,17 @@ async fn main() {
 
     // Startup routines for packages
     if let Some(preload_list) = state.config.preload_packages.clone() {
-        println!("Preloading {} packages in background...", preload_list.len());
+        println!(
+            "Preloading {} packages in background...",
+            preload_list.len()
+        );
         let packages_store = state.packages.clone();
         tokio::spawn(async move {
             let res = tokio::task::spawn_blocking(move || {
                 crate::packages::preload_specific(packages_store, preload_list)
             })
             .await;
-            
+
             if let Ok(Err(e)) = res {
                 eprintln!("Error preloading packages: {}", e);
             } else if res.is_ok() {
@@ -153,7 +161,9 @@ async fn main() {
         let config_clone = state.config.clone();
         let font_state_clone = state.font_state.clone();
         tokio::spawn(async move {
-            if let Err(e) = crate::font_cache::sync_mirror(config_clone.clone(), font_state_clone.clone()).await {
+            if let Err(e) =
+                crate::font_cache::sync_mirror(config_clone.clone(), font_state_clone.clone()).await
+            {
                 eprintln!("Background font sync task failed: {}", e);
             } else {
                 println!("Background font sync task complete.");
@@ -213,7 +223,11 @@ pub(crate) fn create_app(state: AppState) -> Router {
         .route("/admin/packages", get(list_packages_handler))
         .route("/admin/packages/preload", post(preload_packages_handler))
         .route("/admin/packages/sync-all", post(sync_all_packages_handler))
-        .route("/admin/fonts/sync", post(crate::handlers::sync_mirror_fonts_handler))
+        .route(
+            "/admin/fonts/sync",
+            post(crate::handlers::sync_mirror_fonts_handler),
+        )
+        .route("/admin/fonts", post(crate::handlers::upload_fonts_handler))
         .route(
             "/admin/packages/cache",
             delete(clear_packages_cache_handler),
@@ -223,6 +237,10 @@ pub(crate) fn create_app(state: AppState) -> Router {
     Router::new()
         .route("/", get(apex_handler))
         .route("/playground", get(playground_handler))
+        .route(
+            "/add-fonts",
+            get(|| async { axum::response::Html(include_str!("../static/add-fonts.html")) }),
+        )
         .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .route("/health", get(|| async { "OK" }))
         .route("/fonts", get(list_fonts_handler))

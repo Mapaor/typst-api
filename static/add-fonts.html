@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Fonts - Typst API</title>
+    <style>
+        :root {
+            --bg: #f2f2f2;
+            --panel: #ffffff;
+            --line: #cfcfcf;
+            --text: #111111;
+            --muted: #666666;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--line);
+            background: var(--panel);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            padding: 12vh 2rem;
+            flex: 1;
+        }
+
+        .main-panel {
+            width: 50%;
+            min-width: 400px;
+            padding: 1.5rem;
+            border: 1px solid var(--line);
+            background: var(--panel);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .field-grow {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 0.5rem 0.6rem;
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--text);
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--line);
+            padding: 3rem 1.5rem;
+            text-align: center;
+            background: #f7f7f7;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+            min-height: 170px;
+        }
+
+        .drop-zone.dragover {
+            border-color: var(--text);
+            background: #ececec;
+        }
+
+        .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .drop-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .drop-subtext {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        button {
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--line);
+            background: #ececec;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.85rem;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        button:hover:not(:disabled) {
+            background: #e2e2e2;
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: default;
+        }
+
+        #file-list {
+            margin-top: 1rem;
+            border: 1px solid var(--line);
+            display: none;
+        }
+
+        .file-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.85rem;
+            font-family: monospace;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .remove-btn {
+            cursor: pointer;
+            color: var(--muted);
+            padding-left: 0.5rem;
+            font-weight: bold;
+        }
+
+        .remove-btn:hover {
+            color: #d32f2f;
+        }
+
+        .status {
+            display: block;
+            min-height: 2.65rem;
+            padding: 0.75rem;
+            border: 1px solid var(--line);
+            background: #f7f7f7;
+            color: var(--text);
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            font-family: monospace;
+            margin-top: 1rem;
+        }
+
+        .status.error {
+            background: #f2f2f2;
+            border-color: #9a9a9a;
+            color: var(--text);
+        }
+
+        .status.success {
+            background: #e6f4ea;
+            border-color: #ceead6;
+            color: #137333;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Add Fonts - Typst API</h1>
+    </header>
+
+    <div class="container">
+        <form id="upload-form" class="main-panel">
+            <div class="field">
+                <label for="admin-token">Admin Token</label>
+                <input type="password" id="admin-token" placeholder="Enter admin token">
+            </div>
+
+            <div class="field field-grow">
+                <label>Font Files</label>
+                <div class="drop-zone" id="drop-zone">
+                    <div class="drop-text">Click or drag fonts here</div>
+                    <div class="drop-subtext">Supports .ttf, .otf, .ttc, .otc</div>
+                    <input type="file" id="file-input" multiple accept=".ttf,.otf,.ttc,.otc">
+                </div>
+                <div id="file-list"></div>
+            </div>
+
+            <button type="submit" id="submit-btn">Add Fonts</button>
+            <div id="status" class="status info"></div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const tokenInput = document.getElementById('admin-token');
+        const fileInput = document.getElementById('file-input');
+        const dropZone = document.getElementById('drop-zone');
+        const fileList = document.getElementById('file-list');
+        const submitBtn = document.getElementById('submit-btn');
+        const statusDiv = document.getElementById('status');
+
+        let selectedFiles = [];
+
+        // Load token from localStorage
+        const savedToken = localStorage.getItem('typst_admin_token');
+        if (savedToken) {
+            tokenInput.value = savedToken;
+        }
+
+        // Save token on change
+        tokenInput.addEventListener('input', (e) => {
+            localStorage.setItem('typst_admin_token', e.target.value);
+        });
+
+        // Drag & Drop effects
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                addFiles(e.dataTransfer.files);
+            }
+        }, false);
+
+        // Handle file selection
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                addFiles(fileInput.files);
+                fileInput.value = ''; // Reset input
+            }
+        });
+
+        function addFiles(files) {
+            let invalidCount = 0;
+            const validExtensions = ['.ttf', '.otf', '.ttc', '.otc'];
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const lastDotIdx = file.name.lastIndexOf('.');
+                const ext = lastDotIdx !== -1 ? file.name.substring(lastDotIdx).toLowerCase() : '';
+                
+                if (validExtensions.includes(ext)) {
+                    // Avoid duplicates by name
+                    if (!selectedFiles.some(f => f.name === file.name)) {
+                        selectedFiles.push(file);
+                    }
+                } else {
+                    invalidCount++;
+                }
+            }
+
+            if (invalidCount > 0) {
+                showStatus(`Skipped ${invalidCount} invalid file${invalidCount === 1 ? '' : 's'}.`, 'error');
+            } else if (selectedFiles.length > 0) {
+                showStatus('Ready to add fonts.', 'info');
+            }
+            
+            updateFileList();
+        }
+        
+        function updateFileList() {
+            fileList.innerHTML = '';
+            if (selectedFiles.length > 0) {
+                fileList.style.display = 'block';
+                selectedFiles.forEach((file, index) => {
+                    const el = document.createElement('div');
+                    el.className = 'file-item';
+                    
+                    const name = document.createElement('span');
+                    name.textContent = file.name;
+                    
+                    const size = document.createElement('span');
+                    size.textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+                    size.style.opacity = '0.7';
+
+                    const removeBtn = document.createElement('span');
+                    removeBtn.textContent = ' ✕ ';
+                    removeBtn.className = 'remove-btn';
+                    removeBtn.onclick = () => {
+                        selectedFiles.splice(index, 1);
+                        updateFileList();
+                    };
+
+                    const rightSide = document.createElement('div');
+                    rightSide.appendChild(size);
+                    rightSide.appendChild(removeBtn);
+
+                    el.appendChild(name);
+                    el.appendChild(rightSide);
+                    fileList.appendChild(el);
+                });
+            } else {
+                fileList.style.display = 'none';
+            }
+        }
+
+        // Handle Form Submit
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (selectedFiles.length === 0) {
+                showStatus('Please select at least one font file.', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            for (const file of selectedFiles) {
+                formData.append('fonts', file);
+            }
+
+            setLoading(true);
+            showStatus('Uploading...', 'info');
+
+            try {
+                const headers = {};
+                if (tokenInput.value) {
+                    headers['Authorization'] = `Bearer ${tokenInput.value}`;
+                }
+
+                const response = await fetch('/admin/fonts', {
+                    method: 'POST',
+                    headers: headers,
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    showStatus(`Success! ${result.fonts_added} font(s) installed.`, 'success');
+                    selectedFiles = []; // clear
+                    updateFileList();
+                } else {
+                    let errText = await response.text();
+                    try {
+                        const errObj = JSON.parse(errText);
+                        if (errObj.message) errText = errObj.message;
+                    } catch(e) {}
+                    showStatus(`Error ${response.status}: ${errText || response.statusText}`, 'error');
+                }
+            } catch (err) {
+                showStatus(`Network Error: ${err.message}`, 'error');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        function setLoading(isLoading) {
+            submitBtn.disabled = isLoading;
+            submitBtn.textContent = isLoading ? 'Uploading...' : 'Add Fonts';
+        }
+
+        function showStatus(msg, type) {
+            statusDiv.textContent = msg;
+            statusDiv.className = `status ${type}`;
+        }
+    </script>
+</body>
+</html>

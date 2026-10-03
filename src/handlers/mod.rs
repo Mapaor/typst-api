@@ -11,12 +11,12 @@ pub(crate) use packages::{
     clear_packages_cache_handler,
 };
 pub(crate) use playground::playground_handler;
-pub(crate) use admin::{admin_info_handler, sync_mirror_fonts_handler};
+pub(crate) use admin::{admin_info_handler, sync_mirror_fonts_handler, upload_fonts_handler};
 
 pub(crate) use compile::{CompileRequest, CompileSourceRequest, ErrorInfo, ErrorResponse};
 pub(crate) use fonts::{FontInfo, FontsResponse, RefreshFontsResponse};
 pub(crate) use packages::{PackageInfoResponse, PackagesCacheResponse, PreloadPackagesRequest, SimpleSuccessResponse};
-pub(crate) use admin::{AdminInfoResponse, AdminConfigInfo, AdminStatsInfo};
+pub(crate) use admin::{AdminInfoResponse, AdminConfigInfo, AdminStatsInfo, UploadFontsResponse};
 
 use utoipa::ToSchema;
 

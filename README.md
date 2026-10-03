@@ -36,6 +36,7 @@ Note: if you are exposing your API to the public, be sure to prevent API abuse b
 4. From this same local directory, do `docker compose up -d`.
 5. Check `http://localhost:8080/health`, it should return 200 (Ok). The root endpoint `http://localhost:8080` should return a welcome json with the API version, the swagger-ui docs endpoint and other useful information.
 6. Visit `http://localhost:8080/playground` to interactively test the API in your browser.
+7. Visit `http://localhost:8080/add-fonts` to easily add new font to your font database.
 
 ##### Updating
 To update simply do from the same directory:
@@ -235,6 +236,7 @@ You can check a full set of examples in the [`examples/`](./examples/) directory
 The API includes admin endpoints which are prefixed with `/admin`. To set authentication for them add an `ADMIN_TOKEN` to the `.env` file. If the variable is not set, these endpoints fall back to `AUTH_TOKEN` authentication. If neither is set, all endpoints are publicly accessible.
 
 - `GET /admin/info` returns a json with useful info like status, config options and stats.
+- `POST /admin/fonts` accepts a `multipart/form-data` payload containing font files and saves them to the server's fonts directory and updates the font cache.
 - `POST /admin/fonts/refresh` reloads local fonts (from the `TYPST_FONT_PATHS` directory) without having to restart the container.
 - `GET /admin/packages` returns a list of all cached Typst packages and their total size.
 - `POST /admin/packages/preload` receives a JSON array of packages to be downloaded and added to the cache.
@@ -287,6 +289,7 @@ Note: If you do expose the API running on your server to the general public (the
 - [X] Create a `GET /admin/info` with useful admin information like config options and stats
 - [X] Create a very simple static client-side example `/playground` to test the API in the browser . 
 - [X] Create a bash script to run the download the standalone binaries and set up a running service
+- [X] Create an `/add-fonts` static page to easily upload fonts to the backend.
 
 #### Next steps
 - [ ] Allow different outputs (PDF, SVG, PNG, HTML?). SVG can be generated with `typst-svg` and PNG probably from the SVG. I'll have to investigate how the Typst web app handles the (still experimental) HTML export, probably with `typst-html`.
