@@ -264,6 +264,12 @@ My recommendations:
 
 Note: If you do expose the API running on your server to the general public (the internet) make sure to set the `ADMIN_TOKEN` to protect sensible routes. And also, either set authentication (so that only you and people who you trust can  use the API) or enforce limits like maximum payload size and maximum concurrent compilation to prevent API abuse.
 
+## Examples
+Here are some client-side example websites that use this API for compiling Typst:
+- [md.katex.cc](https://md.katex.cc) — A markdown online live editor that supports rendering equations. It uses KaTeX for the HTML rendering and Typst for the download PDF option.
+  
+Have you selfhosted a version of `typst-api` and created a website that internally uses it? Please fill an issue to add your website as an example  here!
+
 ## ROADMAP
 
 - [X] Dynamic custom fonts, allow users to upload custom `.ttf` or `.otf` files as part of the `multipart/form-data` payload (allowing ephemeral custom fonts per compile request).
