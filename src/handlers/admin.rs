@@ -103,14 +103,10 @@ pub(crate) async fn sync_mirror_fonts_handler(
     let font_state_clone = state.font_state.clone();
     
     tokio::spawn(async move {
-        if let Err(e) = crate::font_cache::sync_mirror(config_clone.clone()).await {
+        if let Err(e) = crate::font_cache::sync_mirror(config_clone.clone(), font_state_clone.clone()).await {
             tracing::error!("Background font sync task failed: {}", e);
         } else {
-            tracing::info!("Background font sync task complete. Rebuilding FontState...");
-            let new_font_state = std::sync::Arc::new(crate::fonts::FontState::new(&config_clone.font_paths));
-            let mut guard = font_state_clone.write().await;
-            *guard = new_font_state;
-            tracing::info!("FontState successfully rebuilt with mirrored fonts.");
+            tracing::info!("Background font sync task complete.");
         }
     });
 

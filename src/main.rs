@@ -153,15 +153,10 @@ async fn main() {
         let config_clone = state.config.clone();
         let font_state_clone = state.font_state.clone();
         tokio::spawn(async move {
-            if let Err(e) = crate::font_cache::sync_mirror(config_clone.clone()).await {
+            if let Err(e) = crate::font_cache::sync_mirror(config_clone.clone(), font_state_clone.clone()).await {
                 eprintln!("Background font sync task failed: {}", e);
             } else {
-                println!("Background font sync task complete. Rebuilding FontState...");
-                // Rebuild FontState to pick up the newly downloaded fonts
-                let new_font_state = Arc::new(FontState::new(&config_clone.font_paths));
-                let mut guard = font_state_clone.write().await;
-                *guard = new_font_state;
-                println!("FontState successfully rebuilt with mirrored fonts.");
+                println!("Background font sync task complete.");
             }
         });
     }

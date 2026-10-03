@@ -39,7 +39,13 @@ pub struct CacheMetadata {
     pub sync_timestamp: String,
 }
 
-pub async fn sync_mirror(config: Arc<Config>) -> Result<(), String> {
+use crate::fonts::FontState;
+use tokio::sync::RwLock;
+
+pub async fn sync_mirror(
+    config: Arc<Config>,
+    font_state: Arc<RwLock<Arc<FontState>>>,
+) -> Result<(), String> {
     if !config.cache_all_mirror_fonts {
         return Ok(());
     }
@@ -50,8 +56,11 @@ pub async fn sync_mirror(config: Arc<Config>) -> Result<(), String> {
     }
 
     tracing::info!("Fetching font mirror index from {}", config.fonts_index_url);
-    
-    let client = Client::new();
+
+    let client = Client::builder()
+        .timeout(std::time::Duration::from_secs(30))
+        .build()
+        .map_err(|e| format!("Failed to build client: {}", e))?;
     let resp = client
         .get(&config.fonts_index_url)
         .send()
@@ -68,27 +77,52 @@ pub async fn sync_mirror(config: Arc<Config>) -> Result<(), String> {
         .map_err(|e| format!("Failed to parse index JSON: {}", e))?;
 
     if manifest.schema_version != 1 {
-        return Err(format!("Unsupported schema version: {}", manifest.schema_version));
+        return Err(format!(
+            "Unsupported schema version: {}",
+            manifest.schema_version
+        ));
     }
 
     let mut downloaded = 0;
     let mut skipped = 0;
     let mut failed = 0;
+    let mut successful_since_last_rebuild = 0;
 
     for font in manifest.fonts {
         match sync_font(&client, cache_dir, &manifest.release, &font).await {
-            Ok(true) => downloaded += 1,
+            Ok(true) => {
+                downloaded += 1;
+                successful_since_last_rebuild += 1;
+            }
             Ok(false) => skipped += 1,
             Err(e) => {
                 tracing::error!("Failed to sync font {}: {}", font.id, e);
                 failed += 1;
             }
         }
+
+        if successful_since_last_rebuild >= 20 {
+            // We rebuild FontState every 20 fonts
+            tracing::info!("Rebuilding FontState for partial sync progress...");
+            let new_font_state = Arc::new(FontState::new(&config.font_paths));
+            let mut guard = font_state.write().await;
+            *guard = new_font_state;
+            successful_since_last_rebuild = 0;
+        }
+    }
+
+    if successful_since_last_rebuild > 0 {
+        tracing::info!("Rebuilding FontState for final sync progress...");
+        let new_font_state = Arc::new(FontState::new(&config.font_paths));
+        let mut guard = font_state.write().await;
+        *guard = new_font_state;
     }
 
     tracing::info!(
         "Font mirror sync complete. Downloaded: {}, Skipped: {}, Failed: {}",
-        downloaded, skipped, failed
+        downloaded,
+        skipped,
+        failed
     );
 
     Ok(())
@@ -103,7 +137,8 @@ async fn sync_font(
     let font_dir = cache_dir.join(&font.id);
     let meta_path = font_dir.join(".metadata.json");
 
-    if font_dir.exists() && meta_path.exists()
+    if font_dir.exists()
+        && meta_path.exists()
         && let Ok(meta_bytes) = fs::read(&meta_path)
         && let Ok(meta) = serde_json::from_slice::<CacheMetadata>(&meta_bytes)
         && meta.manifest_release == release
@@ -142,7 +177,10 @@ async fn sync_font(
     let mut hasher = Sha256::new();
     hasher.update(&bytes);
     let hash = hasher.finalize();
-    let sha256_hash = hash.iter().map(|b| format!("{:02x}", b)).collect::<String>();
+    let sha256_hash = hash
+        .iter()
+        .map(|b| format!("{:02x}", b))
+        .collect::<String>();
 
     if sha256_hash != font.asset_sha256 {
         return Err(format!(
@@ -153,10 +191,11 @@ async fn sync_font(
 
     let font_id = font.id.clone();
     let file_format = font.file_format.clone();
-    
+
     let temp_dir = cache_dir.join(format!("{}_tmp", font_id));
     if temp_dir.exists() {
-        fs::remove_dir_all(&temp_dir).map_err(|e| format!("Failed to remove old temp dir: {}", e))?;
+        fs::remove_dir_all(&temp_dir)
+            .map_err(|e| format!("Failed to remove old temp dir: {}", e))?;
     }
     fs::create_dir_all(&temp_dir).map_err(|e| format!("Failed to create temp dir: {}", e))?;
 
@@ -164,7 +203,8 @@ async fn sync_font(
     let temp_dir_clone = temp_dir.clone();
     tokio::task::spawn_blocking(move || -> Result<(), String> {
         let temp_archive = temp_dir_clone.join("archive.tmp");
-        fs::write(&temp_archive, &bytes_clone).map_err(|e| format!("Write archive failed: {}", e))?;
+        fs::write(&temp_archive, &bytes_clone)
+            .map_err(|e| format!("Write archive failed: {}", e))?;
 
         if file_format == "zip" {
             extract_zip(&temp_archive, &temp_dir_clone)?;
@@ -177,10 +217,14 @@ async fn sync_font(
         }
 
         fs::remove_file(&temp_archive).ok();
-        
+
         let mut has_font = false;
         for entry in walkdir(&temp_dir_clone)? {
-            let ext = entry.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
+            let ext = entry
+                .extension()
+                .and_then(|e| e.to_str())
+                .unwrap_or("")
+                .to_lowercase();
             if ext == "ttf" || ext == "otf" || ext == "ttc" || ext == "otc" {
                 has_font = true;
                 break;
@@ -188,7 +232,9 @@ async fn sync_font(
         }
 
         if !has_font {
-            return Err("No supported font files (.ttf, .otf, .ttc, .otc) found in archive".to_string());
+            return Err(
+                "No supported font files (.ttf, .otf, .ttc, .otc) found in archive".to_string(),
+            );
         }
 
         Ok(())
@@ -197,7 +243,8 @@ async fn sync_font(
     .map_err(|e| format!("Task join failed: {}", e))??;
 
     if font_dir.exists() {
-        fs::remove_dir_all(&font_dir).map_err(|e| format!("Failed to remove old font dir: {}", e))?;
+        fs::remove_dir_all(&font_dir)
+            .map_err(|e| format!("Failed to remove old font dir: {}", e))?;
     }
     fs::rename(&temp_dir, &font_dir).map_err(|e| format!("Failed to rename temp dir: {}", e))?;
 
@@ -238,7 +285,9 @@ fn validate_path(path: &Path) -> Result<(), String> {
     for comp in path.components() {
         match comp {
             std::path::Component::ParentDir => return Err("Path traversal detected".into()),
-            std::path::Component::RootDir | std::path::Component::Prefix(_) => return Err("Absolute path detected".into()),
+            std::path::Component::RootDir | std::path::Component::Prefix(_) => {
+                return Err("Absolute path detected".into());
+            }
             _ => {}
         }
     }
@@ -248,7 +297,7 @@ fn validate_path(path: &Path) -> Result<(), String> {
 fn extract_zip(archive_path: &Path, dest_dir: &Path) -> Result<(), String> {
     let file = fs::File::open(archive_path).map_err(|e| format!("Open zip failed: {}", e))?;
     let mut archive = zip::ZipArchive::new(file).map_err(|e| format!("Read zip failed: {}", e))?;
-    
+
     for i in 0..archive.len() {
         let mut file = archive.by_index(i).map_err(|e| e.to_string())?;
         let outpath = match file.enclosed_name() {
@@ -260,7 +309,7 @@ fn extract_zip(archive_path: &Path, dest_dir: &Path) -> Result<(), String> {
             fs::create_dir_all(&outpath).map_err(|e| e.to_string())?;
         } else {
             if let Some(p) = outpath.parent()
-                && !p.exists() 
+                && !p.exists()
             {
                 fs::create_dir_all(p).map_err(|e| e.to_string())?;
             }
@@ -275,7 +324,7 @@ fn extract_tar_gz(archive_path: &Path, dest_dir: &Path) -> Result<(), String> {
     let tar_gz = fs::File::open(archive_path).map_err(|e| e.to_string())?;
     let tar = flate2::read::GzDecoder::new(tar_gz);
     let mut archive = tar::Archive::new(tar);
-    
+
     for entry in archive.entries().map_err(|e| e.to_string())? {
         let mut entry = entry.map_err(|e| e.to_string())?;
         let path = entry.path().map_err(|e| e.to_string())?.to_path_buf();
@@ -289,7 +338,7 @@ fn extract_tar_xz(archive_path: &Path, dest_dir: &Path) -> Result<(), String> {
     let tar_xz = fs::File::open(archive_path).map_err(|e| e.to_string())?;
     let tar = xz2::read::XzDecoder::new(tar_xz);
     let mut archive = tar::Archive::new(tar);
-    
+
     for entry in archive.entries().map_err(|e| e.to_string())? {
         let mut entry = entry.map_err(|e| e.to_string())?;
         let path = entry.path().map_err(|e| e.to_string())?.to_path_buf();
