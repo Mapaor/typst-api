@@ -38,6 +38,8 @@ Note: if you are exposing your API to the public, be sure to prevent API abuse b
 6. Visit `http://localhost:8080/playground` to interactively test the API in your browser.
 7. Visit `http://localhost:8080/add-fonts` to easily add new font to your font database.
 
+You can also the logs of the API by running `docker compose logs typst-api` from that same directory.
+
 ##### Updating
 To update simply do from the same directory:
 ```bash
@@ -89,11 +91,13 @@ curl -sSL https://raw.githubusercontent.com/Mapaor/typst-api/main/scripts/instal
 # Install a specific version
 curl -sSL https://raw.githubusercontent.com/Mapaor/typst-api/main/scripts/install.sh | bash -s -- --version v0.2.4
 
-# Install with a systemd service (Linux only)
+# Install with a systemd service (Recommended. Linux only)
 curl -sSL https://raw.githubusercontent.com/Mapaor/typst-api/main/scripts/install.sh | sudo bash -s -- --with-service
 ```
 
-If you are on a Linux server I recommend the latter because it sets up a service to automatically run the API on boot.
+If you are on a Linux server I recommend the `--with-service` version because it sets up a service to automatically run the API on boot.
+
+Then you can check the logs with `sudo journalctl -u typst-api -n 100 --no-pager`.
 
 If you are on macOS (or Linux but chose not to use the systemd service flag), you'll need to run the server manually:
 ```bash
