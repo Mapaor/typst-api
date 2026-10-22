@@ -1,10 +1,10 @@
 # Typst API
 
-A high-performance REST API built in Rust to compile [Typst](https://typst.app/) documents into PDFs. It supports multiple files, source code, caching fonts, typst packages, authentication, configurable limits and more.
+An HTTP REST API built in Rust to compile [Typst](https://typst.app/) documents into PDFs. It supports multiple files, source code, caching fonts, typst packages, authentication, configurable limits and more stuff.
 
 There are two main ways to run the API:
 1. As a standalone binary (the recommended way is using the install script provided below).
-2. As a docker container (the recommended way it to use Docker Compose). The recommended way to run it with Docker is using Docker Compose.
+2. As a docker container (the recommended way it to use Docker Compose).
 
 You can also of course compile and run the source code with Cargo. 
 
@@ -269,10 +269,10 @@ My recommendations:
 Note: If you do expose the API running on your server to the general public (the internet) make sure to set the `ADMIN_TOKEN` to protect sensible routes. And also, either set authentication (so that only you and people who you trust can  use the API) or enforce limits like maximum payload size and maximum concurrent compilation to prevent API abuse.
 
 ## Examples
-Here are some client-side example websites that use this API for compiling Typst:
+Here are some client-side example of websites that do requests to a server selfhosting this Typst:
 - [md.katex.cc](https://md.katex.cc) — A markdown online live editor that supports rendering equations. It uses KaTeX for the HTML rendering and Typst for the download PDF option.
   
-Have you selfhosted a version of `typst-api` and created a website that internally uses it? Please fill an issue to add your website as an example  here!
+If you create a selfhosted instance of `typst-api` which is public, please share it! Simply fill an issue stating your example website or do a PR editing this REAMDE.
 
 ## ROADMAP
 
