@@ -211,7 +211,8 @@ curl -X POST http://localhost:8080/compile \
   -F "main=@my_document.typ" \
   --output result.pdf
 ```
-Note: If compilation fails, curl will save the JSON error response into result.pdf. To see the error in your console instead, remove the `--output` flag.
+
+Note: If compilation fails, curl saves the JSON error response to the output file. To see the error in your console instead, remove the `--output` flag.
 
 #### With powershell
 ```pwsh
@@ -233,7 +234,29 @@ If you have Postman desktop installed (and optionally the VSCode Extension as we
 4. Select (upload) your `.typ` file in the value column.
 5. Click Send. Postman is great because it will show the visual PDF if the request is successful or it will show the JSON error if it fails.
 
-#### More examples
+### SVG Output
+
+Both `/compile` and `compile/source` default to PDF but they also support SVG output. Simply add a query parameter `?format=svg` to the request to choose SVG output. If the output has multiple pages it will be returned as a ZIP (containing `page-1.svg`, `page-2.svg`, etc.).
+
+
+### Compile source example
+
+```bash
+curl -X POST "http://localhost:3000/compile/source?format=svg" -H "Content-Type: application/json" -d '{"source":"#set page(fill: none, width: auto, height: auto, margin: 0cm)\n#text(fill: red)[$ e^(i pi)+1=0 $]"}' --output result.svg
+```
+
+*Note: SVG backgrounds are white by default, use `#set page(fill: none)` to get a transparent background.*
+
+### Compile multipart example
+For SVG output, add `?format=svg`. One page is returned as SVG; multiple pages are returned as a ZIP archive:
+
+```bash
+curl -X POST "http://localhost:8080/compile?format=svg" -F "main=@my_document.typ" --output result.zip
+```
+
+You can optionally add a `pages` query parameter to select which pages you want to export, for example: `?format=svg&pages=2,3,7-9,11-`, like in the Typst CLI.
+
+### More examples
 You can check a full set of examples in the [`examples/`](./examples/) directory, which contain both the Typst and related files, the PowerShell and Curl commands to run the examples and the expected PDF output.
 
 ### Admin Endpoints
@@ -302,7 +325,7 @@ If you create a selfhosted instance of `typst-api` which is public, please share
 - [X] Create an `/add-fonts` static page to easily upload fonts to the backend.
 
 #### Next steps
-- [ ] Implement SVG output using `typst-svg`
+- [X] Implement SVG output using `typst-svg`
 - [ ] Add PNG support (converted from SVG using `resvg`)
 - [ ] Investigate how the Typst web app handles the (still experimental) HTML export, probably with `typst-html`.
 - [ ] Allow additional output configuration (eg. PDF or PDF-A, DPI, PDF metadata, etc.) Check the current output options of the typst compiler and the typst web app.
