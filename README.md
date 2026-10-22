@@ -248,13 +248,12 @@ curl -X POST "http://localhost:3000/compile/source?format=svg" -H "Content-Type:
 *Note: SVG backgrounds are white by default, use `#set page(fill: none)` to get a transparent background.*
 
 ### Compile multipart example
-For SVG output, add `?format=svg`. One page is returned as SVG; multiple pages are returned as a ZIP archive:
 
 ```bash
 curl -X POST "http://localhost:8080/compile?format=svg" -F "main=@my_document.typ" --output result.zip
 ```
 
-You can optionally add a `pages` query parameter to select which pages you want to export, for example: `?format=svg&pages=2,3,7-9,11-`, like in the Typst CLI.
+You can optionally add a `pages` query parameter to select which pages you want to export, for example: `?format=svg&pages=2,3,7-9,11-`, like in the Typst CLI. You can also use `pages` for PDFs.
 
 ### More examples
 You can check a full set of examples in the [`examples/`](./examples/) directory, which contain both the Typst and related files, the PowerShell and Curl commands to run the examples and the expected PDF output.
