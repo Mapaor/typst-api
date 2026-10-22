@@ -242,7 +242,7 @@ Both `/compile` and `compile/source` default to PDF but they also support SVG ou
 ### Compile source example
 
 ```bash
-curl -X POST "http://localhost:3000/compile/source?format=svg" -H "Content-Type: application/json" -d '{"source":"#set page(fill: none, width: auto, height: auto, margin: 0cm)\n#text(fill: red)[$ e^(i pi)+1=0 $]"}' --output result.svg
+curl -X POST "http://localhost:8080/compile/source?format=svg" -H "Content-Type: application/json" -d '{"source":"#set page(fill: none, width: auto, height: auto, margin: 0cm)\n#text(fill: red)[$ e^(i pi)+1=0 $]"}' --output result.svg
 ```
 
 *Note: SVG backgrounds are white by default, use `#set page(fill: none)` to get a transparent background.*
