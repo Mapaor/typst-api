@@ -3778,7 +3778,7 @@ dependencies = [
 
 [[package]]
 name = "typst-api"
-version = "0.2.7"
+version = "0.2.8"
 dependencies = [
  "axum",
  "chrono",
@@ -3799,6 +3799,7 @@ dependencies = [
  "tracing-subscriber",
  "typst",
  "typst-kit",
+ "typst-layout",
  "typst-pdf",
  "typst-svg",
  "utoipa",

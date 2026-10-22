@@ -1,6 +1,6 @@
 [package]
 name = "typst-api"
-version = "0.2.7"
+version = "0.2.8"
 edition = "2024"
 description = "A self-hostable HTTP API for compiling Typst documents"
 license = "MIT"
@@ -21,6 +21,7 @@ tower-http = { version = "0.6", features = ["cors", "trace"] }
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
 typst = "0.15.1"
+typst-layout = "0.15.1"
 typst-pdf = "0.15.1"
 typst-svg = "0.15.1"
 tower = { version = "0.5.3", features = ["limit"] }
