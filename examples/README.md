@@ -4,7 +4,7 @@ If you have cloned this repo, in your terminal, from the root directory of the r
 (Changing the port `3000` to whatever port you have set in your `.env` file).
 
 ## With curl
-*Note: If compilation fails curl will save the JSON response in the pdf file. To see the error remove the `--output` flag.*
+*Note: If compilation fails curl saves the JSON error response to the output file, which will appear broken. To see the error remove the `--output` flag.*
 
 ```bash
 curl -X POST http://localhost:3000/compile -F "main=@examples/simple/simple.typ" --output "examples/simple/simple.pdf"
@@ -36,6 +36,22 @@ curl -X POST http://localhost:3000/compile -F "main=@examples/local-template/loc
 
 ```bash
 curl -X POST http://localhost:3000/compile -F "main=@examples/using-fonts/using-fonts.typ" -F "terminal-grotesque.ttf=@examples/using-fonts/terminal-grotesque.ttf" --output "examples/using-fonts/using-fonts.pdf"
+```
+
+```bash
+curl -X POST "http://localhost:3000/compile?format=svg" -F "main=@examples/svg-export/single-page.typ" --output "examples/svg-export/single-page.svg"
+```
+
+```bash
+curl -X POST "http://localhost:3000/compile?format=svg" -F "main=@examples/svg-export/multi-page.typ" --output "examples/svg-export/multi-page.zip"
+```
+
+```bash
+curl -X POST "http://localhost:3000/compile?format=svg&pages=2" -F "main=@examples/svg-export/multi-page.typ" --output "examples/svg-export/page-2.svg"
+```
+
+```bash
+curl -X POST "http://localhost:3000/compile?format=svg&pages=1,3" -F "main=@examples/svg-export/multi-page.typ" --output "examples/svg-export/pages-1-and-3.zip"
 ```
 
 ## With powershell
@@ -95,4 +111,16 @@ Invoke-WebRequest -Uri http://localhost:3000/compile -Method Post -Form @{
     "main" = Get-Item "examples/using-fonts/using-fonts.typ"
     "terminal-grotesque.ttf" = Get-Item "examples/using-fonts/terminal-grotesque.ttf"
 } -OutFile "examples/using-fonts/using-fonts.pdf"
+```
+
+```pwsh
+Invoke-WebRequest -Uri "http://localhost:3000/compile?format=svg" -Method Post -Form @{
+    main = Get-Item "examples/svg-export/single-page.typ"
+} -OutFile "examples/svg-export/single-page.svg"
+```
+
+```pwsh
+Invoke-WebRequest -Uri "http://localhost:3000/compile?format=svg" -Method Post -Form @{
+    main = Get-Item "examples/svg-export/multi-page.typ"
+} -OutFile "examples/svg-export/multi-page.zip"
 ```
