@@ -302,7 +302,9 @@ If you create a selfhosted instance of `typst-api` which is public, please share
 - [X] Create an `/add-fonts` static page to easily upload fonts to the backend.
 
 #### Next steps
-- [ ] Allow different outputs (PDF, SVG, PNG, HTML?). SVG can be generated with `typst-svg` and PNG probably from the SVG. I'll have to investigate how the Typst web app handles the (still experimental) HTML export, probably with `typst-html`.
+- [ ] Implement SVG output using `typst-svg`
+- [ ] Add PNG support (converted from SVG using `resvg`)
+- [ ] Investigate how the Typst web app handles the (still experimental) HTML export, probably with `typst-html`.
 - [ ] Allow additional output configuration (eg. PDF or PDF-A, DPI, PDF metadata, etc.) Check the current output options of the typst compiler and the typst web app.
 
 #### In the far future
