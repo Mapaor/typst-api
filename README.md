@@ -325,7 +325,7 @@ If you create a selfhosted instance of `typst-api` which is public, please share
 
 #### Next steps
 - [X] Implement SVG output using `typst-svg`
-- [ ] Add PNG support (converted from SVG using `resvg`)
+- [ ] Add PNG support using default Typst PNG export or converted from SVG using `resvg`
 - [ ] Investigate how the Typst web app handles the (still experimental) HTML export, probably with `typst-html`.
 - [ ] Allow additional output configuration (eg. PDF or PDF-A, DPI, PDF metadata, etc.) Check the current output options of the typst compiler and the typst web app.
 
