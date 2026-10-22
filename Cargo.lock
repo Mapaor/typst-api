@@ -3800,6 +3800,7 @@ dependencies = [
  "typst",
  "typst-kit",
  "typst-pdf",
+ "typst-svg",
  "utoipa",
  "utoipa-swagger-ui",
  "xz2",
