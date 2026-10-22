@@ -1,12 +1,13 @@
 use axum::{
+    Json,
     extract::{Multipart, Query, State},
     http::StatusCode,
     response::IntoResponse,
-    Json,
 };
 use serde_json::json;
 use std::collections::HashMap;
 use std::io::{Cursor, Write};
+use std::num::NonZeroUsize;
 use std::sync::Arc;
 use tokio::time::timeout;
 use typst::diag::SourceDiagnostic;
@@ -23,7 +24,7 @@ pub(crate) struct CompileOptions {
     /// Output format. Defaults to PDF.
     #[param(default = "pdf")]
     pub(crate) format: Option<String>,
-    /// 1-based pages and ranges to export, for example `2,3,7-9,11-`.
+    /// 1-based pages and ranges to export for PDF or SVG, for example `2,3,7-9,11-`.
     pub(crate) pages: Option<String>,
 }
 
@@ -98,8 +99,10 @@ pub(crate) async fn compile_handler(
 
         if let Ok(data) = field.bytes().await {
             let data = data.to_vec();
-            
-            let is_font = file_name.ends_with(".ttf") || file_name.ends_with(".otf") || file_name.ends_with(".ttc");
+
+            let is_font = file_name.ends_with(".ttf")
+                || file_name.ends_with(".otf")
+                || file_name.ends_with(".ttc");
 
             if is_font {
                 let bytes = typst::foundations::Bytes::new(data);
@@ -172,17 +175,12 @@ fn parse_compile_options(
         other => {
             return Err((
                 StatusCode::BAD_REQUEST,
-                Json(json!({"error": format!("Unsupported output format '{other}'. Use 'pdf' or 'svg'.")})),
+                Json(
+                    json!({"error": format!("Unsupported output format '{other}'. Use 'pdf' or 'svg'.")}),
+                ),
             ));
         }
     };
-
-    if options.pages.is_some() && format != OutputFormat::Svg {
-        return Err((
-            StatusCode::BAD_REQUEST,
-            Json(json!({"error": "The pages parameter is only supported with format=svg"})),
-        ));
-    }
 
     let pages = options
         .pages
@@ -251,49 +249,76 @@ async fn perform_compilation(
     let world_clone = world.clone();
     let compile_result = timeout(
         timeout_duration,
-        tokio::task::spawn_blocking(move || typst::compile(&*world_clone)),
+        tokio::task::spawn_blocking(move || {
+            typst::compile::<typst_layout::PagedDocument>(&*world_clone)
+        }),
     )
     .await;
 
     match compile_result {
         Ok(Ok(warned)) => match warned.output {
-            Ok(document) => match options.format {
-                OutputFormat::Pdf => {
-                    let pdf = typst_pdf::pdf(&document, &typst_pdf::PdfOptions::default());
-                    Ok((
-                        StatusCode::OK,
-                        [("Content-Type", "application/pdf")],
-                        pdf.unwrap_or_default(),
-                    ))
-                }
-                OutputFormat::Svg => {
-                    let selected_pages = match select_pages(options.pages.as_deref(), document.pages().len()) {
+            Ok(document) => {
+                let selected_pages =
+                    match select_pages(options.pages.as_deref(), document.pages().len()) {
                         Ok(pages) => pages,
                         Err(error) => {
                             return Err((StatusCode::BAD_REQUEST, Json(json!({"error": error}))));
                         }
                     };
-                    let svgs: Vec<(usize, String)> = selected_pages
-                        .into_iter()
-                        .map(|page| (page + 1, typst_svg::svg(&document.pages()[page], &typst_svg::SvgOptions::default())))
-                        .collect();
-                    if svgs.len() == 1 {
-                        Ok((
-                            StatusCode::OK,
-                            [("Content-Type", "image/svg+xml")],
-                            svgs.into_iter().next().unwrap().1.into_bytes(),
-                        ))
-                    } else {
-                        match zip_svgs(svgs) {
-                            Ok(bytes) => Ok((
+                match options.format {
+                    OutputFormat::Pdf => {
+                        let mut pdf_options = typst_pdf::PdfOptions::default();
+                        if options.pages.is_some() {
+                            pdf_options.page_ranges =
+                                Some(page_ranges_for_indices(&selected_pages));
+                            // Typst cannot combine page ranges with tagged PDF.
+                            pdf_options.tagged = false;
+                        }
+                        match typst_pdf::pdf(&document, &pdf_options) {
+                            Ok(pdf) => Ok((
                                 StatusCode::OK,
-                                [("Content-Type", "application/zip")],
-                                bytes,
+                                [("Content-Type", "application/pdf")],
+                                pdf,
                             )),
-                            Err(error) => Err((
+                            Err(errors) => Err((
                                 StatusCode::INTERNAL_SERVER_ERROR,
-                                Json(json!({"error": format!("Failed to package SVG pages: {error}")})),
+                                Json(json!({"errors": format_errors(&world, &errors)})),
                             )),
+                        }
+                    }
+                    OutputFormat::Svg => {
+                        let svgs: Vec<(usize, String)> = selected_pages
+                            .into_iter()
+                            .map(|page| {
+                                (
+                                    page + 1,
+                                    typst_svg::svg(
+                                        &document.pages()[page],
+                                        &typst_svg::SvgOptions::default(),
+                                    ),
+                                )
+                            })
+                            .collect();
+                        if svgs.len() == 1 {
+                            Ok((
+                                StatusCode::OK,
+                                [("Content-Type", "image/svg+xml")],
+                                svgs.into_iter().next().unwrap().1.into_bytes(),
+                            ))
+                        } else {
+                            match zip_svgs(svgs) {
+                                Ok(bytes) => Ok((
+                                    StatusCode::OK,
+                                    [("Content-Type", "application/zip")],
+                                    bytes,
+                                )),
+                                Err(error) => Err((
+                                    StatusCode::INTERNAL_SERVER_ERROR,
+                                    Json(
+                                        json!({"error": format!("Failed to package SVG pages: {error}")}),
+                                    ),
+                                )),
+                            }
                         }
                     }
                 }
@@ -377,10 +402,14 @@ fn select_pages(
     for &(start, end) in requested {
         let end = end.unwrap_or(page_count);
         if start > page_count {
-            return Err(format!("Page {start} is out of range; document has {page_count} pages"));
+            return Err(format!(
+                "Page {start} is out of range; document has {page_count} pages"
+            ));
         }
         if end > page_count {
-            return Err(format!("Page {end} is out of range; document has {page_count} pages"));
+            return Err(format!(
+                "Page {end} is out of range; document has {page_count} pages"
+            ));
         }
         for page in start..=end {
             selected[page - 1] = true;
@@ -393,12 +422,41 @@ fn select_pages(
         .collect())
 }
 
+fn page_ranges_for_indices(indices: &[usize]) -> typst::layout::PageRanges {
+    let mut ranges = Vec::new();
+    let Some(&first) = indices.first() else {
+        return typst::layout::PageRanges::new(ranges);
+    };
+
+    let mut start = first;
+    let mut end = first;
+    for &index in &indices[1..] {
+        if index == end + 1 {
+            end = index;
+        } else {
+            ranges.push(
+                Some(NonZeroUsize::new(start + 1).unwrap())
+                    ..=Some(NonZeroUsize::new(end + 1).unwrap()),
+            );
+            start = index;
+            end = index;
+        }
+    }
+    ranges.push(
+        Some(NonZeroUsize::new(start + 1).unwrap())..=Some(NonZeroUsize::new(end + 1).unwrap()),
+    );
+    typst::layout::PageRanges::new(ranges)
+}
+
 fn zip_svgs(svgs: Vec<(usize, String)>) -> Result<Vec<u8>, String> {
     let cursor = Cursor::new(Vec::new());
     let mut archive = zip::ZipWriter::new(cursor);
     for (page_number, svg) in svgs {
         archive
-            .start_file(format!("page-{page_number}.svg"), SimpleFileOptions::default())
+            .start_file(
+                format!("page-{page_number}.svg"),
+                SimpleFileOptions::default(),
+            )
             .map_err(|error| error.to_string())?;
         archive
             .write_all(svg.as_bytes())
@@ -429,7 +487,7 @@ fn format_errors(world: &ApiWorld, errors: &[SourceDiagnostic]) -> Vec<serde_jso
                 {
                     map.insert("line".to_string(), json!(line + 1));
                     map.insert("column".to_string(), json!(col + 1));
-                    }
+                }
             }
 
             if !e.hints.is_empty() {
@@ -444,22 +502,38 @@ fn format_errors(world: &ApiWorld, errors: &[SourceDiagnostic]) -> Vec<serde_jso
 
 #[cfg(test)]
 mod tests {
-    use super::{parse_page_selection, select_pages};
-    use std::io::Cursor;
-    use axum::{
-        http::{Request, StatusCode},
-        body::Body,
-    };
-    use tower::ServiceExt;
+    use super::{page_ranges_for_indices, parse_page_selection, select_pages};
     use crate::create_app;
     use crate::state::test_helpers::create_test_state;
     use axum::body::to_bytes;
+    use axum::{
+        body::Body,
+        http::{Request, StatusCode},
+    };
+    use std::io::Cursor;
+    use tower::ServiceExt;
 
     #[test]
     fn page_selection_parses_ranges_and_deduplicates_in_document_order() {
         let requested = parse_page_selection("2,3,7-9,11-").unwrap();
-        assert_eq!(select_pages(Some(&requested), 12).unwrap(), vec![1, 2, 6, 7, 8, 10, 11]);
-        assert_eq!(select_pages(Some(&requested), 10).unwrap_err(), "Page 11 is out of range; document has 10 pages");
+        assert_eq!(
+            select_pages(Some(&requested), 12).unwrap(),
+            vec![1, 2, 6, 7, 8, 10, 11]
+        );
+        assert_eq!(
+            select_pages(Some(&requested), 10).unwrap_err(),
+            "Page 11 is out of range; document has 10 pages"
+        );
+    }
+
+    #[test]
+    fn pdf_page_ranges_preserve_selected_pages() {
+        let ranges = page_ranges_for_indices(&[1, 2, 4]);
+        assert!(!ranges.includes_page_index(0));
+        assert!(ranges.includes_page_index(1));
+        assert!(ranges.includes_page_index(2));
+        assert!(!ranges.includes_page_index(3));
+        assert!(ranges.includes_page_index(4));
     }
 
     #[test]
@@ -495,11 +569,16 @@ mod tests {
             .method("POST")
             .uri("/compile/source?format=svg")
             .header("Content-Type", "application/json")
-            .body(Body::from(r#"{"source":"Page one\\n#pagebreak()\\nPage two"}"#))
+            .body(Body::from(
+                r#"{"source":"Page one\\n#pagebreak()\\nPage two"}"#,
+            ))
             .unwrap();
         let res = app.oneshot(req).await.unwrap();
         assert_eq!(res.status(), StatusCode::OK);
-        assert_eq!(res.headers().get("Content-Type").unwrap(), "application/zip");
+        assert_eq!(
+            res.headers().get("Content-Type").unwrap(),
+            "application/zip"
+        );
         let body = to_bytes(res.into_body(), usize::MAX).await.unwrap();
         let mut archive = zip::ZipArchive::new(Cursor::new(body)).unwrap();
         assert_eq!(archive.len(), 2);
@@ -508,21 +587,45 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn test_compile_source_pdf_page_selection() {
+        let state = create_test_state(None);
+        let app = create_app(state);
+        let req = Request::builder()
+            .method("POST")
+            .uri("/compile/source?pages=2")
+            .header("Content-Type", "application/json")
+            .body(Body::from(
+                r#"{"source":"Page one\\n#pagebreak()\\nPage two"}"#,
+            ))
+            .unwrap();
+        let res = app.oneshot(req).await.unwrap();
+        let status = res.status();
+        let content_type = res.headers().get("Content-Type").cloned();
+        let body = to_bytes(res.into_body(), usize::MAX).await.unwrap();
+        assert_eq!(status, StatusCode::OK, "{}", String::from_utf8_lossy(&body));
+        assert_eq!(content_type.unwrap(), "application/pdf");
+        assert!(body.starts_with(b"%PDF-"));
+    }
+
+    #[tokio::test]
     async fn test_compile_source_success() {
         let state = create_test_state(None);
         let app = create_app(state);
-        
+
         let req = Request::builder()
             .method("POST")
             .uri("/compile/source")
             .header("Content-Type", "application/json")
             .body(Body::from(r#"{"source": "= Title\nHello world!"}"#))
             .unwrap();
-            
+
         let res = app.oneshot(req).await.unwrap();
         assert_eq!(res.status(), StatusCode::OK);
-        assert_eq!(res.headers().get("Content-Type").unwrap(), "application/pdf");
-        
+        assert_eq!(
+            res.headers().get("Content-Type").unwrap(),
+            "application/pdf"
+        );
+
         let body_bytes = to_bytes(res.into_body(), usize::MAX).await.unwrap();
         assert!(body_bytes.starts_with(b"%PDF-"));
     }
@@ -531,7 +634,7 @@ mod tests {
     async fn test_compile_source_error() {
         let state = create_test_state(None);
         let app = create_app(state);
-        
+
         // Intentional syntax error in typst code (unclosed bracket)
         let req = Request::builder()
             .method("POST")
@@ -539,13 +642,13 @@ mod tests {
             .header("Content-Type", "application/json")
             .body(Body::from(r#"{"source": "= Title\n#let x = (1, 2"}"#))
             .unwrap();
-            
+
         let res = app.oneshot(req).await.unwrap();
         assert_eq!(res.status(), StatusCode::BAD_REQUEST);
-        
+
         let body_bytes = to_bytes(res.into_body(), usize::MAX).await.unwrap();
         let body_json: serde_json::Value = serde_json::from_slice(&body_bytes).unwrap();
-        
+
         assert!(body_json.get("errors").is_some());
         let errors = body_json["errors"].as_array().unwrap();
         assert!(!errors.is_empty());
@@ -555,7 +658,7 @@ mod tests {
     async fn test_compile_multipart_success() {
         let state = create_test_state(None);
         let app = create_app(state);
-        
+
         let boundary = "------------------------14737809831466499882746641449";
         let body = format!(
             "--{0}\r\n\
@@ -570,18 +673,24 @@ mod tests {
             --{0}--\r\n",
             boundary
         );
-        
+
         let req = Request::builder()
             .method("POST")
             .uri("/compile")
-            .header("Content-Type", format!("multipart/form-data; boundary={}", boundary))
+            .header(
+                "Content-Type",
+                format!("multipart/form-data; boundary={}", boundary),
+            )
             .body(Body::from(body))
             .unwrap();
-            
+
         let res = app.oneshot(req).await.unwrap();
         assert_eq!(res.status(), StatusCode::OK);
-        assert_eq!(res.headers().get("Content-Type").unwrap(), "application/pdf");
-        
+        assert_eq!(
+            res.headers().get("Content-Type").unwrap(),
+            "application/pdf"
+        );
+
         let body_bytes = to_bytes(res.into_body(), usize::MAX).await.unwrap();
         assert!(body_bytes.starts_with(b"%PDF-"));
     }
